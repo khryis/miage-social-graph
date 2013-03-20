@@ -1,0 +1,10 @@
+git checkout develop
+git checkout -b develop-domain
+-> déplace les sources dans le dossier qui va bien
+git branch -l
+git add -A
+git commit -am "commit de test"
+git checkout develop
+git merge develop-domain
+git branch -d develop-domain
+git push
