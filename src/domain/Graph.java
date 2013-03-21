@@ -63,10 +63,12 @@ public class Graph implements IGraph {
         Node to = nodes.get(toStr);
         if (to == null) {
             to = new Node(toStr);
+            addNode(to);
         }
         Node from = nodes.get(fromStr);
         if (from == null) {
             from = new Node(fromStr);
+            addNode(from);
         }
         Link link = new Link(linkType, from, to);
         to.addLink(link);
