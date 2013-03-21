@@ -38,9 +38,6 @@ public class Graph implements IGraph {
             while ((line = br.readLine()) != null) {
                 addLine(line);
             }
-
-            br.close();
-            fr.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Graph.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -49,6 +46,7 @@ public class Graph implements IGraph {
             try {
                 br.close();
                 fr.close();
+            } catch (NullPointerException ex) {
             } catch (IOException ex) {
                 Logger.getLogger(Graph.class.getName()).log(Level.SEVERE, null, ex);
             }
