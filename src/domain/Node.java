@@ -2,6 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Node implements INode {
 
@@ -27,5 +28,19 @@ public class Node implements INode {
             arrayListLinks.add(link);
             links.put(link.getType(), arrayListLinks);
         }
+    }
+
+    public String toString() {
+        String display = "";
+
+        display += "#### Noeud : " + this.id + "\n";
+        //On affiche la liste des liens regroupés par type
+        for (Map.Entry<String, ArrayList<Link>> link : links.entrySet()) {
+            display += "## " + link.getKey() + "\n";
+            for (Link linkDetail : link.getValue()) {
+                display += linkDetail.toString() + "\n";
+            }
+        }
+        return display;
     }
 }
