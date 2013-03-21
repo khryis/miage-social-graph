@@ -3,6 +3,7 @@ package domain;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Node implements INode {
 
@@ -17,6 +18,10 @@ public class Node implements INode {
     @Override
     public String getId() {
         return id;
+    }
+
+    public HashMap<String, ArrayList<Link>> getLinks() {
+        return links;
     }
 
     @Override
@@ -43,5 +48,26 @@ public class Node implements INode {
             }
         }
         return display;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Node other = (Node) obj;
+        if (!Objects.equals(this.id, other.getId())) {
+            return false;
+        }
+        return true;
     }
 }
