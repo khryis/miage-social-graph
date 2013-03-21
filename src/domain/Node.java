@@ -30,6 +30,7 @@ public class Node implements INode {
         }
     }
 
+    @Override
     public String toString() {
         String display = "";
 
