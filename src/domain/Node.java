@@ -19,6 +19,10 @@ public class Node implements INode {
         return id;
     }
 
+    public ArrayList<Link> getTypeLinkArrayList(String type) {
+        return this.links.get(type);
+    }
+
     @Override
     public void addLink(Link link) {
         if (links.containsKey(link.getType())) {
