@@ -8,10 +8,9 @@ import java.util.Objects;
 public class Link implements ILink {
 
     private String type;
-    private Node nodeSource;
-    private Node nodeTo;
+    private Node from;
+    private Node to;
     private HashMap<String, ArrayList<String>> attributes;
-    private Direction direction;
 
     private Link() {
         attributes = new HashMap<>();
@@ -20,16 +19,8 @@ public class Link implements ILink {
     public Link(String type, Node from, Node to) {
         this();
         this.type = type;
-        nodeSource = from;
-        nodeTo = to;
-    }
-
-    public Link(String type, Node nodeSource, Node nodeTo, Direction direction) {
-        this.type = type;
-        this.nodeSource = nodeSource;
-        this.nodeTo = nodeTo;
-        this.direction = direction;
-        this.attributes = new HashMap();
+        this.from = from;
+        this.to = to;
     }
 
     @Override
@@ -41,9 +32,8 @@ public class Link implements ILink {
     public String toString() {
         String display = "";
 
-        display += "Source : " + this.nodeSource.getId();
-        display += " | To : " + this.nodeTo.getId();
-        display += " | Direction : " + this.direction.getChar();
+        display += "Source: " + this.from.getId();
+        display += " | To: " + this.to.getId();
         //Pour chaque attribut on affiche le nom et sa ou ses valeurs
         for (Entry<String, ArrayList<String>> attribute : attributes.entrySet()) {
             display += " | " + attribute.getKey() + " = ";
@@ -77,16 +67,14 @@ public class Link implements ILink {
         if (!Objects.equals(this.type, other.type)) {
             return false;
         }
-        if (!Objects.equals(this.nodeSource, other.nodeSource)) {
+        if (!Objects.equals(this.from, other.from)) {
             return false;
         }
-        if (!Objects.equals(this.nodeTo, other.nodeTo)) {
+        if (!Objects.equals(this.to, other.to)) {
             return false;
         }
+        //TODO: test if to object with same content (content objects redefine equals) are equals
         if (!Objects.equals(this.attributes, other.attributes)) {
-            return false;
-        }
-        if (this.direction != other.direction) {
             return false;
         }
         return true;

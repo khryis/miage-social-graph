@@ -51,7 +51,9 @@ public class Graph implements IGraph {
         }
     }
 
-    @Override
+    /**
+     * Add the line content in graph. Line analyzer
+     */
     public void addLine(String line) {
         //TODO: Sprint 2 check line validity and continue if false (ex: regex)
         line = line.toLowerCase();
@@ -60,6 +62,13 @@ public class Graph implements IGraph {
         line = line.substring(fromNbr, toNbr);
         String linkType = line.substring(0, line.indexOf("["));
 
+        buildLine(toStr, fromStr, linkType);
+    }
+
+    /**
+     * Line Builder
+     */
+    private void buildLine(String toStr, String fromStr, String linkType) {
         Node to = nodes.get(toStr);
         if (to == null) {
             to = new Node(toStr);
