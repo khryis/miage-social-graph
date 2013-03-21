@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -82,5 +83,15 @@ public class Graph implements IGraph {
         Link link = new Link(linkType, from, to);
         to.addLink(link);
         from.addLink(link);
+    }
+
+    @Override
+    public String toString() {
+        String display = "";
+        //On boucle sur la liste des Nodes sur laquelle on appelle la méthode d'affichage
+        for (Map.Entry<String, Node> node : nodes.entrySet()) {
+            display += node.toString() + "\n";
+        }
+        return display;
     }
 }
