@@ -8,4 +8,7 @@ public interface IGraph {
      * Initialize the graph from the given filepath
      */
     public void includeFile(String filePath);
+
+    @Override
+    public String toString();
 }
