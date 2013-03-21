@@ -54,7 +54,7 @@ public class Graph implements IGraph {
     /**
      * Add the line content in graph. Line analyzer
      */
-    public void addLine(String line) {
+    private void addLine(String line) {
         //TODO: Sprint 2 check line validity and continue if false (ex: regex)
         line = line.toLowerCase();
         int fromNbr = line.indexOf("--"), toNbr = line.indexOf("-->") + 3;
