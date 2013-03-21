@@ -33,30 +33,16 @@ public class LinkTest {
     }
 
     /**
-     * Test of getType method, of class Link.
-     */
-    @Test
-    public void testGetType() {
-        System.out.println("getType");
-        Link instance = null;
-        String expResult = "";
-        String result = instance.getType();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of toString method, of class Link.
      */
     @Test
     public void testToString() {
         System.out.println("toString");
-        Link instance = null;
-        String expResult = "";
+        Link instance = new Link("friend", new Node("Barbara"), new Node("Carol"), Direction.RIGHT);
+        String expResult = "Source : Barbara";
+        expResult += " | To : Carol";
+        expResult += " | Direction : " + Direction.RIGHT.getChar();
         String result = instance.toString();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 }
