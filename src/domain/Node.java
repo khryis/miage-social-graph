@@ -48,7 +48,7 @@ public class Node implements INode {
         display += "#### Noeud : " + this.id + "\n";
         //On affiche la liste des liens regroupés par type
         for (Map.Entry<String, ArrayList<Link>> link : links.entrySet()) {
-            display += "## " + link.getKey() + "\n";
+            display += "##" + link.getKey() + "\n";
             for (Link linkDetail : link.getValue()) {
                 display += linkDetail.toString() + "\n";
             }

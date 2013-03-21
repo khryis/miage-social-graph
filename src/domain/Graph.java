@@ -92,7 +92,7 @@ public class Graph implements IGraph {
         String display = "";
         //On boucle sur la liste des Nodes sur laquelle on appelle la méthode d'affichage
         for (Map.Entry<String, Node> node : nodes.entrySet()) {
-            display += node.toString() + "\n";
+            display += node.getValue().toString() + "\n";
         }
         return display;
     }
