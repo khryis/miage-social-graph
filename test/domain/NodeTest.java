@@ -101,11 +101,13 @@ public class NodeTest {
         String expResult = "#### Noeud : Barbara\n";
         expResult += "## friend\n";
         expResult += "Source: Barbara";
-        expResult += " | To: Carol";
+        expResult += " | To: Carol\n";
         expResult += "## employee_of\n";
         expResult += "Source: Barbara";
-        expResult += " | To: BigCo";
+        expResult += " | To: BigCo\n";
         String result = instance.toString();
+        System.out.println(result);
+        System.out.println(expResult);
         assertEquals(expResult, result);
     }
 }
