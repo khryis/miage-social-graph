@@ -4,7 +4,7 @@ import domain.Graph;
 public class Run {
 
     public static void main(String[] args) {
-        String filePath = "../../testfiles/WellFormedFileWithAttr.txt";
+        String filePath = "testfiles/WellFormedFileWithAttr.txt";
         if (args.length != 0) {
             filePath = args[0];
         }

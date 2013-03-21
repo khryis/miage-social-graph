@@ -67,18 +67,20 @@ public class GraphTest {
     @Test
     public void testIncludeFile() {
         System.out.println("includeFile");
+
         String filePath = "testfiles/WellFormedFileJUnit.txt";
         graph.includeFile(filePath);
-        //graph.toString();
+
         HashMap<String, Node> nodes = graph.getNodes();
-        System.out.println(nodes.get("barbara").toString());
         Node[] nodeArray = new Node[3];
         nodeArray[0] = nodes.get("barbara");
         nodeArray[1] = nodes.get("carol");
         nodeArray[2] = nodes.get("elizabeth");
+
         Node[] expected = {new Node("barbara"),
                            new Node("carol"),
                            new Node("elizabeth")};
+
         assertArrayEquals(expected, nodeArray);
     }
     // TODO review the generated test code and remove the default call to fail.
