@@ -54,11 +54,11 @@ public class NodeTest {
     public void testAddLink() {
         System.out.println("addLink : testAddLink");
 
-        Link link = new Link("friends", new Node("Carol"), new Node("Barbara"), Direction.RIGHT);
+        Link link = new Link("friends", new Node("Carol"), new Node("Barbara"));
         from.addLink(link);
 
         Link attendu;
-        attendu = new Link(linkType, new Node("Carol"), new Node("Barbara"), Direction.RIGHT);
+        attendu = new Link(linkType, new Node("Carol"), new Node("Barbara"));
         ArrayList<Link> fromfriendsLinks = from.getTypeLinkArrayList(linkType);
 
         assertTrue(fromfriendsLinks.contains(attendu));
@@ -96,17 +96,15 @@ public class NodeTest {
     public void testToString() {
         System.out.println("toString");
         Node instance = new Node("Barbara");
-        instance.addLink(new Link("friend", new Node("Barbara"), new Node("Carol"), Direction.RIGHT));
-        instance.addLink(new Link("employee_of", new Node("Barbara"), new Node("BigCo"), Direction.RIGHT));
+        instance.addLink(new Link("friend", new Node("Barbara"), new Node("Carol")));
+        instance.addLink(new Link("employee_of", new Node("Barbara"), new Node("BigCo")));
         String expResult = "#### Noeud : Barbara\n";
         expResult += "## friend\n";
-        expResult += "Source : Barbara";
-        expResult += " | To : Carol";
-        expResult += " | Direction : " + Direction.RIGHT.getChar() + "\n";
+        expResult += "Source: Barbara";
+        expResult += " | To: Carol";
         expResult += "## employee_of\n";
-        expResult += "Source : Barbara";
-        expResult += " | To : BigCo";
-        expResult += " | Direction : " + Direction.RIGHT.getChar() + "\n";
+        expResult += "Source: Barbara";
+        expResult += " | To: BigCo";
         String result = instance.toString();
         assertEquals(expResult, result);
     }
