@@ -19,6 +19,12 @@ public class Node implements INode {
         return id;
     }
 
+    @Override
+    public HashMap<String, ArrayList<Link>> getLinks() {
+        return this.links;
+    }
+
+    @Override
     public ArrayList<Link> getTypeLinkArrayList(String type) {
         return this.links.get(type);
     }

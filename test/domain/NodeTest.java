@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -12,6 +13,7 @@ public class NodeTest {
 
     private Node From;
     private Node To;
+    private String LinkType;
 
     public NodeTest() {
     }
@@ -26,8 +28,9 @@ public class NodeTest {
 
     @Before
     public void setUp() {
-        this.From = new Node("Carol");
-        this.To = new Node("Barbara");
+        From = new Node("Carol");
+        To = new Node("Barbara");
+        LinkType = "friends";
     }
 
     @After
@@ -35,34 +38,54 @@ public class NodeTest {
     }
 
     /**
-     * Test of addLink method, of class Node.
+     * Test of getTypeLinkArrayList method, of class Node
+     */
+    @Test
+    public void testGetTypeLinkArrayList() {
+        ArrayList<Link> friendsLink = From.getTypeLinkArrayList(LinkType);
+        assertNotNull(friendsLink);
+    }
+
+    /**
+     * Test 1 of addLink method, of class Node.
      */
     @Test
     public void testAddLink() {
-        System.out.println("addLink");
+        System.out.println("addLink : testAddLink");
 
         Link link = new Link("friend", new Node("Carol"), new Node("Barbara"), Direction.RIGHT);
         Link[] attendu = {new Link("friend", From, To, Direction.LEFT)};
-        ArrayList<Link> fromLink = this.From.getTypeLinkArrayList(null);
+        ArrayList<Link> fromLink = From.getTypeLinkArrayList(null);
         Link[] links = (Link[]) fromLink.toArray();
-        this.From.addLink(link);
-        //assertEquals(this.Attendu, this.From);
+        From.addLink(link);
+        //assertEquals(attendu, From);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
+    /**
+     * Test 2 of addLink method, of class Node.
+     */
     @Test
-    public void testSizeLinkArrayListAfterAddLink() {
-        System.out.println("addLink");
+    public void testSizeOfLinkArrayListAfterAddLink() {
+        System.out.println("addLink : testSizeOfLinkArrayListAfterAddLink");
+        From.addLink(new Link(LinkType, From, To));
 
-        Link link = new Link("friend", new Node("Carol"), new Node("Barbara"), Direction.RIGHT);
-        Link[] attendu = {new Link("friend", From, To, Direction.LEFT)};
-        ArrayList<Link> fromLink = this.From.getTypeLinkArrayList(null);
-        Link[] links = (Link[]) fromLink.toArray();
-        this.From.addLink(link);
-        //assertEquals(this.Attendu, this.From);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        ArrayList<Link> friendlist = From.getTypeLinkArrayList(LinkType);
+        long attendu = 1;
+        assertEquals(attendu, friendlist.size());
+    }
+
+    /**
+     * <p><strong>Test 3 of addLink method, of class Node.</strong></p>
+     * <p>When add a new type of link, new entry (key) in HashMap.</p>
+     */
+    @Test
+    public void testLinkTypeExistAfterAddLink() {
+        System.out.println("addLink : testKeyExistAfterAddLink");
+        From.addLink(new Link(LinkType, From, To));
+        HashMap<String, ArrayList<Link>> links = From.getLinks();
+        assertTrue(links.containsKey(LinkType));
     }
 
     /**
