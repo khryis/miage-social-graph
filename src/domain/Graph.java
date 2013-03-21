@@ -18,6 +18,10 @@ public class Graph implements IGraph {
         this.nodes = new HashMap<>();
     }
 
+    public HashMap<String, Node> getNodes() {
+        return nodes;
+    }
+
     @Override
     public void addNode(Node node) {
         nodes.put(node.getId(), node);
@@ -58,7 +62,7 @@ public class Graph implements IGraph {
     private void addLine(String line) {
         //TODO: Sprint 2 check line validity and continue if false (ex: regex)
         line = line.toLowerCase();
-        int fromNbr = line.indexOf("--"), toNbr = line.indexOf("-->") + 3;
+        int fromNbr = line.indexOf("--") - 1, toNbr = line.indexOf("-->") + 4;
         String fromStr = line.substring(0, fromNbr), toStr = line.substring(toNbr);
         line = line.substring(fromNbr, toNbr);
         String linkType = line.substring(0, line.indexOf("["));

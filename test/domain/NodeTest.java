@@ -11,9 +11,9 @@ import static org.junit.Assert.*;
 
 public class NodeTest {
 
-    private Node From;
-    private Node To;
-    private String LinkType;
+    private Node from;
+    private Node to;
+    private String linkType;
 
     public NodeTest() {
     }
@@ -28,9 +28,9 @@ public class NodeTest {
 
     @Before
     public void setUp() {
-        From = new Node("Carol");
-        To = new Node("Barbara");
-        LinkType = "friends";
+        from = new Node("Carol");
+        to = new Node("Barbara");
+        linkType = "friends";
     }
 
     @After
@@ -42,8 +42,8 @@ public class NodeTest {
      */
     @Test
     public void testGetTypeLinkArrayList() {
-        From.addLink(new Link(LinkType, From, To));
-        ArrayList<Link> friendsLink = From.getTypeLinkArrayList(LinkType);
+        from.addLink(new Link(linkType, from, to));
+        ArrayList<Link> friendsLink = from.getTypeLinkArrayList(linkType);
         assertNotNull(friendsLink);
     }
 
@@ -55,11 +55,11 @@ public class NodeTest {
         System.out.println("addLink : testAddLink");
 
         Link link = new Link("friends", new Node("Carol"), new Node("Barbara"));
-        From.addLink(link);
+        from.addLink(link);
 
         Link attendu;
-        attendu = new Link(LinkType, new Node("Carol"), new Node("Barbara"));
-        ArrayList<Link> fromfriendsLinks = From.getTypeLinkArrayList(LinkType);
+        attendu = new Link(linkType, new Node("Carol"), new Node("Barbara"));
+        ArrayList<Link> fromfriendsLinks = from.getTypeLinkArrayList(linkType);
 
         assertTrue(fromfriendsLinks.contains(attendu));
     }
@@ -70,9 +70,9 @@ public class NodeTest {
     @Test
     public void testSizeOfLinkArrayListAfterAddLink() {
         System.out.println("addLink : testSizeOfLinkArrayListAfterAddLink");
-        From.addLink(new Link(LinkType, From, To));
+        from.addLink(new Link(linkType, from, to));
 
-        ArrayList<Link> friendlist = From.getTypeLinkArrayList(LinkType);
+        ArrayList<Link> friendlist = from.getTypeLinkArrayList(linkType);
         long attendu = 1;
         assertEquals(attendu, friendlist.size());
     }
@@ -84,9 +84,9 @@ public class NodeTest {
     @Test
     public void testLinkTypeExistAfterAddLink() {
         System.out.println("addLink : testKeyExistAfterAddLink");
-        From.addLink(new Link(LinkType, From, To));
-        HashMap<String, ArrayList<Link>> links = From.getLinks();
-        assertTrue(links.containsKey(LinkType));
+        from.addLink(new Link(linkType, from, to));
+        HashMap<String, ArrayList<Link>> links = from.getLinks();
+        assertTrue(links.containsKey(linkType));
     }
 
     /**
@@ -101,11 +101,13 @@ public class NodeTest {
         String expResult = "#### Noeud : Barbara\n";
         expResult += "## friend\n";
         expResult += "Source: Barbara";
-        expResult += " | To: Carol";
+        expResult += " | To: Carol\n";
         expResult += "## employee_of\n";
         expResult += "Source: Barbara";
-        expResult += " | To: BigCo";
+        expResult += " | To: BigCo\n";
         String result = instance.toString();
+        System.out.println(result);
+        System.out.println(expResult);
         assertEquals(expResult, result);
     }
 }
