@@ -17,6 +17,10 @@ public class Graph implements IGraph {
         this.nodes = new HashMap<>();
     }
 
+    public HashMap<String, Node> getNodes() {
+        return nodes;
+    }
+
     @Override
     public void addNode(Node node) {
         nodes.put(node.getId(), node);

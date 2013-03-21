@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -12,6 +14,8 @@ import static org.junit.Assert.*;
  * @author Chris
  */
 public class GraphTest {
+
+    private Graph graph;
 
     public GraphTest() {
     }
@@ -26,6 +30,7 @@ public class GraphTest {
 
     @Before
     public void setUp() {
+        graph = new Graph();
     }
 
     @After
@@ -33,16 +38,27 @@ public class GraphTest {
     }
 
     /**
-     * Test of addNode method, of class Graph.
+     * Test 1 of addNode method, of class Graph.
      */
     @Test
-    public void testAddNode() {
-        System.out.println("addNode");
-        Node node = null;
-        Graph instance = new Graph();
-        instance.addNode(node);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testAddNodeInKeySet() {
+        System.out.println("addNode : in keyset");
+        String expected = "Carol";
+        graph.addNode(new Node("Carol"));
+        HashMap<String, Node> nodes = graph.getNodes();
+        assertTrue(nodes.containsKey(expected));
+    }
+
+    /**
+     * Test 2 of addNode method, of class Graph.
+     */
+    @Test
+    public void testAddNodeExistNode() {
+        System.out.println("addNode : If node exist");
+        Node expected = new Node("Carol");
+        graph.addNode(new Node("Carol"));
+        HashMap<String, Node> nodes = graph.getNodes();
+        assertEquals(expected, nodes.get("Carol"));
     }
 
     /**
@@ -51,23 +67,20 @@ public class GraphTest {
     @Test
     public void testIncludeFile() {
         System.out.println("includeFile");
-        String filePath = "";
-        Graph instance = new Graph();
-        instance.includeFile(filePath);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String filePath = "testfiles/WellFormedFileJUnit.txt";
+        graph.includeFile(filePath);
+        //graph.toString();
+        HashMap<String, Node> nodes = graph.getNodes();
+        System.out.println(nodes.get("barbara").toString());
+        Node[] nodeArray = new Node[3];
+        nodeArray[0] = nodes.get("barbara");
+        nodeArray[1] = nodes.get("carol");
+        nodeArray[2] = nodes.get("elizabeth");
+        Node[] expected = {new Node("barbara"),
+                           new Node("carol"),
+                           new Node("elizabeth")};
+        assertArrayEquals(expected, nodeArray);
     }
-
-    /**
-     * Test of addLine method, of class Graph.
-     */
-    @Test
-    public void testAddLine() {
-        System.out.println("addLine");
-        String line = "";
-        Graph instance = new Graph();
-        instance.addLine(line);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    // TODO review the generated test code and remove the default call to fail.
+    //fail("The test case is a prototype.");
 }
