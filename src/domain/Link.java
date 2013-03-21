@@ -3,6 +3,7 @@ package domain;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public class Link implements ILink {
 
@@ -56,5 +57,38 @@ public class Link implements ILink {
         }
 
         return display;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Link other = (Link) obj;
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        if (!Objects.equals(this.nodeSource, other.nodeSource)) {
+            return false;
+        }
+        if (!Objects.equals(this.nodeTo, other.nodeTo)) {
+            return false;
+        }
+        if (!Objects.equals(this.attributes, other.attributes)) {
+            return false;
+        }
+        if (this.direction != other.direction) {
+            return false;
+        }
+        return true;
     }
 }

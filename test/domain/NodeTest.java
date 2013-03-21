@@ -42,6 +42,7 @@ public class NodeTest {
      */
     @Test
     public void testGetTypeLinkArrayList() {
+        From.addLink(new Link(LinkType, From, To));
         ArrayList<Link> friendsLink = From.getTypeLinkArrayList(LinkType);
         assertNotNull(friendsLink);
     }
@@ -53,14 +54,14 @@ public class NodeTest {
     public void testAddLink() {
         System.out.println("addLink : testAddLink");
 
-        Link link = new Link("friend", new Node("Carol"), new Node("Barbara"), Direction.RIGHT);
-        Link[] attendu = {new Link("friend", From, To, Direction.LEFT)};
-        ArrayList<Link> fromLink = From.getTypeLinkArrayList(null);
-        Link[] links = (Link[]) fromLink.toArray();
+        Link link = new Link("friends", new Node("Carol"), new Node("Barbara"), Direction.RIGHT);
         From.addLink(link);
-        //assertEquals(attendu, From);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        Link attendu;
+        attendu = new Link(LinkType, new Node("Carol"), new Node("Barbara"), Direction.RIGHT);
+        ArrayList<Link> fromfriendsLinks = From.getTypeLinkArrayList(LinkType);
+
+        assertTrue(fromfriendsLinks.contains(attendu));
     }
 
     /**
