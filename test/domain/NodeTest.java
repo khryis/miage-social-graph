@@ -71,11 +71,19 @@ public class NodeTest {
     @Test
     public void testToString() {
         System.out.println("toString");
-        Node instance = null;
-        String expResult = "";
+        Node instance = new Node("Barbara");
+        instance.addLink(new Link("friend", new Node("Barbara"), new Node("Carol"), Direction.RIGHT));
+        instance.addLink(new Link("employee_of", new Node("Barbara"), new Node("BigCo"), Direction.RIGHT));
+        String expResult = "#### Noeud : Barbara\n";
+        expResult += "## friend\n";
+        expResult += "Source : Barbara";
+        expResult += " | To : Carol";
+        expResult += " | Direction : " + Direction.RIGHT.getChar() + "\n";
+        expResult += "## employee_of\n";
+        expResult += "Source : Barbara";
+        expResult += " | To : BigCo";
+        expResult += " | Direction : " + Direction.RIGHT.getChar() + "\n";
         String result = instance.toString();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 }

@@ -12,6 +12,17 @@ public class Link implements ILink {
     private HashMap<String, ArrayList<String>> attributes;
     private Direction direction;
 
+    private Link() {
+        attributes = new HashMap<>();
+    }
+
+    public Link(String type, Node from, Node to) {
+        this();
+        this.type = type;
+        nodeSource = from;
+        nodeTo = to;
+    }
+
     public Link(String type, Node nodeSource, Node nodeTo, Direction direction) {
         this.type = type;
         this.nodeSource = nodeSource;
