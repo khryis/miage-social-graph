@@ -1,0 +1,23 @@
+Barbara --likes--> Refactoring
+Barbara --friend--> Anna
+Barbara --employee_of--> BigCo
+Barbara --friend--> Carol
+Barbara --friend--> Elizabeth
+Barbara --likes--> NoSQL Distilled
+Refactoring --author--> Martin
+Anna --likes--> Refactoring
+Anna --employee_of--> BigCo
+Carol --employee_of--> BigCo
+Carol --friend--> Dawn
+Carol --likes--> NoSQL Distilled
+Elizabeth --friend--> Jill
+Elizabeth --likes--> NoSQL Distilled
+NoSQL Distilled --author--> Martin
+NoSQL Distilled --author--> Pramod
+NoSQL Distilled --category--> Databases
+Martin --friend--> Pramod
+Dawn --likes--> NoSQL Distilled
+Dawn --friend--> Jill
+Pramod --friend--> Martin
+Database Refactoring --category--> Databases
+Database Refactoring --author--> Pramod
