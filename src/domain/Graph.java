@@ -63,7 +63,7 @@ public class Graph implements IGraph {
         int fromNbr = line.indexOf("--") - 1, toNbr = line.indexOf("-->") + 4;
         String fromStr = line.substring(0, fromNbr), toStr = line.substring(toNbr);
         line = line.substring(fromNbr, toNbr);
-        String linkType = line.substring(0, line.indexOf("["));
+        String linkType = line.substring(3, line.indexOf("["));
 
         buildLine(toStr, fromStr, linkType);
     }
