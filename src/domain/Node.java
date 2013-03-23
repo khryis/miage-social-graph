@@ -31,6 +31,26 @@ public class Node implements INode {
     }
 
     @Override
+    //This method returns the nodes linked to this one by the filters in the parameter
+    public ArrayList<Node> getLinkedNodes(ArrayList<String> linkFilter) {
+        ArrayList<Node> linkedNodes = new ArrayList();
+        //For each type of link selected as filter in the parameter of the search
+        for (String linkType : linkFilter) {
+            //We get the links linked to the node
+            for (Link link : getTypeLinkArrayList(linkType)) {
+                //If the actual node is the source of the link, we add the destination node
+                if (this.equals(link.getFrom())) {
+                    linkedNodes.add(link.getTo());
+                    //If it's not we add the source of the link
+                } else {
+                    linkedNodes.add(link.getFrom());
+                }
+            }
+        }
+        return linkedNodes;
+    }
+
+    @Override
     public void addLink(Link link) {
         if (links.containsKey(link.getType())) {
             links.get(link.getType()).add(link);

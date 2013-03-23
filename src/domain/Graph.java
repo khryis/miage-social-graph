@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -85,6 +86,20 @@ public class Graph implements IGraph {
         Link link = new Link(linkType, from, to);
         to.addLink(link);
         from.addLink(link);
+    }
+
+    @Override
+    public String displayResult(ArrayList<Node> nodeList) {
+        String display = "Resultat : ";
+        if (nodeList.isEmpty()) {
+            display += "Aucun noeud trouvé.";
+        } else {
+            display += nodeList.get(0).getId();
+            for (int i = 1; i < nodeList.size(); i++) {
+                display += ", " + nodeList.get(i).getId();
+            }
+        }
+        return display;
     }
 
     @Override

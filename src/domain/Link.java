@@ -29,6 +29,16 @@ public class Link implements ILink {
     }
 
     @Override
+    public Node getFrom() {
+        return from;
+    }
+
+    @Override
+    public Node getTo() {
+        return to;
+    }
+
+    @Override
     public String toString() {
         String display = "";
 

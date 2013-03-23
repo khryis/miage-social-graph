@@ -4,6 +4,10 @@ public interface ILink {
 
     public String getType();
 
+    public Node getFrom();
+
+    public Node getTo();
+
     /**
      *
      * @return

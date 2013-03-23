@@ -11,6 +11,13 @@ public interface INode {
 
     public ArrayList<Link> getTypeLinkArrayList(String type);
 
+    /**
+     *
+     * @param linkFilter
+     * @return
+     */
+    public ArrayList<Node> getLinkedNodes(ArrayList<String> linkFilter);
+
     public void addLink(Link link);
 
     @Override
