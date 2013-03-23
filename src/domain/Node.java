@@ -27,7 +27,11 @@ public class Node implements INode {
 
     @Override
     public ArrayList<Link> getTypeLinkArrayList(String type) {
-        return this.links.get(type);
+        if (this.links.get(type) != null) {
+            return this.links.get(type);
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     @Override

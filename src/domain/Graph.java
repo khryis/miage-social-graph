@@ -88,6 +88,7 @@ public class Graph implements IGraph {
         from.addLink(link);
     }
 
+    @Override
     public ArrayList<Node> search(Node startingNode, ArrayList<String> linkFilter) {
         ArrayList<Node> resultList = new ArrayList<>();
         ArrayList<Node> exploredNodeList = new ArrayList<>();

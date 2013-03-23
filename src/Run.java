@@ -15,13 +15,6 @@ public class Run {
 
         System.out.println(g.toString());
 
-        //Test for the getLinkedNodes and the displayResult methods
-        /*ArrayList<String> filters = new ArrayList<>();
-         filters.add("friend");
-         filters.add("employee_of");
-         System.out.println(g.displayResult(g.getNodes().get("barbara").getLinkedNodes(filters)));*/
-        //Supposed result : carol, elizabeth, anna, bigco
-
         //Test for the Search method so the DFS
         ArrayList<String> filters = new ArrayList<>();
         filters.add("friend");
