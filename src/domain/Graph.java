@@ -16,7 +16,7 @@ public class Graph implements IGraph {
     private HashMap<String, Node> nodes;
 
     public Graph() {
-        this.nodes = new HashMap<>();
+        this.nodes = new HashMap();
     }
 
     public HashMap<String, Node> getNodes() {
@@ -86,6 +86,25 @@ public class Graph implements IGraph {
         Link link = new Link(linkType, from, to);
         to.addLink(link);
         from.addLink(link);
+    }
+
+    public ArrayList<Node> search(Node startingNode, ArrayList<String> linkFilter) {
+        ArrayList<Node> resultList = new ArrayList<>();
+        ArrayList<Node> exploredNodeList = new ArrayList<>();
+
+        DFS(startingNode, linkFilter, resultList, exploredNodeList);
+
+        return resultList;
+    }
+
+    private void DFS(Node currentNode, ArrayList<String> linkFilter, ArrayList<Node> resultList, ArrayList<Node> exploredNodeList) {
+        exploredNodeList.add(currentNode);
+        for (Node n : currentNode.getLinkedNodes(linkFilter)) {
+            if (!exploredNodeList.contains(n)) {
+                resultList.add(n);
+                DFS(n, linkFilter, resultList, exploredNodeList);
+            }
+        }
     }
 
     @Override
