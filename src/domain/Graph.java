@@ -90,10 +90,20 @@ public class Graph implements IGraph {
 
     @Override
     public ArrayList<Node> search(Node startingNode, ArrayList<String> linkFilter) {
+
+        return search(startingNode, linkFilter, SearchMethod.DFS);
+    }
+
+    @Override
+    public ArrayList<Node> search(Node startingNode, ArrayList<String> linkFilter, SearchMethod method) {
         ArrayList<Node> resultList = new ArrayList<>();
         ArrayList<Node> exploredNodeList = new ArrayList<>();
 
-        DFS(startingNode, linkFilter, resultList, exploredNodeList);
+        switch (method) {
+            case DFS:
+                DFS(startingNode, linkFilter, resultList, exploredNodeList);
+                break;
+        }
 
         return resultList;
     }

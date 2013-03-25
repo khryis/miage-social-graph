@@ -21,6 +21,15 @@ public interface IGraph {
 
     /**
      *
+     * @param startingNode
+     * @param linkFilter
+     * @param method
+     * @return
+     */
+    public ArrayList<Node> search(Node startingNode, ArrayList<String> linkFilter, SearchMethod method);
+
+    /**
+     *
      * @param nodeList
      * @return
      */
