@@ -12,6 +12,7 @@ public interface IGraph {
     public void includeFile(String filePath);
 
     /**
+     * Search the graph with default method
      *
      * @param startingNode
      * @param linkFilter
@@ -20,6 +21,7 @@ public interface IGraph {
     public ArrayList<Node> search(Node startingNode, ArrayList<String> linkFilter);
 
     /**
+     * Search the graph with a method set in parameters
      *
      * @param startingNode
      * @param linkFilter

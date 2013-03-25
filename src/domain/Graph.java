@@ -108,6 +108,14 @@ public class Graph implements IGraph {
         return resultList;
     }
 
+    /**
+     * Process the Depth First Search of the graph
+     *
+     * @param currentNode
+     * @param linkFilter
+     * @param resultList
+     * @param exploredNodeList
+     */
     private void DFS(Node currentNode, ArrayList<String> linkFilter, ArrayList<Node> resultList, ArrayList<Node> exploredNodeList) {
         exploredNodeList.add(currentNode);
         for (Node n : currentNode.getLinkedNodes(linkFilter)) {

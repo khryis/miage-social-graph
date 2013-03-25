@@ -35,7 +35,6 @@ public class Node implements INode {
     }
 
     @Override
-    //This method returns the nodes linked to this one by the filters in the parameter
     public ArrayList<Node> getLinkedNodes(ArrayList<String> linkFilter) {
         ArrayList<Node> linkedNodes = new ArrayList();
         //For each type of link selected as filter in the parameter of the search
