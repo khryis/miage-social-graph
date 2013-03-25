@@ -1,9 +1,12 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Link implements ILink {
 
@@ -26,6 +29,38 @@ public class Link implements ILink {
     @Override
     public String getType() {
         return type;
+    }
+
+    @Override
+    public void addAttributes(String attributesLine) {
+        String attribute, strValues, key;
+        String[] tabValues;
+
+        String motif = "((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)))";
+        Pattern p = Pattern.compile(motif);
+        Matcher m = p.matcher(attributesLine);
+        while (m.find()) {
+            // attribute : "since=1999" or "share=[book|movie]"
+            attribute = attributesLine.substring(m.start(), m.end());
+            // key = "since"
+            key = attribute.substring(0, attribute.indexOf("="));
+            if (attribute.contains("[")) {
+                // strValues = "[book|movie]"
+                strValues = attribute.substring(attribute.indexOf("[") + 1, attribute.lastIndexOf("]"));
+                // tabValues = {"book", "movie"}
+                tabValues = strValues.split("\\|");
+            } else {
+                //strValues = "1999"
+                strValues = attribute.substring(attribute.indexOf("=") + 1);
+                // tabValues = {"1999"}
+                tabValues = new String[]{strValues};
+            }
+            // put the values Array in a list
+            ArrayList<String> listValues = new ArrayList<>(tabValues.length);
+            listValues.addAll(Arrays.asList(tabValues));
+            // add key and it values in attributes Map
+            attributes.put(key, listValues);
+        }
     }
 
     @Override
