@@ -107,4 +107,8 @@ public class Link implements ILink {
         }
         return true;
     }
+
+    public HashMap<String, Attributes> getAttributes() {
+        return attributes;
+    }
 }

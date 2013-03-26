@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -29,15 +30,19 @@ public class LinkTest {
     }
 
     /**
-     * Test of toString method, of class Link.
+     * Test of addAttributes method, of class Link.
      */
     @Test
-    public void testToString() {
-        System.out.println("toString");
-        Link instance = new Link("friend", new Node("Barbara"), new Node("Carol"));
-        String expResult = "Source: Barbara";
-        expResult += " | To: Carol";
-        String result = instance.toString();
+    public void testAddAttributes() {
+        System.out.println("addAttributes");
+        Attributes role = new Attributes(new String[]{"Research"});
+        Attributes hired = new Attributes(new String[]{"Oct08"});
+        HashMap<String, Attributes> expResult = new HashMap();
+        expResult.put("role", role);
+        expResult.put("hired", hired);
+        Link instance = new Link("employee_of", new Node("Barbara"), new Node("BigCo"));
+        instance.addAttributes("role=Research,hired=Oct08");
+        HashMap<String, Attributes> result = instance.getAttributes();
         assertEquals(expResult, result);
     }
 }

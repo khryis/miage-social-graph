@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Attributes {
 
@@ -22,5 +23,26 @@ public class Attributes {
             display += ", " + values.get(i);
         }
         return display;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Attributes other = (Attributes) obj;
+        if (!Objects.equals(this.values, other.values)) {
+            return false;
+        }
+        return true;
     }
 }
