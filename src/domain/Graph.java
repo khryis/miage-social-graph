@@ -60,7 +60,7 @@ public class Graph implements IGraph {
      * Add the line content in graph. Line analyzer
      */
     private void addLine(String line) {
-        // check line validity and continue if false
+        // check line validity and skip add if false
         if (lineIsValid(line)) {
             line = line.toLowerCase();
             int fromNbr = line.indexOf("--") - 1, toNbr = line.indexOf("-->") + 4;
