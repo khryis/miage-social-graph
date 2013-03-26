@@ -2,15 +2,24 @@ package domain;
 
 import java.util.ArrayList;
 
-public class Attributes {
+public class AttributeValues {
 
     private ArrayList<String> values;
 
-    public Attributes(String[] tabValues) {
-        values = new ArrayList<>(tabValues.length);
+    public AttributeValues() {
+        values = new ArrayList<>();
+    }
+
+    public AttributeValues add(String value) {
+        values.add(value);
+        return this;
+    }
+
+    public AttributeValues add(String[] tabValues) {
         for (int i = 0; i < tabValues.length; i++) {
             values.add(tabValues[i]);
         }
+        return this;
     }
 
     @Override
