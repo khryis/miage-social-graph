@@ -10,16 +10,16 @@ public class AttributeValues {
         values = new ArrayList<>();
     }
 
-    public ArrayList<String> add(String value) {
+    public AttributeValues add(String value) {
         values.add(value);
-        return values;
+        return this;
     }
 
-    public ArrayList<String> add(String[] tabValues) {
+    public AttributeValues add(String[] tabValues) {
         for (int i = 0; i < tabValues.length; i++) {
             values.add(tabValues[i]);
         }
-        return values;
+        return this;
     }
 
     @Override
