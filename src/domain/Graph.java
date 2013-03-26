@@ -96,14 +96,19 @@ public class Graph implements IGraph {
 
     @Override
     public Result search(Node startingNode, ArrayList<String> linkFilter, SearchMethod method) {
+        switch (method) {
+            case DFS:
+                return DFS(startingNode, linkFilter);
+            default:
+                return DFS(startingNode, linkFilter);
+        }
+    }
+
+    private Result DFS(Node startingNode, ArrayList<String> linkFilter) {
         Result result = new Result();
         ArrayList<Node> exploredNodeList = new ArrayList<>();
 
-        switch (method) {
-            case DFS:
-                DFS(startingNode, linkFilter, result, exploredNodeList);
-                break;
-        }
+        DFS(startingNode, linkFilter, result, exploredNodeList);
 
         return result;
     }
