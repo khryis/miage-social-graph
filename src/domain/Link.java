@@ -11,7 +11,7 @@ public class Link implements ILink {
     private String type;
     private Node from;
     private Node to;
-    private HashMap<String, Attributes> attributes;
+    private HashMap<String, AttributeValues> attributes;
 
     private Link() {
         attributes = new HashMap<>();
@@ -31,32 +31,27 @@ public class Link implements ILink {
 
     @Override
     public void addAttributes(String attributesLine) {
-        String attribute, strValues, key;
-        String[] tabValues;
+        String attribute, key;
+        AttributeValues value;
 
         String motif = "((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)))";
         Pattern p = Pattern.compile(motif);
         Matcher m = p.matcher(attributesLine);
+
         while (m.find()) {
             // attribute : "since=1999" or "share=[book|movie]"
             attribute = attributesLine.substring(m.start(), m.end());
             // key = "since"
             key = attribute.substring(0, attribute.indexOf("="));
+            value = new AttributeValues();
             if (attribute.contains("[")) {
-                // strValues = "[book|movie]"
-                strValues = attribute.substring(attribute.indexOf("[") + 1, attribute.lastIndexOf("]"));
-                // tabValues = {"book", "movie"}
-                tabValues = strValues.split("\\|");
+                //"[book|movie]"
+                value.add(attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1).split("\\|"));
             } else {
-                //strValues = "1999"
-                strValues = attribute.substring(attribute.indexOf("=") + 1);
-                // tabValues = {"1999"}
-                tabValues = new String[]{strValues};
+                //"1999"
+                value.add(attribute.substring(attribute.indexOf("=") + 1));
             }
-            // put the values Array in a list
-            Attributes listValues = new Attributes(tabValues);
-            // add key and it values in attributes Map
-            attributes.put(key, listValues);
+            attributes.put(key, value);
         }
     }
 
@@ -67,9 +62,9 @@ public class Link implements ILink {
         display += "Source: " + this.from.getId();
         display += " | To: " + this.to.getId();
         //Pour chaque attribut on affiche le nom et sa ou ses valeurs
-        for (Entry<String, Attributes> attribute : attributes.entrySet()) {
+        for (Entry<String, AttributeValues> attribute : attributes.entrySet()) {
             display += " | " + attribute.getKey() + " = ";
-            Attributes attributeValues = attribute.getValue();
+            AttributeValues attributeValues = attribute.getValue();
             //L'attribut est minimum de type : "since = 1999"
             display += attributeValues.toString();
         }
