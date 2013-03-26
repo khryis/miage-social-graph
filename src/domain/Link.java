@@ -1,16 +1,17 @@
 package domain;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Link implements ILink {
 
     private String type;
     private Node from;
     private Node to;
-    private HashMap<String, ArrayList<String>> attributes;
+    private HashMap<String, Attributes> attributes;
 
     private Link() {
         attributes = new HashMap<>();
@@ -38,6 +39,36 @@ public class Link implements ILink {
         return to;
     }
 
+    public void addAttributes(String attributesLine) {
+        String attribute, strValues, key;
+        String[] tabValues;
+
+        String motif = "((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)))";
+        Pattern p = Pattern.compile(motif);
+        Matcher m = p.matcher(attributesLine);
+        while (m.find()) {
+            // attribute : "since=1999" or "share=[book|movie]"
+            attribute = attributesLine.substring(m.start(), m.end());
+            // key = "since"
+            key = attribute.substring(0, attribute.indexOf("="));
+            if (attribute.contains("[")) {
+                // strValues = "[book|movie]"
+                strValues = attribute.substring(attribute.indexOf("[") + 1, attribute.lastIndexOf("]"));
+                // tabValues = {"book", "movie"}
+                tabValues = strValues.split("\\|");
+            } else {
+                //strValues = "1999"
+                strValues = attribute.substring(attribute.indexOf("=") + 1);
+                // tabValues = {"1999"}
+                tabValues = new String[]{strValues};
+            }
+            // put the values Array in a list
+            Attributes listValues = new Attributes(tabValues);
+            // add key and it values in attributes Map
+            attributes.put(key, listValues);
+        }
+    }
+
     @Override
     public String toString() {
         String display = "";
@@ -45,15 +76,11 @@ public class Link implements ILink {
         display += "Source: " + this.from.getId();
         display += " | To: " + this.to.getId();
         //Pour chaque attribut on affiche le nom et sa ou ses valeurs
-        for (Entry<String, ArrayList<String>> attribute : attributes.entrySet()) {
+        for (Entry<String, Attributes> attribute : attributes.entrySet()) {
             display += " | " + attribute.getKey() + " = ";
-            ArrayList<String> attributeValues = attribute.getValue();
+            Attributes attributeValues = attribute.getValue();
             //L'attribut est minimum de type : "since = 1999"
-            display += attributeValues.get(0);
-            //Si l'attribut a plusieurs valeurs, par exemple : "allergic to = lactose, kiwi"
-            for (int i = 1; i < attributeValues.size(); i++) {
-                display += ", " + attributeValues.get(i);
-            }
+            display += attributeValues.toString();
         }
 
         return display;
