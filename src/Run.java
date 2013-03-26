@@ -18,7 +18,7 @@ public class Run {
         //Test for the Search method so the DFS
         ArrayList<String> filters = new ArrayList<>();
         filters.add("friend");
-        System.out.println(g.displayResult(g.search(g.getNodes().get("barbara"), filters)));
+        System.out.println(g.search(g.getNodes().get("barbara"), filters).display());
         //Supposed result : carol, dawn, elizabeth, anna
     }
 }

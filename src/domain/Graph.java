@@ -89,23 +89,23 @@ public class Graph implements IGraph {
     }
 
     @Override
-    public ArrayList<Node> search(Node startingNode, ArrayList<String> linkFilter) {
+    public Result search(Node startingNode, ArrayList<String> linkFilter) {
 
         return search(startingNode, linkFilter, SearchMethod.DFS);
     }
 
     @Override
-    public ArrayList<Node> search(Node startingNode, ArrayList<String> linkFilter, SearchMethod method) {
-        ArrayList<Node> resultList = new ArrayList<>();
+    public Result search(Node startingNode, ArrayList<String> linkFilter, SearchMethod method) {
+        Result result = new Result();
         ArrayList<Node> exploredNodeList = new ArrayList<>();
 
         switch (method) {
             case DFS:
-                DFS(startingNode, linkFilter, resultList, exploredNodeList);
+                DFS(startingNode, linkFilter, result, exploredNodeList);
                 break;
         }
 
-        return resultList;
+        return result;
     }
 
     /**
@@ -116,28 +116,14 @@ public class Graph implements IGraph {
      * @param resultList
      * @param exploredNodeList
      */
-    private void DFS(Node currentNode, ArrayList<String> linkFilter, ArrayList<Node> resultList, ArrayList<Node> exploredNodeList) {
+    private void DFS(Node currentNode, ArrayList<String> linkFilter, Result result, ArrayList<Node> exploredNodeList) {
         exploredNodeList.add(currentNode);
         for (Node n : currentNode.getLinkedNodes(linkFilter)) {
             if (!exploredNodeList.contains(n)) {
-                resultList.add(n);
-                DFS(n, linkFilter, resultList, exploredNodeList);
+                result.add(n);
+                DFS(n, linkFilter, result, exploredNodeList);
             }
         }
-    }
-
-    @Override
-    public String displayResult(ArrayList<Node> nodeList) {
-        String display = "Resultat : ";
-        if (nodeList.isEmpty()) {
-            display += "Aucun noeud trouvé.";
-        } else {
-            display += nodeList.get(0).getId();
-            for (int i = 1; i < nodeList.size(); i++) {
-                display += ", " + nodeList.get(i).getId();
-            }
-        }
-        return display;
     }
 
     @Override

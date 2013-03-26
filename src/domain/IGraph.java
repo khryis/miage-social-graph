@@ -18,7 +18,7 @@ public interface IGraph {
      * @param linkFilter
      * @return
      */
-    public ArrayList<Node> search(Node startingNode, ArrayList<String> linkFilter);
+    public Result search(Node startingNode, ArrayList<String> linkFilter);
 
     /**
      * Search the graph with a method set in parameters
@@ -28,14 +28,7 @@ public interface IGraph {
      * @param method
      * @return
      */
-    public ArrayList<Node> search(Node startingNode, ArrayList<String> linkFilter, SearchMethod method);
-
-    /**
-     *
-     * @param nodeList
-     * @return
-     */
-    public String displayResult(ArrayList<Node> nodeList);
+    public Result search(Node startingNode, ArrayList<String> linkFilter, SearchMethod method);
 
     @Override
     public String toString();
