@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Link implements ILink {
+public class Link {
 
     private String type;
     private Node from;
@@ -24,12 +24,10 @@ public class Link implements ILink {
         this.to = to;
     }
 
-    @Override
     public String getType() {
         return type;
     }
 
-    @Override
     public void addAttributes(String attributesLine) {
         String attribute, key;
         AttributeValues value;

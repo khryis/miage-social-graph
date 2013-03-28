@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Graph implements IGraph {
+public class Graph {
 
     private HashMap<String, Node> nodes;
 
@@ -24,12 +24,10 @@ public class Graph implements IGraph {
         return nodes;
     }
 
-    @Override
     public void addNode(Node node) {
         nodes.put(node.getId(), node);
     }
 
-    @Override
     public void includeFile(String filePath) {
         FileReader fr = null;
         BufferedReader br = null;

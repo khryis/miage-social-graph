@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class Node implements INode {
+public class Node {
 
     private String id;
     private HashMap<String, ArrayList<Link>> links;
@@ -15,22 +15,18 @@ public class Node implements INode {
         this.links = new HashMap();
     }
 
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
     public HashMap<String, ArrayList<Link>> getLinks() {
         return links;
     }
 
-    @Override
     public ArrayList<Link> getTypeLinkArrayList(String type) {
         return this.links.get(type);
     }
 
-    @Override
     public void addLink(Link link) {
         if (links.containsKey(link.getType())) {
             links.get(link.getType()).add(link);

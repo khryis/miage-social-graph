@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AttributeValues {
 
@@ -16,9 +17,7 @@ public class AttributeValues {
     }
 
     public AttributeValues add(String[] tabValues) {
-        for (int i = 0; i < tabValues.length; i++) {
-            values.add(tabValues[i]);
-        }
+        values.addAll(Arrays.asList(tabValues));
         return this;
     }
 
