@@ -1,6 +1,9 @@
 package domain;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -30,20 +33,29 @@ public class LinkTest {
     }
 
     /**
-     * Test of addAttributes method, of class Link.
+     * Test of addAttributes method, of class Link
      */
     @Test
     public void testAddAttributes() {
         System.out.println("addAttributes");
-        /*AttributeValues role = new AttributeValues();
-         AttributeValues hired = new AttributeValues(new String[]{"Oct08"});
-         HashMap<String, AttributeValues> expResult = new HashMap();
-         expResult.put("role", role);
-         expResult.put("hired", hired);
-         Link instance = new Link("employee_of", new Node("Barbara"), new Node("BigCo"));
-         instance.add("role=Research,hired=Oct08");
-         HashMap<String, AttributeValues> result = instance.
-         ();
-         assertEquals(expResult, result);*/
+        AttributeSingleValue since = new AttributeSingleValue("2003");
+        AttributeMultipleValues share = new AttributeMultipleValues();
+        share.add("book");
+        share.add("movie");
+        AttributeSingleValue from = new AttributeSingleValue("school");
+        AttributeMultipleValues meet = new AttributeMultipleValues();
+        meet.add("2004");
+        meet.add("2005");
+        meet.add("2006");
+        HashMap<String, IAttributeValue> expResult = new HashMap();
+        expResult.put("since", since);
+        expResult.put("share", share);
+        expResult.put("from", from);
+        expResult.put("meet", meet);
+        Link instance = new Link("friends", new Node("Barbara"), new Node("Henri"));
+        instance.addAttributes("since=2003,share=[book|movie],from=school,meet=[2004|2005|2006]");
+        System.out.println(instance);
+        HashMap<String, IAttributeValue> result = instance.getAttributes();
+        assertEquals(expResult, result);
     }
 }
