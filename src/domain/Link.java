@@ -1,8 +1,11 @@
 package domain;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,7 +14,7 @@ public class Link {
     private String type;
     private Node from;
     private Node to;
-    private HashMap<String, AttributeValues> attributes;
+    private HashMap<String, IAttributeValue> attributes;
 
     private Link() {
         attributes = new HashMap<>();
@@ -24,13 +27,9 @@ public class Link {
         this.to = to;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public void addAttributes(String attributesLine) {
         String attribute, key;
-        AttributeValues value;
+        IAttributeValue value;
 
         String motif = "((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)))";
         Pattern p = Pattern.compile(motif);
@@ -41,16 +40,60 @@ public class Link {
             attribute = attributesLine.substring(m.start(), m.end());
             // key = "since"
             key = attribute.substring(0, attribute.indexOf("="));
-            value = new AttributeValues();
             if (attribute.contains("[")) {
                 //"[book|movie]"
-                value.add(attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1).split("\\|"));
+                value = new AttributeMultipleValues(
+                            Arrays.asList(
+                                attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1).split("\\|")
+                            )
+                        );
             } else {
                 //"1999"
-                value.add(attribute.substring(attribute.indexOf("=") + 1));
+                value = new AttributeSingleValue(attribute.substring(attribute.indexOf("=") + 1));
             }
             attributes.put(key, value);
         }
+    }
+
+    /**
+     * Updates the current link with the information of the link in parameters
+     *
+     * @param link the link which will be used to update the current link
+     */
+    public void update(Link link) {
+        HashMap<String, IAttributeValue> tmpAttributes = link.getAttributes();
+        Set<String> attributesName = tmpAttributes.keySet();
+        Iterator iterator = attributesName.iterator();
+        while (iterator.hasNext()) {
+            String attributeName = (String) iterator.next();
+            IAttributeValue tmpAttributeValue = tmpAttributes.get(attributeName);
+            IAttributeValue attributeValue = attributes.get(attributeName);
+            // if the current link has not this attribute
+            if (attributeValue == null) {
+                attributes.put(attributeName, tmpAttributeValue);
+            } else {
+                attributeValue.update(tmpAttributeValue.getValue());
+            }
+        }
+    }
+
+    /**
+     * Utility methods
+     */
+    public String getType() {
+        return type;
+    }
+
+    public Node getFrom() {
+        return from;
+    }
+
+    public Node getTo() {
+        return to;
+    }
+
+    public HashMap<String, IAttributeValue> getAttributes() {
+        return attributes;
     }
 
     @Override
@@ -59,12 +102,11 @@ public class Link {
 
         display += "Source: " + this.from.getId();
         display += " | To: " + this.to.getId();
-        //Pour chaque attribut on affiche le nom et sa ou ses valeurs
-        for (Entry<String, AttributeValues> attribute : attributes.entrySet()) {
+        // For each attribute, prints his name and his value(s)
+        for (Entry<String, IAttributeValue> attribute : attributes.entrySet()) {
             display += " | " + attribute.getKey() + " = ";
-            AttributeValues attributeValues = attribute.getValue();
-            //L'attribut est minimum de type : "since = 1999"
-            display += attributeValues.toString();
+            IAttributeValue value = attribute.getValue();
+            display += value.toString();
         }
 
         return display;

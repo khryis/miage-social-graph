@@ -13,28 +13,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Graph {
-
+    
     private HashMap<String, Node> nodes;
-
+    
     public Graph() {
         this.nodes = new HashMap<>();
     }
-
-    public HashMap<String, Node> getNodes() {
-        return nodes;
-    }
-
+    
     public void addNode(Node node) {
         nodes.put(node.getId(), node);
     }
-
+    
     public void includeFile(String filePath) {
         FileReader fr = null;
         BufferedReader br = null;
         try {
             fr = new FileReader(new File(filePath));
             br = new BufferedReader(fr);
-
+            
             String line;
             while ((line = br.readLine()) != null) {
                 addLine(line);
@@ -58,7 +54,7 @@ public class Graph {
      * Add the line content in graph. Line analyzer
      */
     private void addLine(String line) {
-        // check line validity and skip add if false
+        // Check line validity and skip add if false
         if (lineIsValid(line)) {
             line = line.toLowerCase();
             int fromNbr = line.indexOf("--") - 1, toNbr = line.indexOf("-->") + 4;
@@ -69,7 +65,7 @@ public class Graph {
             buildLine(toStr, fromStr, linkType, attributes);
         }
     }
-
+    
     private boolean lineIsValid(String line) {
         //TODO improve the flexibility of the regexp
         String motif = "\\w+\\s--\\w+\\[((((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)),)*)((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+))))\\]-->\\s\\w+";
@@ -94,14 +90,25 @@ public class Graph {
         }
         Link link = new Link(linkType, from, to);
         link.addAttributes(attributes);
-        to.addLink(link);
-        from.addLink(link);
+        if (!to.checkLink(link)) {
+            to.addLink(link);
+        }
+        if (!from.checkLink(link)) {
+            from.addLink(link);
+        }
     }
 
+    /**
+     * Utility methods
+     */
+    public HashMap<String, Node> getNodes() {
+        return nodes;
+    }
+    
     @Override
     public String toString() {
         String display = "";
-        //On boucle sur la liste des Nodes sur laquelle on appelle la méthode d'affichage
+        // Prints each node of the graph
         for (Map.Entry<String, Node> node : nodes.entrySet()) {
             display += node.getValue().toString() + "\n";
         }
