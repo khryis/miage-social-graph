@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Graph implements IGraph {
+public class Graph {
 
     private HashMap<String, Node> nodes;
 
@@ -21,11 +21,6 @@ public class Graph implements IGraph {
         this.nodes = new HashMap();
     }
 
-    public HashMap<String, Node> getNodes() {
-        return nodes;
-    }
-
-    @Override
     public void addNode(Node node) {
         nodes.put(node.getId(), node);
     }
@@ -34,7 +29,9 @@ public class Graph implements IGraph {
         return nodes.get(nodeId.toLowerCase());
     }
 
-    @Override
+    /**
+     * Initialize the graph from the given filepath
+     */
     public void includeFile(String filePath) {
         FileReader fr = null;
         BufferedReader br = null;
@@ -65,7 +62,7 @@ public class Graph implements IGraph {
      * Add the line content in graph. Line analyzer
      */
     private void addLine(String line) {
-        // check line validity and skip add if false
+        // Check line validity and skip add if false
         if (lineIsValid(line)) {
             line = line.toLowerCase();
             int fromNbr = line.indexOf("--") - 1, toNbr = line.indexOf("-->") + 4;
@@ -101,17 +98,41 @@ public class Graph implements IGraph {
         }
         Link link = new Link(linkType, from, to);
         link.addAttributes(attributes);
-        to.addLink(link);
-        from.addLink(link);
+        if (!to.checkLink(link)) {
+            to.addLink(link);
+        }
+        if (!from.checkLink(link)) {
+            from.addLink(link);
+        }
     }
 
-    @Override
+    /**
+     * Utility methods
+     */
+    public HashMap<String, Node> getNodes() {
+        return nodes;
+    }
+
+    /**
+     * Search the graph with default method
+     *
+     * @param startingNode
+     * @param linkFilter
+     * @return
+     */
     public Result search(Node startingNode, ArrayList<String> linkFilter) {
 
         return search(startingNode, linkFilter, SearchMethod.DFS);
     }
 
-    @Override
+    /**
+     * Search the graph with a method set in parameters
+     *
+     * @param startingNode
+     * @param linkFilter
+     * @param method
+     * @return
+     */
     public Result search(Node startingNode, ArrayList<String> linkFilter, SearchMethod method) {
         switch (method) {
             case DFS:
@@ -151,7 +172,7 @@ public class Graph implements IGraph {
     @Override
     public String toString() {
         String display = "";
-        //On boucle sur la liste des Nodes sur laquelle on appelle la méthode d'affichage
+        // Prints each node of the graph
         for (Map.Entry<String, Node> node : nodes.entrySet()) {
             display += node.getValue().toString() + "\n";
         }
