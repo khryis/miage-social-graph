@@ -153,6 +153,7 @@ public class Link {
             return false;
         }
         //TODO: test if to object with same content (content objects redefine equals) are equals
+
         if (!Objects.equals(this.attributes, other.attributes)) {
             return false;
         }

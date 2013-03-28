@@ -7,30 +7,31 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Graph {
-    
+
     private HashMap<String, Node> nodes;
-    
+
     public Graph() {
         this.nodes = new HashMap<>();
     }
-    
+
     public void addNode(Node node) {
         nodes.put(node.getId(), node);
     }
-    
+
     public void includeFile(String filePath) {
         FileReader fr = null;
         BufferedReader br = null;
         try {
             fr = new FileReader(new File(filePath));
             br = new BufferedReader(fr);
-            
+
             String line;
             while ((line = br.readLine()) != null) {
                 addLine(line);
@@ -65,7 +66,7 @@ public class Graph {
             buildLine(toStr, fromStr, linkType, attributes);
         }
     }
-    
+
     private boolean lineIsValid(String line) {
         //TODO improve the flexibility of the regexp
         String motif = "\\w+\\s--\\w+\\[((((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)),)*)((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+))))\\]-->\\s\\w+";
@@ -104,7 +105,7 @@ public class Graph {
     public HashMap<String, Node> getNodes() {
         return nodes;
     }
-    
+
     @Override
     public String toString() {
         String display = "";
@@ -113,5 +114,26 @@ public class Graph {
             display += node.getValue().toString() + "\n";
         }
         return display;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Graph other = (Graph) obj;
+        if (!Objects.equals(this.nodes, other.nodes)) {
+            return false;
+        }
+        return true;
     }
 }
