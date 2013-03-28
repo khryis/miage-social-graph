@@ -71,6 +71,7 @@ public class GraphTest {
         String filePath = "testfiles/WellFormedFileJUnit.txt";
         graph.includeFile(filePath);
 
+        //TODO change the test to be correct. nodeArray must be build with all the values contained in the ArrayList and must be the size of the ArrayList
         HashMap<String, Node> nodes = graph.getNodes();
         Node[] nodeArray = new Node[3];
         nodeArray[0] = nodes.get("barbara");
@@ -92,8 +93,7 @@ public class GraphTest {
 
         String filePath = "testfiles/JUnitTestDFS.txt";
         graph.includeFile(filePath);
-        Node[] expected = new Node[5];
-        expected[0] = graph.getNode("barbara");
+        Node[] expected = new Node[4];
         expected[0] = graph.getNode("carol");
         expected[1] = graph.getNode("elizabeth");
         expected[2] = graph.getNode("anna");
@@ -116,9 +116,8 @@ public class GraphTest {
 
         String filePath = "testfiles/JUnitTestDFS.txt";
         graph.includeFile(filePath);
-        Node[] expected = new Node[2];
-        expected[0] = graph.getNode("anna");
-        expected[1] = graph.getNode("barbara");
+        Node[] expected = new Node[1];
+        expected[0] = graph.getNode("barbara");
 
         ArrayList<String> criteria = new ArrayList<>();
         criteria.add("employee_of");
