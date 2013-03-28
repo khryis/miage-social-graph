@@ -1,7 +1,7 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -78,11 +78,56 @@ public class GraphTest {
         nodeArray[2] = nodes.get("elizabeth");
 
         Node[] expected = {new Node("barbara"),
-                           new Node("carol"),
-                           new Node("elizabeth")};
+            new Node("carol"),
+            new Node("elizabeth")};
 
         assertArrayEquals(expected, nodeArray);
     }
     // TODO review the generated test code and remove the default call to fail.
     //fail("The test case is a prototype.");
+
+    @Test
+    public void testDFSFriend() {
+        System.out.println("DFS friend");
+
+        String filePath = "testfiles/JUnitTestDFS.txt";
+        graph.includeFile(filePath);
+        Node[] expected = new Node[5];
+        expected[0] = graph.getNode("barbara");
+        expected[0] = graph.getNode("carol");
+        expected[1] = graph.getNode("elizabeth");
+        expected[2] = graph.getNode("anna");
+        expected[3] = graph.getNode("julie");
+
+        ArrayList<String> criteria = new ArrayList<>();
+        criteria.add("friend");
+        Node[] result = graph.search(graph.getNode("barbara"), criteria, SearchMethod.DFS).toNodeArray();
+
+        for (Node n : result) {
+            System.out.println(n);
+        }
+
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    public void testDFSEmployeeOf() {
+        System.out.println("DFS employee_of");
+
+        String filePath = "testfiles/JUnitTestDFS.txt";
+        graph.includeFile(filePath);
+        Node[] expected = new Node[2];
+        expected[0] = graph.getNode("anna");
+        expected[1] = graph.getNode("barbara");
+
+        ArrayList<String> criteria = new ArrayList<>();
+        criteria.add("employee_of");
+        Node[] result = graph.search(graph.getNode("anna"), criteria, SearchMethod.DFS).toNodeArray();
+
+        for (Node n : result) {
+            System.out.println(n);
+        }
+
+        assertArrayEquals(expected, result);
+    }
 }

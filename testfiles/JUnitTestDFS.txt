@@ -1,0 +1,6 @@
+Barbara --friend[since=1999]--> Carol
+Barbara --friend[since=1999,share=[books|movies|tweets]]--> Elizabeth
+Barbara --friend[since=2011]--> Anna
+Anna --friend[since=2011]--> Barbara
+Anna --friend[since=2011]--> Julie
+Anna --employee_of[since=2011]--> Barbara

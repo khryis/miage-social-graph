@@ -34,4 +34,13 @@ public class Result {
         }
         return display;
     }
+
+    public Node[] toNodeArray() {
+        Node[] result = new Node[resultList.size()];
+        int i = 0;
+        for (Node n : resultList) {
+            result[i++] = n;
+        }
+        return result;
+    }
 }

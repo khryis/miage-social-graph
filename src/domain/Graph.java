@@ -30,6 +30,10 @@ public class Graph implements IGraph {
         nodes.put(node.getId(), node);
     }
 
+    public Node getNode(String nodeId) {
+        return nodes.get(nodeId.toLowerCase());
+    }
+
     @Override
     public void includeFile(String filePath) {
         FileReader fr = null;
