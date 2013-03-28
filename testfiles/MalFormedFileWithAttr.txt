@@ -1,8 +1,11 @@
 Barbara --friend[since=1999]--> Carol
-Barbara --friend[since=99,share=[books,movies|tweets]]--> Elizabeth
-Barbara --friend[since==2011]--> Anna
-Barbara --employee_of[role=Architect,hired=Feb04--> BigCo
-Anna --employee_of[role=Developer|hired=Mars06]--> BigCo
-Anna --friend[since=2005|hired=Mars06]--> Carol
+Barbara --friend[since=2000]--> Carol
+Barbara --friend[since=1999,share=[books|movies|tweets]]--> Elizabeth
+Barbara --friend[since=2011]--> Anna
+Barbara --employee_of[role=Architect,hired=Feb04]--> BigCo
+Anna --employee_of[role=Developer,hired=Mars06]--> BigCo
 Carol --employee_of[role=Research,hired=Oct08]--> BigCo
 Carol --friend[since=2005]--> Dawn
+Carol --friend[since=2007,share=tweets]--> Dawn
+Carol --friend[since=2007,share=[books]]--> Dawn
+Carol --friend[since=2007,share=movies]--> Dawn

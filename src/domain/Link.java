@@ -1,17 +1,22 @@
 package domain;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Link implements ILink {
+public class Link {
 
     private String type;
     private Node from;
     private Node to;
-    private HashMap<String, AttributeValues> attributes;
+    private HashMap<String, IAttributeValue> attributes;
 
     private Link() {
         attributes = new HashMap<>();
@@ -24,15 +29,9 @@ public class Link implements ILink {
         this.to = to;
     }
 
-    @Override
-    public String getType() {
-        return type;
-    }
-
-    @Override
     public void addAttributes(String attributesLine) {
         String attribute, key;
-        AttributeValues value;
+        IAttributeValue value;
 
         String motif = "((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)))";
         Pattern p = Pattern.compile(motif);
@@ -43,16 +42,74 @@ public class Link implements ILink {
             attribute = attributesLine.substring(m.start(), m.end());
             // key = "since"
             key = attribute.substring(0, attribute.indexOf("="));
-            value = new AttributeValues();
             if (attribute.contains("[")) {
                 //"[book|movie]"
-                value.add(attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1).split("\\|"));
+                value = new AttributeMultipleValues(
+                        Arrays.asList(
+                        attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1).split("\\|")));
             } else {
                 //"1999"
-                value.add(attribute.substring(attribute.indexOf("=") + 1));
+                value = new AttributeSingleValue(attribute.substring(attribute.indexOf("=") + 1));
             }
             attributes.put(key, value);
         }
+    }
+
+    /**
+     * Updates the current link with the information of the attributes in
+     * parameters
+     *
+     * @param attributes the attributes
+     */
+    public void update(HashMap<String, IAttributeValue> attributes) {
+        Set<String> attributesName = attributes.keySet();
+        Iterator iterator = attributesName.iterator();
+        while (iterator.hasNext()) {
+            String attributeName = (String) iterator.next();
+            IAttributeValue tmpAttributeValue = attributes.get(attributeName);
+            IAttributeValue attributeValue = this.attributes.get(attributeName);
+            // if the current link has not this attribute
+            if (attributeValue == null) {
+                this.attributes.put(attributeName, tmpAttributeValue);
+            } else {
+                // if the attributes are instance of the same class
+                if (tmpAttributeValue.getClass().equals(attributeValue.getClass())) {
+                    attributeValue.update(tmpAttributeValue.getValue());
+                    // if tmpAttributeValue like share=[books, movies] and attributeValue like share=tweets
+                } else if (tmpAttributeValue instanceof AttributeMultipleValues) {
+                    this.attributes.remove(attributeName);
+                    AttributeMultipleValues tmpMultipleValues = (AttributeMultipleValues) tmpAttributeValue;
+                    List<String> value = new ArrayList<>();
+                    value.add((String) attributeValue.getValue());
+                    tmpMultipleValues.update(value);
+                    this.attributes.put(attributeName, tmpMultipleValues);
+                    //if tmpAttributeValue like share=movies and attributeValue like share=[movies,tweets]
+                } else {
+                    List<String> value = new ArrayList<>();
+                    value.add((String) tmpAttributeValue.getValue());
+                    attributeValue.update(value);
+                }
+            }
+        }
+    }
+
+    /**
+     * Utility methods
+     */
+    public String getType() {
+        return type;
+    }
+
+    public Node getFrom() {
+        return from;
+    }
+
+    public Node getTo() {
+        return to;
+    }
+
+    public HashMap<String, IAttributeValue> getAttributes() {
+        return attributes;
     }
 
     @Override
@@ -61,12 +118,11 @@ public class Link implements ILink {
 
         display += "Source: " + this.from.getId();
         display += " | To: " + this.to.getId();
-        //Pour chaque attribut on affiche le nom et sa ou ses valeurs
-        for (Entry<String, AttributeValues> attribute : attributes.entrySet()) {
+        // For each attribute, prints his name and his value(s)
+        for (Entry<String, IAttributeValue> attribute : attributes.entrySet()) {
             display += " | " + attribute.getKey() + " = ";
-            AttributeValues attributeValues = attribute.getValue();
-            //L'attribut est minimum de type : "since = 1999"
-            display += attributeValues.toString();
+            IAttributeValue value = attribute.getValue();
+            display += value.toString();
         }
 
         return display;
