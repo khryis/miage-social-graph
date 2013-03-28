@@ -2,10 +2,11 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class Node implements INode {
+public class Node {
 
     private String id;
     private HashMap<String, ArrayList<Link>> links;
@@ -15,22 +16,6 @@ public class Node implements INode {
         this.links = new HashMap();
     }
 
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public HashMap<String, ArrayList<Link>> getLinks() {
-        return links;
-    }
-
-    @Override
-    public ArrayList<Link> getTypeLinkArrayList(String type) {
-        return this.links.get(type);
-    }
-
-    @Override
     public void addLink(Link link) {
         if (links.containsKey(link.getType())) {
             links.get(link.getType()).add(link);
@@ -41,12 +26,50 @@ public class Node implements INode {
         }
     }
 
+    /**
+     * Checks if the link is already define for the node. If true, updates the
+     * link in the node.
+     *
+     * @param link the link to check
+     * @return true if the link has been updated
+     */
+    public boolean checkLink(Link link) {
+        boolean hasBeenUpdated = false;
+        if (links.containsKey(link.getType())) {
+            List<Link> linksToCheck = links.get(link.getType());
+            for (int i = 0; i < linksToCheck.size() && !hasBeenUpdated; i++) {
+                Link currentLink = linksToCheck.get(i);
+                if (currentLink.getFrom().equals(link.getFrom())
+                        && currentLink.getTo().equals(link.getTo())) {
+                    currentLink.update(link.getAttributes());
+                    hasBeenUpdated = true;
+                }
+            }
+        }
+        return hasBeenUpdated;
+    }
+
+    /**
+     * Utility methods
+     */
+    public String getId() {
+        return id;
+    }
+
+    public HashMap<String, ArrayList<Link>> getLinks() {
+        return links;
+    }
+
+    public ArrayList<Link> getTypeLinkArrayList(String type) {
+        return this.links.get(type);
+    }
+
     @Override
     public String toString() {
         String display = "";
 
         display += "#### Noeud : " + this.id + "\n";
-        //On affiche la liste des liens regroupés par type
+        // Prints a list of links grouped by type
         for (Map.Entry<String, ArrayList<Link>> link : links.entrySet()) {
             display += "##" + link.getKey() + "\n";
             for (Link linkDetail : link.getValue()) {
