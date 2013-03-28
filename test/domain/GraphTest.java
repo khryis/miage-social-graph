@@ -67,9 +67,9 @@ public class GraphTest {
     @Test
     public void testIncludeFile() {
         System.out.println("includeFile");
-
         String filePath = "testfiles/WellFormedFileJUnit.txt";
         graph.includeFile(filePath);
+
 
         //TODO change the test to be correct. nodeArray must be build with all the values contained in the ArrayList and must be the size of the ArrayList
         HashMap<String, Node> nodes = graph.getNodes();
@@ -83,6 +83,30 @@ public class GraphTest {
             new Node("elizabeth")};
 
         assertArrayEquals(expected, nodeArray);
+
+        Graph expResult = new Graph();
+        Node barbara = new Node("barbara");
+        Node carol = new Node("carol");
+        Node elizabeth = new Node("elizabeth");
+        Node anna = new Node("anna");
+        Link friend1 = new Link("friend", barbara, carol);
+        friend1.addAttributes("since=1999");
+        barbara.addLink(friend1);
+        carol.addLink(friend1);
+        Link friend2 = new Link("friend", barbara, elizabeth);
+        friend1.addAttributes("since=1999,share=[books|movies|tweets]");
+        barbara.addLink(friend2);
+        elizabeth.addLink(friend2);
+        Link friend3 = new Link("friend", barbara, anna);
+        friend3.addAttributes("since=2011");
+        barbara.addLink(friend3);
+        anna.addLink(friend3);
+        expResult.addNode(barbara);
+        expResult.addNode(elizabeth);
+        expResult.addNode(carol);
+        expResult.addNode(anna);
+        assertEquals(expResult, graph);
+
     }
     // TODO review the generated test code and remove the default call to fail.
     //fail("The test case is a prototype.");
@@ -128,5 +152,57 @@ public class GraphTest {
         }
 
         assertArrayEquals(expected, result);
+    }
+
+    /**
+     * Test of includeFile method, of class Graph.
+     */
+    @Test
+    public void testIncludeMalFormedFile() {
+        System.out.println("includeMalFormedFile");
+        Graph expResult = new Graph();
+        Node barbara = new Node("barbara");
+        Node carol = new Node("carol");
+        Node elizabeth = new Node("elizabeth");
+        Node anna = new Node("anna");
+        Node bigCo = new Node("bigco");
+        Node dawn = new Node("dawn");
+        expResult.addNode(barbara);
+        expResult.addNode(carol);
+        expResult.addNode(elizabeth);
+        expResult.addNode(anna);
+        expResult.addNode(bigCo);
+        expResult.addNode(dawn);
+        Link friend1 = new Link("friend", barbara, carol);
+        friend1.addAttributes("since=2000");
+        barbara.addLink(friend1);
+        carol.addLink(friend1);
+        Link friend2 = new Link("friend", barbara, elizabeth);
+        friend2.addAttributes("since=1999,share=[books|movies|tweets]");
+        barbara.addLink(friend2);
+        elizabeth.addLink(friend2);
+        Link friend3 = new Link("friend", barbara, anna);
+        friend3.addAttributes("since=2011");
+        barbara.addLink(friend3);
+        anna.addLink(friend3);
+        Link employee1 = new Link("employee_of", barbara, bigCo);
+        employee1.addAttributes("role=architect,hired=feb04");
+        barbara.addLink(employee1);
+        bigCo.addLink(employee1);
+        Link employee2 = new Link("employee_of", anna, bigCo);
+        employee2.addAttributes("role=developer,hired=mars06");
+        anna.addLink(employee2);
+        bigCo.addLink(employee2);
+        Link employee3 = new Link("employee_of", carol, bigCo);
+        employee3.addAttributes("role=research,hired=oct08");
+        carol.addLink(employee3);
+        bigCo.addLink(employee3);
+        Link friend4 = new Link("friend", carol, dawn);
+        friend4.addAttributes("since=2007,share=[books|tweets|movies]");
+        carol.addLink(friend4);
+        dawn.addLink(friend4);
+        String filePath = "testfiles/MalFormedFileWithAttrJUnit.txt";
+        graph.includeFile(filePath);
+        assertEquals(expResult, graph);
     }
 }

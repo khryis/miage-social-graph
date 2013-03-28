@@ -122,9 +122,12 @@ public class Node {
             return false;
         }
         final Node other = (Node) obj;
-        if (!Objects.equals(this.id, other.getId())) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
+        /* if (!Objects.equals(this.links, other.links)) {
+         return false;
+         }*/
         return true;
     }
 }

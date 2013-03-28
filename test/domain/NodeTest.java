@@ -88,26 +88,4 @@ public class NodeTest {
         HashMap<String, ArrayList<Link>> links = from.getLinks();
         assertTrue(links.containsKey(linkType));
     }
-
-    /**
-     * Test of toString method, of class Node.
-     */
-    @Test
-    public void testToString() {
-        System.out.println("toString");
-        Node instance = new Node("Barbara");
-        instance.addLink(new Link("friend", new Node("Barbara"), new Node("Carol")));
-        instance.addLink(new Link("employee_of", new Node("Barbara"), new Node("BigCo")));
-        String expResult = "#### Noeud : Barbara\n";
-        expResult += "## friend\n";
-        expResult += "Source: Barbara";
-        expResult += " | To: Carol\n";
-        expResult += "## employee_of\n";
-        expResult += "Source: Barbara";
-        expResult += " | To: BigCo\n";
-        String result = instance.toString();
-        System.out.println(result);
-        System.out.println(expResult);
-        assertEquals(expResult, result);
-    }
 }

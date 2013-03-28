@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -177,5 +178,26 @@ public class Graph {
             display += node.getValue().toString() + "\n";
         }
         return display;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Graph other = (Graph) obj;
+        if (!Objects.equals(this.nodes, other.nodes)) {
+            return false;
+        }
+        return true;
     }
 }
