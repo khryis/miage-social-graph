@@ -41,7 +41,7 @@ public class Node {
                 Link currentLink = linksToCheck.get(i);
                 if (currentLink.getFrom().equals(link.getFrom())
                         && currentLink.getTo().equals(link.getTo())) {
-                    currentLink.update(link);
+                    currentLink.update(link.getAttributes());
                     hasBeenUpdated = true;
                 }
             }

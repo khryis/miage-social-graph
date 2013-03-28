@@ -1,8 +1,10 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
@@ -43,10 +45,8 @@ public class Link {
             if (attribute.contains("[")) {
                 //"[book|movie]"
                 value = new AttributeMultipleValues(
-                            Arrays.asList(
-                                attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1).split("\\|")
-                            )
-                        );
+                        Arrays.asList(
+                        attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1).split("\\|")));
             } else {
                 //"1999"
                 value = new AttributeSingleValue(attribute.substring(attribute.indexOf("=") + 1));
@@ -56,23 +56,39 @@ public class Link {
     }
 
     /**
-     * Updates the current link with the information of the link in parameters
+     * Updates the current link with the information of the attributes in
+     * parameters
      *
-     * @param link the link which will be used to update the current link
+     * @param attributes the attributes
      */
-    public void update(Link link) {
-        HashMap<String, IAttributeValue> tmpAttributes = link.getAttributes();
-        Set<String> attributesName = tmpAttributes.keySet();
+    public void update(HashMap<String, IAttributeValue> attributes) {
+        Set<String> attributesName = attributes.keySet();
         Iterator iterator = attributesName.iterator();
         while (iterator.hasNext()) {
             String attributeName = (String) iterator.next();
-            IAttributeValue tmpAttributeValue = tmpAttributes.get(attributeName);
-            IAttributeValue attributeValue = attributes.get(attributeName);
+            IAttributeValue tmpAttributeValue = attributes.get(attributeName);
+            IAttributeValue attributeValue = this.attributes.get(attributeName);
             // if the current link has not this attribute
             if (attributeValue == null) {
-                attributes.put(attributeName, tmpAttributeValue);
+                this.attributes.put(attributeName, tmpAttributeValue);
             } else {
-                attributeValue.update(tmpAttributeValue.getValue());
+                // if the attributes are instance of the same class
+                if (tmpAttributeValue.getClass().equals(attributeValue.getClass())) {
+                    attributeValue.update(tmpAttributeValue.getValue());
+                    // if tmpAttributeValue like share=[books, movies] and attributeValue like share=tweets
+                } else if (tmpAttributeValue instanceof AttributeMultipleValues) {
+                    this.attributes.remove(attributeName);
+                    AttributeMultipleValues tmpMultipleValues = (AttributeMultipleValues) tmpAttributeValue;
+                    List<String> value = new ArrayList<>();
+                    value.add((String) attributeValue.getValue());
+                    tmpMultipleValues.update(value);
+                    this.attributes.put(attributeName, tmpMultipleValues);
+                    //if tmpAttributeValue like share=movies and attributeValue like share=[movies,tweets]
+                } else {
+                    List<String> value = new ArrayList<>();
+                    value.add((String) tmpAttributeValue.getValue());
+                    attributeValue.update(value);
+                }
             }
         }
     }

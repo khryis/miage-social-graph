@@ -6,5 +6,6 @@ Barbara --employee_of[role=Architect,hired=Feb04]--> BigCo
 Anna --employee_of[role=Developer,hired=Mars06]--> BigCo
 Carol --employee_of[role=Research,hired=Oct08]--> BigCo
 Carol --friend[since=2005]--> Dawn
-Carol --friend[since=2005,share=[books]]--> Dawn
-Carol --friend[since=2007,share=[movies]]--> Dawn
+Carol --friend[since=2007,share=tweets]--> Dawn
+Carol --friend[since=2007,share=[books]]--> Dawn
+Carol --friend[since=2007,share=movies]--> Dawn

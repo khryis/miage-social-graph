@@ -16,7 +16,7 @@ public class AttributeMultipleValues implements IAttributeValue<List<String>> {
         this.values.addAll(values);
     }
 
-    private AttributeMultipleValues add(String value) {
+    public AttributeMultipleValues add(String value) {
         values.add(value);
         return this;
     }
