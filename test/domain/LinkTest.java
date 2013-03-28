@@ -35,14 +35,15 @@ public class LinkTest {
     @Test
     public void testAddAttributes() {
         System.out.println("addAttributes");
-        Attributes role = new Attributes(new String[]{"Research"});
-        Attributes hired = new Attributes(new String[]{"Oct08"});
-        HashMap<String, Attributes> expResult = new HashMap();
+        AttributeValues role = new AttributeValues();
+        AttributeValues hired = new AttributeValues(new String[]{"Oct08"});
+        HashMap<String, AttributeValues> expResult = new HashMap();
         expResult.put("role", role);
         expResult.put("hired", hired);
         Link instance = new Link("employee_of", new Node("Barbara"), new Node("BigCo"));
-        instance.addAttributes("role=Research,hired=Oct08");
-        HashMap<String, Attributes> result = instance.getAttributes();
+        instance.add("role=Research,hired=Oct08");
+        HashMap<String, AttributeValues> result = instance.
+                ();
         assertEquals(expResult, result);
     }
 }

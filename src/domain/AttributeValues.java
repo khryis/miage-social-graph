@@ -11,6 +11,10 @@ public class AttributeValues {
         values = new ArrayList<>();
     }
 
+    public ArrayList<String> getAttributesValues() {
+        return values;
+    }
+
     public AttributeValues add(String value) {
         values.add(value);
         return this;
@@ -48,7 +52,7 @@ public class AttributeValues {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Attributes other = (Attributes) obj;
+        final AttributeValues other = (AttributeValues) obj;
         if (!Objects.equals(this.values, other.values)) {
             return false;
         }
