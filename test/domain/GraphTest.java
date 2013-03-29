@@ -69,7 +69,6 @@ public class GraphTest {
         System.out.println("includeFile");
         String filePath = "testfiles/WellFormedFileJUnit.txt";
         graph.includeFile(filePath);
-
         Graph expResult = new Graph();
         Node barbara = new Node("barbara");
         Node carol = new Node("carol");
@@ -80,7 +79,7 @@ public class GraphTest {
         barbara.addLink(friend1);
         carol.addLink(friend1);
         Link friend2 = new Link("friend", barbara, elizabeth);
-        friend1.addAttributes("since=1999,share=[books|movies|tweets]");
+        friend2.addAttributes("since=1999,share=[books|movies|tweets]");
         barbara.addLink(friend2);
         elizabeth.addLink(friend2);
         Link friend3 = new Link("friend", barbara, anna);
@@ -91,6 +90,13 @@ public class GraphTest {
         expResult.addNode(elizabeth);
         expResult.addNode(carol);
         expResult.addNode(anna);
+        System.out.println("*************************");
+        System.out.println(expResult);
+        System.out.println("--------------------------");
+        System.out.println(graph);
+        System.out.println("***************************");
+
+
         assertEquals(expResult, graph);
 
     }

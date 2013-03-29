@@ -154,13 +154,14 @@ public class Link {
         if (!Objects.equals(this.type, other.type)) {
             return false;
         }
-        if (!Objects.equals(this.from, other.from)) {
+        if (!Objects.equals(this.from.getId(), other.from.getId())) {
             return false;
         }
-        if (!Objects.equals(this.to, other.to)) {
+        if (!Objects.equals(this.to.getId(), other.to.getId())) {
             return false;
         }
         //TODO: test if to object with same content (content objects redefine equals) are equals
+
 
         if (!Objects.equals(this.attributes, other.attributes)) {
             return false;
