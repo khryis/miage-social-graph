@@ -125,9 +125,6 @@ public class Node {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        /* if (!Objects.equals(this.links, other.links)) {
-         return false;
-         }*/
         return true;
     }
 }

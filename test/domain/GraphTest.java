@@ -70,20 +70,6 @@ public class GraphTest {
         String filePath = "testfiles/WellFormedFileJUnit.txt";
         graph.includeFile(filePath);
 
-
-        //TODO change the test to be correct. nodeArray must be build with all the values contained in the ArrayList and must be the size of the ArrayList
-        HashMap<String, Node> nodes = graph.getNodes();
-        Node[] nodeArray = new Node[3];
-        nodeArray[0] = nodes.get("barbara");
-        nodeArray[1] = nodes.get("carol");
-        nodeArray[2] = nodes.get("elizabeth");
-
-        Node[] expected = {new Node("barbara"),
-            new Node("carol"),
-            new Node("elizabeth")};
-
-        assertArrayEquals(expected, nodeArray);
-
         Graph expResult = new Graph();
         Node barbara = new Node("barbara");
         Node carol = new Node("carol");
