@@ -7,5 +7,5 @@ Anna --employee_of[role=Developer,hired=Mars06]--> BigCo
 Carol --employee_of[role=Research,hired=Oct08]--> BigCo
 Carol --friend[since=2005]--> Dawn
 Carol --friend[since=2007,share=tweets]--> Dawn
-Carol --friend[since=2007,share=[books]]--> Dawn
+Carol --friend[since=2007,share=[books|dicks]]--> Dawn
 Carol --friend[since=2007,share=movies]--> Dawn

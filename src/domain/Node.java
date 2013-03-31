@@ -16,6 +16,9 @@ public class Node {
         this.links = new HashMap();
     }
 
+    /**
+     * Utility methods
+     */
     public void addLink(Link link) {
         if (links.containsKey(link.getType())) {
             links.get(link.getType()).add(link);
@@ -27,40 +30,60 @@ public class Node {
     }
 
     /**
-     * Checks if the link is already define for the node. If true, updates the
-     * link in the node.
+     * Returns the link if it exists in the node
      *
-     * @param link the link to check
-     * @return true if the link has been updated
+     * @param type the link type
+     * @param from the starting node
+     * @param to the end node
+     * @return the link or null
      */
-    public boolean checkLink(Link link) {
-        boolean hasBeenUpdated = false;
-        if (links.containsKey(link.getType())) {
-            List<Link> linksToCheck = links.get(link.getType());
-            for (int i = 0; i < linksToCheck.size() && !hasBeenUpdated; i++) {
-                Link currentLink = linksToCheck.get(i);
-                if (currentLink.getFrom().equals(link.getFrom())
-                        && currentLink.getTo().equals(link.getTo())) {
-                    currentLink.update(link.getAttributes());
-                    hasBeenUpdated = true;
+    public Link getLink(String type, Node from, Node to) {
+        boolean found = false;
+        Link link = null;
+        if (links.containsKey(type)) {
+            List<Link> linksList = links.get(type);
+            for (int i = 0; i < linksList.size() && !found; i++) {
+                Link currentLink = linksList.get(i);
+                if (currentLink.getFrom().equals(from)
+                        && currentLink.getTo().equals(to)) {
+                    link = currentLink;
+                    found = true;
                 }
             }
         }
-        return hasBeenUpdated;
+        return link;
     }
 
     /**
-     * Utility methods
+     * Checks if the link exists in the node
+     *
+     * @param link the link to check
+     * @return <tt>true</tt> if the node contains the link
      */
+    public boolean contains(Link link) {
+        boolean contains = false;
+        if (links.containsKey(link.getType())) {
+            List<Link> linksList = links.get(link.getType());
+            for (int i = 0; i < linksList.size() && !contains; i++) {
+                Link currentLink = linksList.get(i);
+                if (currentLink.getFrom().equals(link.getFrom())
+                        && currentLink.getTo().equals(link.getTo())) {
+                    contains = true;
+                }
+            }
+        }
+        return contains;
+    }
+
     public String getId() {
         return id;
     }
 
-    public HashMap<String, ArrayList<Link>> getLinks() {
+    public Map<String, ArrayList<Link>> getLinks() {
         return links;
     }
 
-    public ArrayList<Link> getTypeLinkArrayList(String type) {
+    public List<Link> getTypeLinkArrayList(String type) {
         if (this.links.get(type) != null) {
             return this.links.get(type);
         } else {
@@ -74,7 +97,7 @@ public class Node {
      * @param linkFilter
      * @return
      */
-    public ArrayList<Node> getLinkedNodes(ArrayList<String> linkFilter) {
+    public List<Node> getLinkedNodes(List<String> linkFilter) {
         ArrayList<Node> linkedNodes = new ArrayList();
         //For each type of link selected as filter in the parameter of the search
         for (String linkType : linkFilter) {

@@ -4,40 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class AttributeMultipleValues implements IAttributeValue<List<String>> {
+public class AttributeValues {
 
     private List<String> values;
 
-    public AttributeMultipleValues() {
+    public AttributeValues() {
         values = new ArrayList<>();
     }
 
-    public AttributeMultipleValues(List<String> values) {
+    public AttributeValues(List<String> values) {
         this();
         this.values.addAll(values);
-    }
-
-    public AttributeMultipleValues add(String value) {
-        values.add(value);
-        return this;
     }
 
     /**
      * Utility methods
      */
-    @Override
-    public List<String> getValue() {
-        return values;
+    public AttributeValues addValue(String value) {
+        values.add(value);
+        return this;
     }
 
-    @Override
-    public IAttributeValue update(List<String> values) {
-        for (String currentValue : values) {
-            if (!this.values.contains(currentValue)) {
-                add(currentValue);
-            }
-        }
-        return this;
+    public List<String> getValues() {
+        return values;
     }
 
     @Override
@@ -63,7 +52,7 @@ public class AttributeMultipleValues implements IAttributeValue<List<String>> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final AttributeMultipleValues other = (AttributeMultipleValues) obj;
+        final AttributeValues other = (AttributeValues) obj;
         if (!Objects.equals(this.values, other.values)) {
             return false;
         }
