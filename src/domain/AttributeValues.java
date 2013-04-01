@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class AttributeValues
+ */
 public class AttributeValues {
 
     private List<String> values;
@@ -31,11 +34,11 @@ public class AttributeValues {
 
     @Override
     public String toString() {
-        String display = values.get(0);
+        StringBuilder display = new StringBuilder(values.get(0));
         for (int i = 1; i < values.size(); i++) {
-            display += ", " + values.get(i);
+            display.append(", ").append(values.get(i));
         }
-        return display;
+        return display.toString();
     }
 
     @Override

@@ -9,20 +9,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Abstact class AbstractGraphBuilder
+ * Abstact class GraphBuilder
  */
-public abstract class AbstractGraphBuilder {
+public abstract class GraphBuilder {
 
     protected Graph workingGraph;
 
-    protected AbstractGraphBuilder(Graph workingGraph) {
+    protected GraphBuilder(Graph workingGraph) {
         this.workingGraph = workingGraph;
     }
 
     /**
      * Put line data into the working graph
      *
-     * @param line the line to analize
+     * @param line the line to analyze
      * @throws GraphBuildingException
      */
     public abstract void putLineData(String line) throws GraphBuildingException;
@@ -30,7 +30,7 @@ public abstract class AbstractGraphBuilder {
     /**
      * Gets the line data
      *
-     * @param line the line to analize
+     * @param line the line to analyze
      * @return an instance of <code>Map</code> wich contains the data of the
      * line
      */

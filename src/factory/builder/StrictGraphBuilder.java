@@ -6,11 +6,12 @@ import domain.Node;
 import java.util.Map;
 
 /**
- * The default extension of <code>AbstractGraphBuilder</code>
+ * The default extension of
+ * <code>GraphBuilder</code>
  */
-public class DefaultGraphBuilder extends AbstractGraphBuilder {
+public class StrictGraphBuilder extends GraphBuilder {
 
-    public DefaultGraphBuilder(Graph workingGraph) {
+    public StrictGraphBuilder(Graph workingGraph) {
         super(workingGraph);
     }
 

@@ -1,0 +1,7 @@
+Barbara --friend[since=1999]--> Carol
+Barbara --friend[since=2001]--> Carol
+Carol --friend[since=2007,share=tweets]--> Dawn
+Carol --friend[since=2007,share=[books]]--> Dawn
+Carol --friend[since=2007,share=movies]--> Dawn
+Simon --friend[since=2003,share=movies]--> Barbara
+Simon --friend[since=2003,share=[books|tweets]]--> Barbara

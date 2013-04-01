@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Class Node
+ */
 public class Node {
 
     private String id;
@@ -75,15 +78,7 @@ public class Node {
         return contains;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public Map<String, ArrayList<Link>> getLinks() {
-        return links;
-    }
-
-    public List<Link> getTypeLinkArrayList(String type) {
+    public List<Link> getLinkTypeArrayList(String type) {
         if (this.links.get(type) != null) {
             return this.links.get(type);
         } else {
@@ -94,15 +89,15 @@ public class Node {
     /**
      * Returns the nodes linked to this one by the filters in the parameter
      *
-     * @param linkFilter
-     * @return
+     * @param linkFilters the filters
+     * @return an instance of <code>List</code> of nodes
      */
-    public List<Node> getLinkedNodes(List<String> linkFilter) {
+    public List<Node> getLinkedNodes(List<String> linkFilters) {
         ArrayList<Node> linkedNodes = new ArrayList();
         //For each type of link selected as filter in the parameter of the search
-        for (String linkType : linkFilter) {
+        for (String linkType : linkFilters) {
             //We get the links linked to the node
-            for (Link link : getTypeLinkArrayList(linkType)) {
+            for (Link link : getLinkTypeArrayList(linkType)) {
                 //If the actual node is the source of the link, we add the destination node
                 if (this.equals(link.getFrom())) {
                     linkedNodes.add(link.getTo());
@@ -115,19 +110,26 @@ public class Node {
         return linkedNodes;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public Map<String, ArrayList<Link>> getLinks() {
+        return links;
+    }
+
     @Override
     public String toString() {
-        String display = "";
-
-        display += "#### Noeud : " + this.id + "\n";
+        StringBuilder display = new StringBuilder();
+        display.append("#### Noeud : ").append(id).append("\n");
         // Prints a list of links grouped by type
         for (Map.Entry<String, ArrayList<Link>> link : links.entrySet()) {
-            display += "##" + link.getKey() + "\n";
+            display.append("##").append(link.getKey()).append("\n");
             for (Link linkDetail : link.getValue()) {
-                display += linkDetail.toString() + "\n";
+                display.append(linkDetail).append("\n");
             }
         }
-        return display;
+        return display.toString();
     }
 
     @Override

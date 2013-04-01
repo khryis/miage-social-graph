@@ -1,10 +1,15 @@
 package domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+/**
+ * Class Link
+ */
 public class Link {
 
     private String type;
@@ -22,6 +27,18 @@ public class Link {
     /**
      * Utility methods
      */
+    public void addAttribute(String name, String value) {
+        List<String> values = new ArrayList<>();
+        values.add(value);
+        addAttribute(name, values);
+    }
+    
+    public void addAttribute(String name, List<String> values) {
+        if (!attributes.containsKey(name)) {
+            attributes.put(name, new AttributeValues(values));
+        }
+    }
+
     public String getType() {
         return type;
     }
@@ -44,18 +61,16 @@ public class Link {
 
     @Override
     public String toString() {
-        String display = "";
-
-        display += "Source: " + this.from.getId();
-        display += " | To: " + this.to.getId();
+        StringBuilder display = new StringBuilder();
+        display.append("Source: ").append(from.getId());
+        display.append(" | To: ").append(to.getId());
         // For each attribute, prints his name and his value(s)
         for (Entry<String, AttributeValues> attribute : attributes.entrySet()) {
-            display += " | " + attribute.getKey() + " = ";
+            display.append(" | ").append(attribute.getKey()).append(" = ");
             AttributeValues value = attribute.getValue();
-            display += value.toString();
+            display.append(value);
         }
-
-        return display;
+        return display.toString();
     }
 
     @Override

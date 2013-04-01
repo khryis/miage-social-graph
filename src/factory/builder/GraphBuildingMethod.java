@@ -6,6 +6,6 @@ package factory.builder;
  */
 public enum GraphBuildingMethod {
 
-    DEFAULT,
+    STRICT,
     WITH_UPDATE;
 }

@@ -1,6 +1,8 @@
 Barbara --friend[since=1999]--> Carol
 Barbara --friend[since=1999,share=[books|movies|tweets]]--> Elizabeth
 Barbara --friend[since=2011]--> Anna
-Anna --friend[since=2011]--> Barbara
 Anna --friend[since=2011]--> Julie
 Anna --employee_of[since=2011]--> Barbara
+Simon --friend[since=2001]--> Judith
+Simon --employee_of[since=2011]--> Romain
+Romain --friend[since=2005]--> Judith

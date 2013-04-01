@@ -1,7 +1,8 @@
 package factory.parser;
 
 /**
- * Exception GraphFileParserException which it throws when there is a parsing error
+ * Exception GraphFileParserException which it throws when there is a parsing
+ * error
  */
 public class GraphFileParserException extends Exception {
 

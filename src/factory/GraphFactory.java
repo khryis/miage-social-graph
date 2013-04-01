@@ -1,10 +1,10 @@
 package factory;
 
 import domain.Graph;
-import factory.builder.AbstractGraphBuilder;
-import factory.builder.DefaultGraphBuilder;
+import factory.builder.GraphBuilder;
 import factory.builder.GraphBuildingException;
 import factory.builder.GraphBuildingMethod;
+import factory.builder.StrictGraphBuilder;
 import factory.builder.WithUpdateGraphBuilder;
 import factory.parser.GraphFileParser;
 import factory.parser.GraphFileParserException;
@@ -28,7 +28,7 @@ public class GraphFactory implements IGraphFactory {
     @Override
     public Graph getGraph(File file)
             throws GraphFileParserException, GraphBuildingException, IOException {
-        return getGraph(file, GraphBuildingMethod.DEFAULT);
+        return getGraph(file, GraphBuildingMethod.STRICT);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class GraphFactory implements IGraphFactory {
             throws GraphFileParserException, GraphBuildingException, IOException {
         GraphFileParser parser = new GraphFileParser(file);
         Graph graph = new Graph();
-        AbstractGraphBuilder builder = initBuilder(graph, buildingMethod);
+        GraphBuilder builder = initBuilder(graph, buildingMethod);
         String currentLine;
         while ((currentLine = parser.readNextLine()) != null) {
             builder.putLineData(currentLine);
@@ -46,17 +46,19 @@ public class GraphFactory implements IGraphFactory {
     }
 
     /**
-     * Initializes an extension of <code>AbstractGraphBuilder</code>
-     * 
+     * Initializes an extension of
+     * <code>GraphBuilder</code>
+     *
      * @param workingGraph the graph to work on
      * @param buildingMethod the building method
-     * @return an extension of <code>AbstractGraphBuilder</code>
+     * @return an extension of <code>GraphBuilder</code>
      */
-    private AbstractGraphBuilder initBuilder(Graph workingGraph, GraphBuildingMethod buildingMethod) {
-        if (buildingMethod.equals(GraphBuildingMethod.WITH_UPDATE)) {
-            return new WithUpdateGraphBuilder(workingGraph);
-        } else {
-            return new DefaultGraphBuilder(workingGraph);
+    private GraphBuilder initBuilder(Graph workingGraph, GraphBuildingMethod buildingMethod) {
+        switch (buildingMethod) {
+            case WITH_UPDATE:
+                return new WithUpdateGraphBuilder(workingGraph);
+            default:
+                return new StrictGraphBuilder(workingGraph);
         }
     }
 }

@@ -1,13 +1,14 @@
 package domain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class NodeTest {
 
@@ -43,7 +44,7 @@ public class NodeTest {
     @Test
     public void testGetTypeLinkArrayList() {
         from.addLink(new Link(linkType, from, to));
-        ArrayList<Link> friendsLink = from.getTypeLinkArrayList(linkType);
+        List<Link> friendsLink = from.getLinkTypeArrayList(linkType);
         assertNotNull(friendsLink);
     }
 
@@ -59,7 +60,7 @@ public class NodeTest {
 
         Link attendu;
         attendu = new Link(linkType, new Node("Carol"), new Node("Barbara"));
-        ArrayList<Link> fromfriendsLinks = from.getTypeLinkArrayList(linkType);
+        List<Link> fromfriendsLinks = from.getLinkTypeArrayList(linkType);
 
         assertTrue(fromfriendsLinks.contains(attendu));
     }
@@ -72,20 +73,20 @@ public class NodeTest {
         System.out.println("addLink : testSizeOfLinkArrayListAfterAddLink");
         from.addLink(new Link(linkType, from, to));
 
-        ArrayList<Link> friendlist = from.getTypeLinkArrayList(linkType);
+        List<Link> friendlist = from.getLinkTypeArrayList(linkType);
         long attendu = 1;
         assertEquals(attendu, friendlist.size());
     }
 
     /**
-     * <p><strong>Test 3 of addLink method, of class Node.</strong></p>
-     * <p>When add a new type of link, new entry (key) in HashMap.</p>
+     * <p><strong>Test 3 of addLink method, of class Node.</strong></p> <p>When
+     * add a new type of link, new entry (key) in HashMap.</p>
      */
     @Test
     public void testLinkTypeExistAfterAddLink() {
         System.out.println("addLink : testKeyExistAfterAddLink");
         from.addLink(new Link(linkType, from, to));
-        HashMap<String, ArrayList<Link>> links = from.getLinks();
+        Map<String, ArrayList<Link>> links = from.getLinks();
         assertTrue(links.containsKey(linkType));
     }
 }

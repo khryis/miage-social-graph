@@ -11,9 +11,9 @@ import java.util.Set;
 
 /**
  * The "with update" extension of
- * <code>AbstractGraphBuilder</code>
+ * <code>GraphBuilder</code>
  */
-public class WithUpdateGraphBuilder extends AbstractGraphBuilder {
+public class WithUpdateGraphBuilder extends GraphBuilder {
 
     public WithUpdateGraphBuilder(Graph workingGraph) {
         super(workingGraph);
