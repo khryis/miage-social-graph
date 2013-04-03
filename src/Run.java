@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import search.GraphParser;
-import search.SearchException;
-import search.SearchResult;
 
 public class Run {
 
@@ -35,13 +33,14 @@ public class Run {
         List<String> filters = new ArrayList<>();
         filters.add("friend");
         GraphParser parser = new GraphParser(g);
-        try {
-            SearchResult result = parser.search("barbara", filters);
-            System.out.println(result);
-            // Supposed result : carol, dawn, elizabeth, anna
-        } catch (SearchException ex) {
-            Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        //TODO uncomment search
+        /*try {
+         SearchResult result = parser.search("barbara", filters);
+         System.out.println(result);
+         // Supposed result : carol, dawn, elizabeth, anna
+         } catch (SearchException ex) {
+         Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         */
     }
 }

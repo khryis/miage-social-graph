@@ -1,10 +1,13 @@
 package search;
 
 import domain.Graph;
+import domain.Link;
 import domain.LinkFilter;
 import domain.Node;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import static search.SearchMethod.BFS;
 
 /**
  * Class GraphParser
@@ -18,36 +21,55 @@ public class GraphParser implements IGraphParser {
     }
 
     @Override
-    public SearchResult search(String startingNode, List<String> linkFilters) throws SearchException {
-        return search(startingNode, linkFilters, SearchMethod.DFS);
+    public SearchResult search(String startingNode, List<LinkFilter> filters) throws SearchException {
+        return search(startingNode, filters, SearchMethod.DFS, 1, Unicity.GLOBALNODE);
     }
 
     @Override
-    public SearchResult search(String startingNode, List<String> linkFilters, SearchMethod searchMethod) throws SearchException {
+    public SearchResult search(String startingNode, List<LinkFilter> filters, int level) throws SearchException {
+        return search(startingNode, filters, SearchMethod.DFS, level, Unicity.GLOBALNODE);
+    }
+
+    @Override
+    public SearchResult search(String startingNode, List<LinkFilter> filters, Unicity unicity) throws SearchException {
+        return search(startingNode, filters, SearchMethod.DFS, 1, unicity);
+    }
+
+    @Override
+    public SearchResult search(String startingNode, List<LinkFilter> filters, int level, Unicity unicity) throws SearchException {
+        return search(startingNode, filters, SearchMethod.DFS, level, Unicity.GLOBALNODE);
+    }
+
+    @Override
+    public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod) throws SearchException {
+        return search(startingNode, filters, searchMethod, 1, Unicity.GLOBALNODE);
+    }
+
+    @Override
+    public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod, int level) throws SearchException {
+        return search(startingNode, filters, searchMethod, level, Unicity.GLOBALNODE);
+    }
+
+    @Override
+    public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod, Unicity unicity) throws SearchException {
+        return search(startingNode, filters, searchMethod, 1, unicity);
+    }
+
+    @Override
+    public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod, int level, Unicity unicity) throws SearchException {
         Node node;
         if ((node = workingGraph.getNode(startingNode)) == null) {
             throw new SearchException("The node " + startingNode + " does not exist for this graph");
+        }
+        if (level < 1) {
+            throw new SearchException("The level of search must a least be 1");
         }
         switch (searchMethod) {
             case BFS:
                 return null;
             default:
-                return DFS(node, linkFilters);
+                return DFS(node, filters, level, unicity);
         }
-    }
-
-    /**
-     * The Depth First Search method
-     *
-     * @param startingNode the starting node
-     * @param linkFilters the filters
-     * @return an instance of <code>SearchResult</code>
-     */
-    private SearchResult DFS(Node startingNode, List<String> linkFilters) {
-        SearchResult result = new SearchResult();
-        List<Node> exploredNodeList = new ArrayList<>();
-        processDFS(startingNode, linkFilters, result, exploredNodeList);
-        return result;
     }
 
     /**
@@ -58,17 +80,47 @@ public class GraphParser implements IGraphParser {
      * @param result the result which is updated
      * @param exploredNodeList the explored nodes list
      */
-    private void processDFS(Node currentNode, List<String> linkFilters, SearchResult result, List<Node> exploredNodesList) {
+    @Deprecated
+    private void recursiveDFS(Node currentNode, List<String> linkFilters, SearchResult result, List<Node> exploredNodesList) {
         exploredNodesList.add(currentNode);
         for (Node n : currentNode.getLinkedNodes(linkFilters)) {
             if (!exploredNodesList.contains(n)) {
                 result.addNode(n);
-                processDFS(n, linkFilters, result, exploredNodesList);
+                recursiveDFS(n, linkFilters, result, exploredNodesList);
             }
         }
     }
 
-    private void processDFS(Node currentNode, List<LinkFilter> linkFilters, SearchResult result, List<Node> exploredNode, int level, Unicity unicity) {
+    /**
+     * The Depth First Search method
+     *
+     * @param startingNode the starting node
+     * @param filters search criteria
+     * @param level set the depth of search (default = 1)
+     * @param unicity set the parsing rule (default = GLOBALNODE)
+     * @return an instance of <code>SearchResult</code>
+     */
+    private SearchResult DFS(Node startingNode, List<LinkFilter> filters, int level, Unicity unicity) {
+        SearchResult result = new SearchResult();
+        switch (unicity) {
+            case GLOBALRELATION:
+                Set<Link> exploredLinksList = new HashSet<>();
+                recursiveGlobalRelationDFS(startingNode, filters, result, exploredLinksList, 0, level);
+                break;
+            default:
+                Set<Node> exploredNodesList = new HashSet<>();
+                recursiveGlobalNodeDFS(startingNode, filters, result, exploredNodesList, 0, level);
+                break;
+        }
+        return result;
+    }
+
+    private void recursiveGlobalNodeDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Node> exploredNodes, int currentLevel, int maxLevel) {
+        //TODO see recursiveDFS method
+    }
+
+    private void recursiveGlobalRelationDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {
+        //TODO add this kind of parsing
     }
 
     public enum Unicity {
