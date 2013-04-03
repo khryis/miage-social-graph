@@ -1,6 +1,7 @@
 package search;
 
 import domain.Graph;
+import domain.LinkFilter;
 import domain.Node;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,5 +66,14 @@ public class GraphParser implements IGraphParser {
                 processDFS(n, linkFilters, result, exploredNodesList);
             }
         }
+    }
+
+    private void processDFS(Node currentNode, List<LinkFilter> linkFilters, SearchResult result, List<Node> exploredNode, int level, Unicity unicity) {
+    }
+
+    public enum Unicity {
+
+        GLOBALNODE,
+        GLOBALRELATION
     }
 }

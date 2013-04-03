@@ -110,6 +110,16 @@ public class Node {
         return linkedNodes;
     }
 
+    public List<Node> getLinkedNodes(HashMap<String, IsSource> linkFilters) {
+        for (Map.Entry<String, IsSource> entry : linkFilters.entrySet()) {
+            String string = entry.getKey();
+            IsSource isSource = entry.getValue();
+
+        }
+
+        return null;
+    }
+
     public String getId() {
         return id;
     }
@@ -154,5 +164,11 @@ public class Node {
             return false;
         }
         return true;
+    }
+
+    public enum IsSource {
+
+        TRUE,
+        FALSE
     }
 }
