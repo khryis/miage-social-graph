@@ -1,4 +1,4 @@
-package factory.builder;
+package factory;
 
 import domain.AttributeValues;
 import domain.Graph;
@@ -8,10 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Abstact class GraphBuilder
- */
-public abstract class GraphBuilder {
+abstract class GraphBuilder {
 
     protected Graph workingGraph;
 

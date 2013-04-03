@@ -1,10 +1,6 @@
-package factory.builder;
+package factory;
 
-/**
- *
- * @author Julien Neuhart
- */
-public class GraphBuildingException extends Exception {
+class GraphBuildingException extends Exception {
 
     /**
      * Creates a new instance of

@@ -1,10 +1,10 @@
-package factory.parser;
+package factory;
 
 /**
  * Exception GraphFileParserException which it throws when there is a parsing
  * error
  */
-public class GraphFileParserException extends Exception {
+class GraphFileParserException extends Exception {
 
     /**
      * Creates a new instance of

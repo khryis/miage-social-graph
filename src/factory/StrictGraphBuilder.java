@@ -1,4 +1,4 @@
-package factory.builder;
+package factory;
 
 import domain.Graph;
 import domain.Link;
@@ -9,7 +9,7 @@ import java.util.Map;
  * The default extension of
  * <code>GraphBuilder</code>
  */
-public class StrictGraphBuilder extends GraphBuilder {
+class StrictGraphBuilder extends GraphBuilder {
 
     public StrictGraphBuilder(Graph workingGraph) {
         super(workingGraph);

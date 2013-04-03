@@ -1,4 +1,4 @@
-package factory.parser;
+package factory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  * Class GraphFileParser which helps to parse a file to build a
  * <code>Graph</code>
  */
-public class GraphFileParser {
+class GraphFileParser {
 
     private static final String REGEX =
             "\\w+\\s--\\w+\\[((((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)),)*)((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+))))\\]-->\\s\\w+";

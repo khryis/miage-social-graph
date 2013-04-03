@@ -1,4 +1,4 @@
-package factory.builder;
+package factory;
 
 import domain.AttributeValues;
 import domain.Graph;
@@ -13,7 +13,7 @@ import java.util.Set;
  * The "with update" extension of
  * <code>GraphBuilder</code>
  */
-public class WithUpdateGraphBuilder extends GraphBuilder {
+class WithUpdateGraphBuilder extends GraphBuilder {
 
     public WithUpdateGraphBuilder(Graph workingGraph) {
         super(workingGraph);

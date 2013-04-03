@@ -2,9 +2,9 @@
 import domain.Graph;
 import factory.GraphFactory;
 import factory.IGraphFactory;
-import factory.builder.GraphBuildingException;
-import factory.builder.GraphBuildingMethod;
-import factory.parser.GraphFileParserException;
+import factory.GraphBuildingException;
+import factory.GraphBuildingMethod;
+import factory.GraphFileParserException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class Run {
         } catch (GraphFileParserException | GraphBuildingException | IOException ex) {
             Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         // Test for DFS
         List<String> filters = new ArrayList<>();
         filters.add("friend");

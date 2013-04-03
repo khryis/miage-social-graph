@@ -1,4 +1,4 @@
-package factory.builder;
+package factory;
 
 /**
  * Enum GraphBuildingMethod wich helps the factory to know what kind of graph
