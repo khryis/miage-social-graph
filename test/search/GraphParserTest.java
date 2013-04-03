@@ -4,7 +4,7 @@ import domain.Graph;
 import domain.Node;
 import factory.GraphFactory;
 import factory.IGraphFactory;
-import factory.builder.GraphBuildingMethod;
+import factory.GraphBuildingMethod;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

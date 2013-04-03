@@ -4,7 +4,7 @@ package factory;
  * Exception GraphFileParserException which it throws when there is a parsing
  * error
  */
-class GraphFileParserException extends Exception {
+public class GraphFileParserException extends Exception {
 
     /**
      * Creates a new instance of

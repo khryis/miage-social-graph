@@ -1,6 +1,6 @@
 package factory;
 
-class GraphBuildingException extends Exception {
+public class GraphBuildingException extends Exception {
 
     /**
      * Creates a new instance of
