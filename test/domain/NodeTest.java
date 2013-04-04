@@ -42,9 +42,9 @@ public class NodeTest {
      * Test of getTypeLinkArrayList method, of class Node
      */
     @Test
-    public void testGetTypeLinkArrayList() {
+    public void testGetLinkList() {
         from.addLink(new Link(linkType, from, to));
-        List<Link> friendsLink = from.getLinkTypeArrayList(linkType);
+        List<Link> friendsLink = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
         assertNotNull(friendsLink);
     }
 
@@ -60,7 +60,7 @@ public class NodeTest {
 
         Link attendu;
         attendu = new Link(linkType, new Node("Carol"), new Node("Barbara"));
-        List<Link> fromfriendsLinks = from.getLinkTypeArrayList(linkType);
+        List<Link> fromfriendsLinks = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
 
         assertTrue(fromfriendsLinks.contains(attendu));
     }
@@ -69,11 +69,11 @@ public class NodeTest {
      * Test 2 of addLink method, of class Node.
      */
     @Test
-    public void testSizeOfLinkArrayListAfterAddLink() {
+    public void testSizeOfLinkListAfterAddLink() {
         System.out.println("addLink : testSizeOfLinkArrayListAfterAddLink");
         from.addLink(new Link(linkType, from, to));
 
-        List<Link> friendlist = from.getLinkTypeArrayList(linkType);
+        List<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
         long attendu = 1;
         assertEquals(attendu, friendlist.size());
     }

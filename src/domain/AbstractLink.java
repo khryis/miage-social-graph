@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class AbstractLink {
 
@@ -53,5 +54,21 @@ public abstract class AbstractLink {
     public abstract int hashCode();
 
     @Override
-    public abstract boolean equals(Object obj);
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        //TODO: check if testing superclass is OK (if must return AbastractLink class)
+        if (getClass().getSuperclass() != obj.getClass().getSuperclass()) {
+            return false;
+        }
+        final AbstractLink other = (AbstractLink) obj;
+        if (!Objects.equals(getType(), other.getType())) {
+            return false;
+        }
+        if (!Objects.equals(getAttributes(), other.getAttributes())) {
+            return false;
+        }
+        return true;
+    }
 }

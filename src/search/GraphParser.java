@@ -80,17 +80,16 @@ public class GraphParser implements IGraphParser {
      * @param result the result which is updated
      * @param exploredNodeList the explored nodes list
      */
-    @Deprecated
-    private void recursiveDFS(Node currentNode, List<String> linkFilters, SearchResult result, List<Node> exploredNodesList) {
-        exploredNodesList.add(currentNode);
-        for (Node n : currentNode.getLinkedNodes(linkFilters)) {
-            if (!exploredNodesList.contains(n)) {
-                result.addNode(n);
-                recursiveDFS(n, linkFilters, result, exploredNodesList);
-            }
-        }
-    }
-
+    /*@Deprecated
+     private void recursiveDFS(Node currentNode, List<String> linkFilters, SearchResult result, List<Node> exploredNodesList) {
+     exploredNodesList.add(currentNode);
+     for (Node n : currentNode.getLinkedNodes(linkFilters)) {
+     if (!exploredNodesList.contains(n)) {
+     result.addNode(n);
+     recursiveDFS(n, linkFilters, result, exploredNodesList);
+     }
+     }
+     }*/
     /**
      * The Depth First Search method
      *
@@ -116,7 +115,15 @@ public class GraphParser implements IGraphParser {
     }
 
     private void recursiveGlobalNodeDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Node> exploredNodes, int currentLevel, int maxLevel) {
-        //TODO see recursiveDFS method
+        //TODO see recursiveDFS method and complete code (maxLevel, etc)
+        exploredNodes.add(currentNode);
+        for (Node n : currentNode.getLinkedNodes(filters.get(currentLevel))) {
+            if (!exploredNodes.contains(n)) {
+                result.addNode(n);
+                recursiveGlobalNodeDFS(currentNode, filters, result, exploredNodes, currentLevel + 1, maxLevel);
+                //recursiveDFS(n, linkFilters, result, exploredNodesList);
+            }
+        }
     }
 
     private void recursiveGlobalRelationDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {

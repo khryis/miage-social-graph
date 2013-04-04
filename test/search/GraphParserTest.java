@@ -58,7 +58,7 @@ public class GraphParserTest {
 
         GraphParser parser = new GraphParser(graph);
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("friend", Node.IsSource.TRUE);
+        LinkFilter f1 = new LinkFilter("friend", LinkFilter.Direction.FROM);
         filters.add(f1);
         SearchResult result = parser.search("barbara", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Node[] resultNodes = result.getResultNodesAsArray();
@@ -91,7 +91,7 @@ public class GraphParserTest {
 
         GraphParser parser = new GraphParser(graph);
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("employee_of", Node.IsSource.TRUE);
+        LinkFilter f1 = new LinkFilter("employee_of", LinkFilter.Direction.FROM);
         filters.add(f1);
         SearchResult result = parser.search("anna", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Node[] resultNodes = result.getResultNodesAsArray();

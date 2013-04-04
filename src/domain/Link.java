@@ -51,28 +51,22 @@ public class Link extends AbstractLink {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (!super.equals(obj)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Link other = (Link) obj;
-        if (!Objects.equals(getType(), other.getType())) {
-            return false;
-        }
-        if (!Objects.equals(this.from.getId(), other.from.getId())) {
-            return false;
-        }
-        if (!Objects.equals(this.to.getId(), other.to.getId())) {
-            return false;
-        }
-        //TODO: test if to object with same content (content objects redefine equals) are equals
 
-
-        if (!Objects.equals(getAttributes(), other.getAttributes())) {
+        if (getClass() == obj.getClass()) {
+            final Link other = (Link) obj;
+            if (!Objects.equals(this.from.getId(), other.from.getId())) {
+                return false;
+            }
+            if (!Objects.equals(this.to.getId(), other.to.getId())) {
+                return false;
+            }
+        } else if (obj.getClass() != LinkFilter.class) {
             return false;
         }
+
         return true;
     }
 }

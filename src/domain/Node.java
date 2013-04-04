@@ -2,6 +2,7 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -78,46 +79,61 @@ public class Node {
         return contains;
     }
 
-    public List<Link> getLinkTypeArrayList(String type) {
-        if (this.links.get(type) != null) {
-            return this.links.get(type);
-        } else {
-            return new ArrayList<>();
+    /**
+     * Returns the list of links of the current node that satisfy the given
+     * search criterias
+     *
+     * @param filter define the link exclusion criteria
+     * @return list of links according to the given search criteria
+     */
+    public List<Link> getLinkList(LinkFilter filter) {
+        List<Link> list = new ArrayList<>();
+        for (Iterator<Link> it = links.get(filter.getType()).iterator(); it.hasNext();) {
+            Link link = it.next();
+            if (!link.equals(filter)) {
+                list.add(link);
+            }
         }
+        return list;
     }
 
     /**
-     * Returns the nodes linked to this one by the filters in the parameter
+     * Returns the linked nodes list to the current node according to the given
+     * filter
      *
-     * @param linkFilters the filters
-     * @return an instance of <code>List</code> of nodes
+     * @param filter Criteria of link acceptation
+     *
+     * @return linked nodes matching the given search criteria
      */
-    public List<Node> getLinkedNodes(List<String> linkFilters) {
-        ArrayList<Node> linkedNodes = new ArrayList();
-        //For each type of link selected as filter in the parameter of the search
-        for (String linkType : linkFilters) {
-            //We get the links linked to the node
-            for (Link link : getLinkTypeArrayList(linkType)) {
-                //If the actual node is the source of the link, we add the destination node
-                if (this.equals(link.getFrom())) {
-                    linkedNodes.add(link.getTo());
-                    //If it's not we add the source of the link
-                } else {
-                    linkedNodes.add(link.getFrom());
-                }
+    public List<Node> getLinkedNodes(LinkFilter filter) {
+        ArrayList<Node> linkedNodes = new ArrayList<>();
+        for (Link link : getLinkList(filter)) {
+            switch (filter.getDirection()) {
+                case FROM:
+                    if (this.equals(link.getFrom())) {
+                        linkedNodes.add(link.getTo());
+                    }
+                    break;
+                case TO:
+                    if (this.equals(link.getTo())) {
+                        linkedNodes.add(link.getFrom());
+                    }
+                    break;
+                case BOTH:
+                    //TODO
+                    break;
+                case BLIND:
+                    if (this.equals(link.getFrom())) {
+                        linkedNodes.add(link.getTo());
+                    }
+                    if (this.equals(link.getTo())) {
+                        linkedNodes.add(link.getFrom());
+                    }
+                    break;
             }
         }
+
         return linkedNodes;
-    }
-
-    public List<Node> getLinkedNodes(HashMap<String, IsSource> linkFilters) {
-        for (Map.Entry<String, IsSource> entry : linkFilters.entrySet()) {
-            String string = entry.getKey();
-            IsSource isSource = entry.getValue();
-
-        }
-
-        return null;
     }
 
     public String getId() {
@@ -164,11 +180,5 @@ public class Node {
             return false;
         }
         return true;
-    }
-
-    public enum IsSource {
-
-        TRUE,
-        FALSE
     }
 }
