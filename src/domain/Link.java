@@ -1,5 +1,6 @@
 package domain;
 
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
@@ -51,11 +52,18 @@ public class Link extends AbstractLink {
 
     @Override
     public boolean equals(Object obj) {
-        if (!super.equals(obj)) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass().getSuperclass() != obj.getClass().getSuperclass()) {
+            return false;
+        }
+        if (!getType().equals(((AbstractLink) obj).getType())) {
             return false;
         }
 
         if (getClass() == obj.getClass()) {
+            //Same instance, we want both object to be exactly the same
             final Link other = (Link) obj;
             if (!Objects.equals(this.from.getId(), other.from.getId())) {
                 return false;
@@ -63,7 +71,18 @@ public class Link extends AbstractLink {
             if (!Objects.equals(this.to.getId(), other.to.getId())) {
                 return false;
             }
-        } else if (obj.getClass() != LinkFilter.class) {
+            if (!Objects.equals(getAttributes(), other.getAttributes())) {
+                return false;
+            }
+        } else if (obj.getClass() == LinkFilter.class) {
+            //the given object is a linkfilter, we want it to be a subset of this
+            final LinkFilter other = (LinkFilter) obj;
+            for (Map.Entry<String, AttributeValues> en : other.getAttributes().entrySet()) {
+                if (!getAttributes().get(en.getKey()).isSupersetOf(en.getValue())) {
+                    return false;
+                }
+            }
+        } else {
             return false;
         }
 

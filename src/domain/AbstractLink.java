@@ -58,12 +58,11 @@ public abstract class AbstractLink {
         if (obj == null) {
             return false;
         }
-        //TODO: check if testing superclass is OK (if must return AbastractLink class)
         if (getClass().getSuperclass() != obj.getClass().getSuperclass()) {
             return false;
         }
         final AbstractLink other = (AbstractLink) obj;
-        if (!Objects.equals(getType(), other.getType())) {
+        if (!getType().equals(other.getType())) {
             return false;
         }
         if (!Objects.equals(getAttributes(), other.getAttributes())) {

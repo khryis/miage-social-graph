@@ -29,8 +29,7 @@ public class LinkFilter extends AbstractLink {
 
     @Override
     public boolean equals(Object obj) {
-        //TODO define equals with super and a comparison with a "Link" instance
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return super.equals(obj);
     }
 
     public enum Direction {
