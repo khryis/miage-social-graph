@@ -129,10 +129,4 @@ public class GraphParser implements IGraphParser {
     private void recursiveGlobalRelationDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {
         //TODO add this kind of parsing
     }
-
-    public enum Unicity {
-
-        GLOBALNODE,
-        GLOBALRELATION
-    }
 }
