@@ -58,11 +58,12 @@ public class NodeTest {
         Link link = new Link("friends", new Node("Carol"), new Node("Barbara"));
         from.addLink(link);
 
-        Link attendu;
-        attendu = new Link(linkType, new Node("Carol"), new Node("Barbara"));
-        List<Link> fromfriendsLinks = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
+        Link expected;
+        expected = new Link(linkType, new Node("Carol"), new Node("Barbara"));
 
-        assertTrue(fromfriendsLinks.contains(attendu));
+        List<Link> fromfriendsLinks = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.BLIND));
+
+        assertTrue(fromfriendsLinks.contains(expected));
     }
 
     /**
@@ -74,8 +75,8 @@ public class NodeTest {
         from.addLink(new Link(linkType, from, to));
 
         List<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
-        long attendu = 1;
-        assertEquals(attendu, friendlist.size());
+        long expected = 1;
+        assertEquals(expected, friendlist.size());
     }
 
     /**
