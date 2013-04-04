@@ -1,10 +1,11 @@
 package search;
 
 import domain.Graph;
+import domain.LinkFilter;
 import domain.Node;
+import factory.GraphBuildingMethod;
 import factory.GraphFactory;
 import factory.IGraphFactory;
-import factory.GraphBuildingMethod;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +57,10 @@ public class GraphParserTest {
         expResult[3] = graph.getNode("julie");
 
         GraphParser parser = new GraphParser(graph);
-        List<String> filters = new ArrayList<>();
-        filters.add("friend");
-        SearchResult result = parser.search("barbara", filters, SearchMethod.DFS);
+        List<LinkFilter> filters = new ArrayList<>();
+        LinkFilter f1 = new LinkFilter("friend", Node.IsSource.TRUE);
+        filters.add(f1);
+        SearchResult result = parser.search("barbara", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Node[] resultNodes = result.getResultNodesAsArray();
 
         System.out.println("*************************");
@@ -88,9 +90,10 @@ public class GraphParserTest {
         expResult[0] = graph.getNode("barbara");
 
         GraphParser parser = new GraphParser(graph);
-        List<String> filters = new ArrayList<>();
-        filters.add("employee_of");
-        SearchResult result = parser.search("anna", filters, SearchMethod.DFS);
+        List<LinkFilter> filters = new ArrayList<>();
+        LinkFilter f1 = new LinkFilter("employee_of", Node.IsSource.TRUE);
+        filters.add(f1);
+        SearchResult result = parser.search("anna", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Node[] resultNodes = result.getResultNodesAsArray();
 
         System.out.println("*************************");
