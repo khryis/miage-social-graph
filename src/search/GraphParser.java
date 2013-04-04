@@ -154,7 +154,6 @@ public class GraphParser implements IGraphParser {
     }
 
     private void globalNodeBFS(Node startingNode, List<LinkFilter> filters, SearchResult result, Set<Node> exploredNodes, int currentLevel, int maxLevel) {
-        //TODO see recursiveBFS method and complete code (maxLevel, etc)
         exploredNodes.add(startingNode);
         ArrayDeque<Node> nodesQueue = new ArrayDeque();
         nodesQueue.add(startingNode);
@@ -165,6 +164,7 @@ public class GraphParser implements IGraphParser {
             for (Node n : currentNode.getLinkedNodes(filters.get(currentLevel))) {
                 if (!exploredNodes.contains(n)) {
                     exploredNodes.add(n);
+                    nodesQueue.add(n);
                 }
             }
         }
