@@ -73,6 +73,7 @@ public class GraphParserTest {
          }
          System.out.println("***************************");*/
 
+        //TODO use a different assert function (the order given by parser.search "cannot" be predicted)
         assertArrayEquals(expResult, resultNodes);
     }
 

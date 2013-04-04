@@ -134,5 +134,18 @@ public class GraphParser implements IGraphParser {
 
     private void recursiveGlobalRelationDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {
         //TODO add this kind of parsing
+        currentLevel++;
+        for (Link l : currentNode.getLinkList(filters.get(currentLevel >= filters.size() ? filters.size() - 1 : currentLevel))) {
+            if (!exploredLinks.contains(l)) {
+                Node target = (l.getTo().getId().equals(currentNode.getId()) ? l.getFrom() : l.getTo());
+                int delta = currentLevel - filters.size();
+                if (delta >= 0) {
+                    result.addNode(target);
+                }
+                if (delta < maxLevel) {
+                    recursiveGlobalRelationDFS(target, filters, result, exploredLinks, currentLevel, maxLevel);
+                }
+            }
+        }
     }
 }
