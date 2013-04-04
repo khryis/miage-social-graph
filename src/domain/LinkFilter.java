@@ -8,6 +8,15 @@ public class LinkFilter extends AbstractLink {
         super();
     }
 
+    /**
+     * Default direction is BLIND
+     *
+     * @param type Type of link
+     */
+    public LinkFilter(String type) {
+        this(type, Direction.BLIND);
+    }
+
     public LinkFilter(String type, Direction direction) {
         super(type);
         this.direction = direction;

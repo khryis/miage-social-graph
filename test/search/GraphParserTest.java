@@ -58,20 +58,20 @@ public class GraphParserTest {
 
         GraphParser parser = new GraphParser(graph);
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("friend", LinkFilter.Direction.FROM);
+        LinkFilter f1 = new LinkFilter("friend", LinkFilter.Direction.BLIND);
         filters.add(f1);
         SearchResult result = parser.search("barbara", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Node[] resultNodes = result.getResultNodesAsArray();
 
-        System.out.println("*************************");
-        for (int i = 0; i < expResult.length; i++) {
-            System.out.println(expResult[i]);
-        }
-        System.out.println("--------------------------");
-        for (int i = 0; i < resultNodes.length; i++) {
-            System.out.println(resultNodes[i]);
-        }
-        System.out.println("***************************");
+        /*System.out.println("*************************");
+         for (int i = 0; i < expResult.length; i++) {
+         System.out.println(expResult[i]);
+         }
+         System.out.println("--------------------------");
+         for (int i = 0; i < resultNodes.length; i++) {
+         System.out.println(resultNodes[i]);
+         }
+         System.out.println("***************************");*/
 
         assertArrayEquals(expResult, resultNodes);
     }
@@ -91,20 +91,20 @@ public class GraphParserTest {
 
         GraphParser parser = new GraphParser(graph);
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("employee_of", LinkFilter.Direction.FROM);
+        LinkFilter f1 = new LinkFilter("employee_of", LinkFilter.Direction.BLIND);
         filters.add(f1);
         SearchResult result = parser.search("anna", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Node[] resultNodes = result.getResultNodesAsArray();
 
-        System.out.println("*************************");
-        for (int i = 0; i < expResult.length; i++) {
-            System.out.println(expResult[i]);
-        }
-        System.out.println("--------------------------");
-        for (int i = 0; i < resultNodes.length; i++) {
-            System.out.println(resultNodes[i]);
-        }
-        System.out.println("***************************");
+        /*System.out.println("*************************");
+         for (int i = 0; i < expResult.length; i++) {
+         System.out.println(expResult[i]);
+         }
+         System.out.println("--------------------------");
+         for (int i = 0; i < resultNodes.length; i++) {
+         System.out.println(resultNodes[i]);
+         }
+         System.out.println("***************************");*/
 
         assertArrayEquals(expResult, resultNodes);
     }

@@ -67,6 +67,7 @@ public class GraphParser implements IGraphParser {
         switch (searchMethod) {
             case BFS:
                 return null;
+            case DFS:
             default:
                 return DFS(node, filters, level, unicity);
         }
@@ -106,6 +107,7 @@ public class GraphParser implements IGraphParser {
                 Set<Link> exploredLinksList = new HashSet<>();
                 recursiveGlobalRelationDFS(startingNode, filters, result, exploredLinksList, 0, level);
                 break;
+            case GLOBALNODE:
             default:
                 Set<Node> exploredNodesList = new HashSet<>();
                 recursiveGlobalNodeDFS(startingNode, filters, result, exploredNodesList, 0, level);
@@ -115,13 +117,17 @@ public class GraphParser implements IGraphParser {
     }
 
     private void recursiveGlobalNodeDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Node> exploredNodes, int currentLevel, int maxLevel) {
-        //TODO see recursiveDFS method and complete code (maxLevel, etc)
         exploredNodes.add(currentNode);
-        for (Node n : currentNode.getLinkedNodes(filters.get(currentLevel))) {
+        currentLevel++;
+        for (Node n : currentNode.getLinkedNodes(filters.get(currentLevel >= filters.size() ? filters.size() - 1 : currentLevel))) {
             if (!exploredNodes.contains(n)) {
-                result.addNode(n);
-                recursiveGlobalNodeDFS(currentNode, filters, result, exploredNodes, currentLevel + 1, maxLevel);
-                //recursiveDFS(n, linkFilters, result, exploredNodesList);
+                int delta = currentLevel - filters.size();
+                if (delta >= 0) {
+                    result.addNode(n);
+                }
+                if (delta < maxLevel) {
+                    recursiveGlobalNodeDFS(n, filters, result, exploredNodes, currentLevel, maxLevel);
+                }
             }
         }
     }
