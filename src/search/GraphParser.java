@@ -4,9 +4,12 @@ import domain.Graph;
 import domain.Link;
 import domain.LinkFilter;
 import domain.Node;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import static search.IGraphParser.Unicity.GLOBALRELATION;
 import static search.SearchMethod.BFS;
 
 /**
@@ -66,7 +69,7 @@ public class GraphParser implements IGraphParser {
         }
         switch (searchMethod) {
             case BFS:
-                return null;
+                return BFS(node, filters, level, unicity);
             default:
                 return DFS(node, filters, level, unicity);
         }
@@ -114,6 +117,30 @@ public class GraphParser implements IGraphParser {
         return result;
     }
 
+    /**
+     * The Breadth First Search method
+     *
+     * @param startingNode the starting node
+     * @param filters search criteria
+     * @param level set the depth of search (default = 1)
+     * @param unicity set the parsing rule (default = GLOBALNODE)
+     * @return an instance of <code>SearchResult</code>
+     */
+    private SearchResult BFS(Node startingNode, List<LinkFilter> filters, int level, Unicity unicity) {
+        SearchResult result = new SearchResult();
+        switch (unicity) {
+            case GLOBALRELATION:
+                Set<Link> exploredLinksList = new HashSet<>();
+                globalRelationBFS(startingNode, filters, result, exploredLinksList, 0, level);
+                break;
+            default:
+                Set<Node> exploredNodesList = new HashSet<>();
+                globalNodeBFS(startingNode, filters, result, exploredNodesList, 0, level);
+                break;
+        }
+        return result;
+    }
+
     private void recursiveGlobalNodeDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Node> exploredNodes, int currentLevel, int maxLevel) {
         //TODO see recursiveDFS method and complete code (maxLevel, etc)
         exploredNodes.add(currentNode);
@@ -126,7 +153,30 @@ public class GraphParser implements IGraphParser {
         }
     }
 
+    private void globalNodeBFS(Node startingNode, List<LinkFilter> filters, SearchResult result, Set<Node> exploredNodes, int currentLevel, int maxLevel) {
+        //TODO see recursiveBFS method and complete code (maxLevel, etc)
+        exploredNodes.add(startingNode);
+        ArrayDeque<Node> nodesQueue = new ArrayDeque();
+        nodesQueue.add(startingNode);
+        Node currentNode;
+        while (!nodesQueue.isEmpty()) {
+            currentNode = nodesQueue.pollFirst();
+            result.addNode(currentNode);
+            for (Node n : currentNode.getLinkedNodes(filters.get(currentLevel))) {
+                if (!exploredNodes.contains(n)) {
+                    exploredNodes.add(n);
+                }
+            }
+        }
+
+
+    }
+
     private void recursiveGlobalRelationDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {
+        //TODO add this kind of parsing
+    }
+
+    private void globalRelationBFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {
         //TODO add this kind of parsing
     }
 }
