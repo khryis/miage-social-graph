@@ -74,24 +74,6 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Process the Depth First Search on the graph
-     *
-     * @param currentNode the current node
-     * @param linkFilters the filters
-     * @param result the result which is updated
-     * @param exploredNodeList the explored nodes list
-     */
-    /*@Deprecated
-     private void recursiveDFS(Node currentNode, List<String> linkFilters, SearchResult result, List<Node> exploredNodesList) {
-     exploredNodesList.add(currentNode);
-     for (Node n : currentNode.getLinkedNodes(linkFilters)) {
-     if (!exploredNodesList.contains(n)) {
-     result.addNode(n);
-     recursiveDFS(n, linkFilters, result, exploredNodesList);
-     }
-     }
-     }*/
-    /**
      * The Depth First Search method
      *
      * @param startingNode the starting node
@@ -133,7 +115,6 @@ public class GraphParser implements IGraphParser {
     }
 
     private void recursiveGlobalRelationDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {
-        //TODO add this kind of parsing
         currentLevel++;
         for (Link l : currentNode.getLinkList(filters.get(currentLevel >= filters.size() ? filters.size() - 1 : currentLevel))) {
             if (!exploredLinks.contains(l)) {
