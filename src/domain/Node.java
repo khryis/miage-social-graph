@@ -162,6 +162,16 @@ public class Node {
         }
     }
 
+    public Set<Link> getLinkList() {
+        Set<Link> list = new HashSet<>();
+        for (Map.Entry<String, ArrayList<Link>> entry : links.entrySet()) {
+            for (Iterator<Link> it = entry.getValue().iterator(); it.hasNext();) {
+                list.add(it.next());
+            }
+        }
+        return list;
+    }
+
     /**
      * Returns the list of links of the current node that satisfy the given
      * search criterias
@@ -178,6 +188,28 @@ public class Node {
             }
         }
         return list;
+    }
+
+    public Set<Link> getLinkList(List<LinkFilter> filters) {
+        if (filters != null) {
+            switch (filters.size()) {
+                case 0:
+                    return getLinkList();
+                case 1:
+                    return getLinkList(filters.get(0));
+                default:
+                    //Build a set of all links matching one of the filters
+                    Set<Link> result = new HashSet<>();
+                    for (Iterator<LinkFilter> it = filters.iterator(); it.hasNext();) {
+                        for (Iterator<Link> it1 = getLinkList(it.next()).iterator(); it1.hasNext();) {
+                            result.add(it1.next());
+                        }
+                    }
+                    return result;
+            }
+        } else {
+            return getLinkList();
+        }
     }
 
     public Map<String, ArrayList<Link>> getLinks() {
