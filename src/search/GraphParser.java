@@ -87,10 +87,7 @@ public class GraphParser implements IGraphParser {
         SearchResult result;
         switch (unicity) {
             case GLOBALRELATION:
-                result = new SearchResult();
-                Set<Link> exploredLinksList = new HashSet<>();
-                recursiveGlobalRelationDFS(startingNode, filters, result, exploredLinksList, 0, maxDepth);
-                return result;
+                return globalRelationDFSStep1(startingNode, filters, maxDepth);
             case GLOBALNODE:
             default:
                 return globalNodeDFSStep1(startingNode, filters, maxDepth);
