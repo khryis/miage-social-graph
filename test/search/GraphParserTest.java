@@ -92,30 +92,35 @@ public class GraphParserTest {
     }
 
     /**
-     * Test 2 of search method, of class GraphParser.
+     * Test 3 of search method, of class GraphParser.
      */
     @Test
-    public void testSearch_DFS_GlobalNode_Likes_Friend() throws Exception {
-        System.out.println("search DFS global node Like(level 1) and Friend(level 2");
+    public void testSearch_DFS_GlobalNode_Employee_Of_Without_Attr() throws Exception {
+        System.out.println("search DFS global node employee_of without attributes(level 1)");
 
-        String filePath = "testfiles/JUnitTestSearch.txt";
+        String filePath = "testfiles/WellFormedFileWithoutAttr.txt";
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
-        Node[] expResult = new Node[1];
-        expResult[0] = graph.getNode("barbara");
+        Set<Node> expResult = new HashSet<Node>(3);
+        expResult.add(graph.getNode("anna"));
+        expResult.add(graph.getNode("barbara"));
+        expResult.add(graph.getNode("carol"));
+
+        System.out.println(expResult);
 
         List<LinkFilter> filters = new ArrayList<>();
         LinkFilter f1 = new LinkFilter("employee_of", LinkFilter.Direction.BLIND);
         filters.add(f1);
-        SearchResult result = graph.parser.search("anna", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
-        Node[] resultNodes = result.getResultNodesAsArray();
+        SearchResult result = graph.parser.search("BigCo", filters, SearchMethod.DFS,
+                                                  1, GraphParser.Unicity.GLOBALNODE);
+        Set<Node> resultNodes = result.getResultNodes();
+        System.out.println(result.getResultNodes());
 
-        assertArrayEquals(expResult, resultNodes);
+        assertSame(expResult, resultNodes);
     }
 
     /**
-     * Test 3 of search method, of class GraphParser.
+     * Test 4 of search method, of class GraphParser.
      */
     @Test
     public void testSearch_BFS_GlobalNode_Friend() throws Exception {
@@ -135,14 +140,13 @@ public class GraphParserTest {
         filters.add(f1);
         SearchResult result = graph.parser.search("barbara", filters, SearchMethod.BFS,
                                                   Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
-        System.out.println(result);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
     }
 
     /**
-     * Test 4 of search method, of class GraphParser.
+     * Test 5 of search method, of class GraphParser.
      */
     @Test
     public void testSearch_BFS_GlobalNode_EmployeeOf() throws Exception {
