@@ -1,6 +1,10 @@
 package domain;
 
+import factory.GraphBuildingMethod;
+import factory.GraphFactory;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import org.junit.After;
@@ -15,6 +19,8 @@ public class NodeTest {
     private Node from;
     private Node to;
     private String linkType;
+    private String filePath;
+    private GraphFactory factory;
 
     public NodeTest() {
     }
@@ -32,6 +38,8 @@ public class NodeTest {
         from = new Node("Carol");
         to = new Node("Barbara");
         linkType = "friends";
+        filePath = "testfiles/JUnitTestSearch2.txt";
+        factory = new GraphFactory();
     }
 
     @After
@@ -58,12 +66,12 @@ public class NodeTest {
         Link link = new Link("friends", new Node("Carol"), new Node("Barbara"));
         from.addLink(link);
 
-        Link expected;
-        expected = new Link(linkType, new Node("Carol"), new Node("Barbara"));
+        Link expResult;
+        expResult = new Link(linkType, new Node("Carol"), new Node("Barbara"));
 
         Set<Link> fromfriendsLinks = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.BLIND));
 
-        assertTrue(fromfriendsLinks.contains(expected));
+        assertTrue(fromfriendsLinks.contains(expResult));
     }
 
     /**
@@ -75,13 +83,12 @@ public class NodeTest {
         from.addLink(new Link(linkType, from, to));
 
         Set<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
-        long expected = 1;
-        assertEquals(expected, friendlist.size());
+        long expResult = 1;
+        assertEquals(expResult, friendlist.size());
     }
 
     /**
-     * <p><strong>Test 3 of addLink method, of class Node.</strong></p> <p>When
-     * add a new type of link, new entry (key) in HashMap.</p>
+     * <p><strong>Test 3 of addLink method, of class Node.</strong></p> <p>When add a new type of link, new entry (key) in HashMap.</p>
      */
     @Test
     public void testLinkTypeExistAfterAddLink() {
@@ -89,5 +96,31 @@ public class NodeTest {
         from.addLink(new Link(linkType, from, to));
         Map<String, ArrayList<Link>> links = from.getLinks();
         assertTrue(links.containsKey(linkType));
+    }
+
+    @Test
+    public void testLinkGetLinkList_Filter() throws Exception {
+        System.out.println("addLink : testLinkGetLinkList_Filter");
+
+        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
+
+        Set<Link> expResult = new HashSet<>();
+        expResult.add(new Link("f", graph.getNode("1"), graph.getNode("2")));
+        expResult.add(new Link("f", graph.getNode("1"), graph.getNode("3")));
+        expResult.add(new Link("f", graph.getNode("1"), graph.getNode("4")));
+
+        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.BLIND);
+        Node startNode = graph.getNode("1");
+
+        Set<Link> resultLinks = startNode.getLinkList(f1);
+
+        assertThat(factory, null);
+//        assertNotNull(expResult);
+//        assertNotNull(resultLinks);
+//        assertEquals(expResult.size(), resultLinks.size());
+//        assertTrue(expResult.containsAll(resultLinks));
+//        assertTrue(expResult.containsAll(resultLinks));
+        assertSame(expResult, resultLinks);
+
     }
 }

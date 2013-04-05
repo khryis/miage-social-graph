@@ -21,6 +21,7 @@ import org.junit.Test;
 public class GraphParserTest {
 
     private IGraphFactory factory;
+    private String filePath;
 
     public GraphParserTest() {
     }
@@ -36,6 +37,7 @@ public class GraphParserTest {
     @Before
     public void setUp() {
         factory = new GraphFactory();
+        filePath = "testfiles/JUnitTestSearch2.txt";
     }
 
     @After
@@ -46,23 +48,19 @@ public class GraphParserTest {
      * Test 1 of search method, of class GraphParser.
      */
     @Test
-    public void testSearch_DFS_GlobalNode_Friend() throws Exception {
-        System.out.println("search DFS global node friend");
+    public void testSearch_DFS_GlobalNode_F() throws Exception {
+        System.out.println("search DFS global node f");
 
-        String filePath = "testfiles/JUnitTestSearch.txt";
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("carol"));
-        expResult.add(graph.getNode("elizabeth"));
-        expResult.add(graph.getNode("anna"));
-        expResult.add(graph.getNode("julie"));
+        expResult.add(graph.getNode("5"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("friend", LinkFilter.Direction.BLIND);
+        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.BLIND);
         filters.add(f1);
-        SearchResult result = graph.parser.search("barbara", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+        SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
+                                                  1, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -75,7 +73,6 @@ public class GraphParserTest {
     public void testSearch_DFS_GlobalNode_EmployeeOf() throws Exception {
         System.out.println("search DFS global node employee of");
 
-        String filePath = "testfiles/JUnitTestSearch.txt";
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Node[] expResult = new Node[1];
@@ -98,7 +95,6 @@ public class GraphParserTest {
     public void testSearch_DFS_GlobalNode_Employee_Of_Without_Attr() throws Exception {
         System.out.println("search DFS global node employee_of without attributes(level 1)");
 
-        String filePath = "testfiles/WellFormedFileWithoutAttr.txt";
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Set<Node> expResult = new HashSet<Node>(3);
@@ -106,15 +102,12 @@ public class GraphParserTest {
         expResult.add(graph.getNode("barbara"));
         expResult.add(graph.getNode("carol"));
 
-        System.out.println(expResult);
-
         List<LinkFilter> filters = new ArrayList<>();
         LinkFilter f1 = new LinkFilter("employee_of", LinkFilter.Direction.BLIND);
         filters.add(f1);
         SearchResult result = graph.parser.search("BigCo", filters, SearchMethod.DFS,
                                                   1, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
-        System.out.println(result.getResultNodes());
 
         assertSame(expResult, resultNodes);
     }
@@ -126,7 +119,6 @@ public class GraphParserTest {
     public void testSearch_BFS_GlobalNode_Friend() throws Exception {
         System.out.println("search BFS global node friend");
 
-        String filePath = "testfiles/JUnitTestSearch.txt";
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Set<Node> expResult = new HashSet<>();
@@ -152,7 +144,6 @@ public class GraphParserTest {
     public void testSearch_BFS_GlobalNode_EmployeeOf() throws Exception {
         System.out.println("search BFS global node employee of");
 
-        String filePath = "testfiles/JUnitTestSearch.txt";
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Node[] expResult = new Node[1];
