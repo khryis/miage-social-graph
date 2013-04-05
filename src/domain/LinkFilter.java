@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Map;
+
 public class LinkFilter extends AbstractLink {
 
     private Direction direction;
@@ -28,7 +30,15 @@ public class LinkFilter extends AbstractLink {
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder display = new StringBuilder();
+        display.append("Direction: ").append(direction);
+        // For each attribute, prints his name and his value(s)
+        for (Map.Entry<String, AttributeValues> attribute : getAttributes().entrySet()) {
+            display.append(" | ").append(attribute.getKey()).append(" = ");
+            AttributeValues value = attribute.getValue();
+            display.append(value);
+        }
+        return display.toString();
     }
 
     @Override
