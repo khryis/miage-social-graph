@@ -8,6 +8,15 @@ public class LinkFilter extends AbstractLink {
         super();
     }
 
+    /**
+     * Default direction is BLIND
+     *
+     * @param type Type of link
+     */
+    public LinkFilter(String type) {
+        this(type, Direction.BLIND);
+    }
+
     public LinkFilter(String type, Direction direction) {
         super(type);
         this.direction = direction;
@@ -29,8 +38,7 @@ public class LinkFilter extends AbstractLink {
 
     @Override
     public boolean equals(Object obj) {
-        //TODO define equals with super and a comparison with a "Link" instance
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return super.equals(obj);
     }
 
     public enum Direction {

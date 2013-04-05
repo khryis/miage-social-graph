@@ -90,7 +90,7 @@ public class Node {
         List<Link> list = new ArrayList<>();
         for (Iterator<Link> it = links.get(filter.getType()).iterator(); it.hasNext();) {
             Link link = it.next();
-            if (!link.equals(filter)) {
+            if (link.equals(filter)) {
                 list.add(link);
             }
         }

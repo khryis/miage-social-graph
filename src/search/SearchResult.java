@@ -1,37 +1,42 @@
 package search;
 
 import domain.Node;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Class SearchResult
  */
 public class SearchResult {
 
-    private List<Node> resultNodes;
+    private Set<Node> resultNodes;
 
     public SearchResult() {
-        resultNodes = new ArrayList<>();
+        resultNodes = new HashSet<>();
     }
 
     /**
-     * Utility methods
+     * Add a node if it isn't already present
      */
     public void addNode(Node node) {
         resultNodes.add(node);
     }
 
-    public List<Node> getResultNodes() {
+    public boolean containsNode(Node node) {
+        return resultNodes.contains(node);
+    }
+
+    public Set<Node> getResultNodes() {
         return resultNodes;
     }
 
     public Node[] getResultNodesAsArray() {
         Node[] result = new Node[resultNodes.size()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = resultNodes.get(i);
-        }
+
+        resultNodes.toArray(result);
+
         return result;
     }
 
@@ -41,9 +46,8 @@ public class SearchResult {
         if (resultNodes.isEmpty()) {
             display.append("0 node found");
         } else {
-            display.append(resultNodes.get(0));
-            for (int i = 1; i < resultNodes.size(); i++) {
-                display.append(", ").append(resultNodes.get(i));
+            for (Iterator<Node> it = resultNodes.iterator(); it.hasNext();) {
+                display.append(it.next());
             }
         }
         return display.toString();

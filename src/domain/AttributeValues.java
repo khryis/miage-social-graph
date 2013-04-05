@@ -1,6 +1,7 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,6 +59,15 @@ public class AttributeValues {
         final AttributeValues other = (AttributeValues) obj;
         if (!Objects.equals(this.values, other.values)) {
             return false;
+        }
+        return true;
+    }
+
+    public boolean isSupersetOf(AttributeValues other) {
+        for (Iterator<String> it = other.getValues().iterator(); it.hasNext();) {
+            if (!values.contains(it.next())) {
+                return false;
+            }
         }
         return true;
     }

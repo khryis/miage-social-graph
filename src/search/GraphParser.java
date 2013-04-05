@@ -5,7 +5,6 @@ import domain.Link;
 import domain.LinkFilter;
 import domain.Node;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -71,29 +70,12 @@ public class GraphParser implements IGraphParser {
         switch (searchMethod) {
             case BFS:
                 return BFS(node, filters, level, unicity);
+            case DFS:
             default:
                 return DFS(node, filters, level, unicity);
         }
     }
 
-    /**
-     * Process the Depth First Search on the graph
-     *
-     * @param currentNode the current node
-     * @param linkFilters the filters
-     * @param result the result which is updated
-     * @param exploredNodeList the explored nodes list
-     */
-    /*@Deprecated
-     private void recursiveDFS(Node currentNode, List<String> linkFilters, SearchResult result, List<Node> exploredNodesList) {
-     exploredNodesList.add(currentNode);
-     for (Node n : currentNode.getLinkedNodes(linkFilters)) {
-     if (!exploredNodesList.contains(n)) {
-     result.addNode(n);
-     recursiveDFS(n, linkFilters, result, exploredNodesList);
-     }
-     }
-     }*/
     /**
      * The Depth First Search method
      *
@@ -110,6 +92,7 @@ public class GraphParser implements IGraphParser {
                 Set<Link> exploredLinksList = new HashSet<>();
                 recursiveGlobalRelationDFS(startingNode, filters, result, exploredLinksList, 0, level);
                 break;
+            case GLOBALNODE:
             default:
                 Set<Node> exploredNodesList = new HashSet<>();
                 recursiveGlobalNodeDFS(startingNode, filters, result, exploredNodesList, 0, level);
@@ -143,13 +126,17 @@ public class GraphParser implements IGraphParser {
     }
 
     private void recursiveGlobalNodeDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Node> exploredNodes, int currentLevel, int maxLevel) {
-        //TODO see recursiveDFS method and complete code (maxLevel, etc)
         exploredNodes.add(currentNode);
-        for (Node n : currentNode.getLinkedNodes(filters.get(currentLevel))) {
+        currentLevel++;
+        for (Node n : currentNode.getLinkedNodes(filters.get(currentLevel >= filters.size() ? filters.size() - 1 : currentLevel))) {
             if (!exploredNodes.contains(n)) {
-                result.addNode(n);
-                recursiveGlobalNodeDFS(currentNode, filters, result, exploredNodes, currentLevel + 1, maxLevel);
-                //recursiveDFS(n, linkFilters, result, exploredNodesList);
+                int delta = currentLevel - filters.size();
+                if (delta >= 0) {
+                    result.addNode(n);
+                }
+                if (delta < maxLevel) {
+                    recursiveGlobalNodeDFS(n, filters, result, exploredNodes, currentLevel, maxLevel);
+                }
             }
         }
     }
@@ -175,7 +162,19 @@ public class GraphParser implements IGraphParser {
     }
 
     private void recursiveGlobalRelationDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {
-        //TODO add this kind of parsing
+        currentLevel++;
+        for (Link l : currentNode.getLinkList(filters.get(currentLevel >= filters.size() ? filters.size() - 1 : currentLevel))) {
+            if (!exploredLinks.contains(l)) {
+                Node target = (l.getTo().getId().equals(currentNode.getId()) ? l.getFrom() : l.getTo());
+                int delta = currentLevel - filters.size();
+                if (delta >= 0) {
+                    result.addNode(target);
+                }
+                if (delta < maxLevel) {
+                    recursiveGlobalRelationDFS(target, filters, result, exploredLinks, currentLevel, maxLevel);
+                }
+            }
+        }
     }
 
     private void globalRelationBFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {
