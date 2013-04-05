@@ -7,6 +7,7 @@ import domain.Node;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import static search.IGraphParser.Unicity.GLOBALRELATION;
@@ -161,7 +162,8 @@ public class GraphParser implements IGraphParser {
         while (!nodesQueue.isEmpty()) {
             currentNode = nodesQueue.pollFirst();
             result.addNode(currentNode);
-            for (Node n : currentNode.getLinkedNodes(filters.get(currentLevel))) {
+            for (Iterator<Node> it = currentNode.getLinkedNodes(filters.get(currentLevel)).iterator(); it.hasNext();) {
+                Node n = it.next();
                 if (!exploredNodes.contains(n)) {
                     exploredNodes.add(n);
                     nodesQueue.add(n);
