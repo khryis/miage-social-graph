@@ -1,8 +1,8 @@
 package domain;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -44,7 +44,7 @@ public class NodeTest {
     @Test
     public void testGetLinkList() {
         from.addLink(new Link(linkType, from, to));
-        List<Link> friendsLink = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
+        Set<Link> friendsLink = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
         assertNotNull(friendsLink);
     }
 
@@ -61,7 +61,7 @@ public class NodeTest {
         Link expected;
         expected = new Link(linkType, new Node("Carol"), new Node("Barbara"));
 
-        List<Link> fromfriendsLinks = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.BLIND));
+        Set<Link> fromfriendsLinks = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.BLIND));
 
         assertTrue(fromfriendsLinks.contains(expected));
     }
@@ -74,7 +74,7 @@ public class NodeTest {
         System.out.println("addLink : testSizeOfLinkArrayListAfterAddLink");
         from.addLink(new Link(linkType, from, to));
 
-        List<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
+        Set<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
         long expected = 1;
         assertEquals(expected, friendlist.size());
     }
