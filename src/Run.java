@@ -1,10 +1,10 @@
 
 import domain.Graph;
-import factory.GraphFactory;
-import factory.IGraphFactory;
 import factory.GraphBuildingException;
 import factory.GraphBuildingMethod;
+import factory.GraphFactory;
 import factory.GraphFileParserException;
+import factory.IGraphFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import search.GraphParser;
 public class Run {
 
     public static void main(String[] args) {
-        String filePath = "testfiles/WellFormedFileWithAttr.txt";
+        String filePath = "testfiles/WellFormedFileWithoutAttr.txt";
         if (args.length != 0) {
             filePath = args[0];
         }

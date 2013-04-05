@@ -1,8 +1,10 @@
 package factory;
 
+import domain.AttributeValues;
 import domain.Graph;
 import domain.Link;
 import domain.Node;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -18,7 +20,7 @@ class StrictGraphBuilder extends GraphBuilder {
     @Override
     public void putLineData(String line) throws GraphBuildingException {
         Map<String, Object> lineData = getLineData(line);
-        if (lineData.size() != 4) {
+        if (lineData.size() != 4 && lineData.size() != 3) {
             throw new GraphBuildingException("Line has not the required data");
         }
         Map<String, Node> nodes = workingGraph.getNodes();
@@ -35,8 +37,12 @@ class StrictGraphBuilder extends GraphBuilder {
         Link link = new Link((String) lineData.get("linkType"), from, to);
         if (from.contains(link) || to.contains(link)) {
             throw new GraphBuildingException("The link already exists:\n" + link);
-        } else {
+        } else if (lineData.size() == 4) {
             link.setAttributes((Map) lineData.get("attributes"));
+            from.addLink(link);
+            to.addLink(link);
+        } else {
+            link.setAttributes(new HashMap<String, AttributeValues>());
             from.addLink(link);
             to.addLink(link);
         }
