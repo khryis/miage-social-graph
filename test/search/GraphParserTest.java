@@ -46,10 +46,10 @@ public class GraphParserTest {
      * Test 1 of search method, of class GraphParser.
      */
     @Test
-    public void testSearch_DFS_Friend() throws Exception {
-        System.out.println("search DFS friend");
+    public void testSearch_DFS_GlobalNode_Friend() throws Exception {
+        System.out.println("search DFS global node friend");
 
-        String filePath = "testfiles/JUnitTestDFS.txt";
+        String filePath = "testfiles/JUnitTestSearch.txt";
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
         
         Set<Node> expResult = new HashSet<>();
@@ -61,7 +61,8 @@ public class GraphParserTest {
         List<LinkFilter> filters = new ArrayList<>();
         LinkFilter f1 = new LinkFilter("friend", LinkFilter.Direction.BLIND);
         filters.add(f1);
-        SearchResult result = graph.parser.search("barbara", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+        SearchResult result = graph.parser.search("barbara", filters, SearchMethod.DFS, 
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -71,10 +72,10 @@ public class GraphParserTest {
      * Test 2 of search method, of class GraphParser.
      */
     @Test
-    public void testSearch_DFS_EmployeeOf() throws Exception {
-        System.out.println("search DFS employee of");
+    public void testSearch_DFS_GlobalNode_EmployeeOf() throws Exception {
+        System.out.println("search DFS global node employee of");
 
-        String filePath = "testfiles/JUnitTestDFS.txt";
+        String filePath = "testfiles/JUnitTestSearch.txt";
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Node[] expResult = new Node[1];
@@ -83,7 +84,57 @@ public class GraphParserTest {
         List<LinkFilter> filters = new ArrayList<>();
         LinkFilter f1 = new LinkFilter("employee_of", LinkFilter.Direction.BLIND);
         filters.add(f1);
-        SearchResult result = graph.parser.search("anna", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+        SearchResult result = graph.parser.search("anna", filters, SearchMethod.DFS, 
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+        Node[] resultNodes = result.getResultNodesAsArray();
+
+        assertArrayEquals(expResult, resultNodes);
+    }
+    
+    /**
+     * Test 3 of search method, of class GraphParser.
+     */
+    @Test
+    public void testSearch_BFS_GlobalNode_Friend() throws Exception {
+        System.out.println("search BFS global node friend");
+
+        String filePath = "testfiles/JUnitTestSearch.txt";
+        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
+        
+        Set<Node> expResult = new HashSet<>();
+        expResult.add(graph.getNode("carol"));
+        expResult.add(graph.getNode("elizabeth"));
+        expResult.add(graph.getNode("anna"));
+        expResult.add(graph.getNode("julie"));
+
+        List<LinkFilter> filters = new ArrayList<>();
+        LinkFilter f1 = new LinkFilter("friend", LinkFilter.Direction.BLIND);
+        filters.add(f1);
+        SearchResult result = graph.parser.search("barbara", filters, SearchMethod.BFS, 
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+        Set<Node> resultNodes = result.getResultNodes();
+
+        assertEquals(expResult, resultNodes);
+    }
+
+    /**
+     * Test 4 of search method, of class GraphParser.
+     */
+    @Test
+    public void testSearch_BFS_GlobalNode_EmployeeOf() throws Exception {
+        System.out.println("search BFS global node employee of");
+
+        String filePath = "testfiles/JUnitTestSearch.txt";
+        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
+
+        Node[] expResult = new Node[1];
+        expResult[0] = graph.getNode("barbara");
+
+        List<LinkFilter> filters = new ArrayList<>();
+        LinkFilter f1 = new LinkFilter("employee_of", LinkFilter.Direction.BLIND);
+        filters.add(f1);
+        SearchResult result = graph.parser.search("anna", filters, SearchMethod.BFS, 
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Node[] resultNodes = result.getResultNodesAsArray();
 
         assertArrayEquals(expResult, resultNodes);
