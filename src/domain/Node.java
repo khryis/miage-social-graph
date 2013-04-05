@@ -2,10 +2,12 @@ package domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Class Node
@@ -80,21 +82,23 @@ public class Node {
     }
 
     /**
-     * Returns the list of links of the current node that satisfy the given
-     * search criterias
-     *
-     * @param filter define the link exclusion criteria
-     * @return list of links according to the given search criteria
+     * @return A list of all directly linked nodes
      */
-    public List<Link> getLinkList(LinkFilter filter) {
-        List<Link> list = new ArrayList<>();
-        for (Iterator<Link> it = links.get(filter.getType()).iterator(); it.hasNext();) {
-            Link link = it.next();
-            if (link.equals(filter)) {
-                list.add(link);
+    public Set<Node> getLinkedNodes() {
+        Set<Node> linkedNodes = new HashSet<>();
+        for (Map.Entry<String, ArrayList<Link>> entry : links.entrySet()) {
+            for (Iterator<Link> it = entry.getValue().iterator(); it.hasNext();) {
+                Link link = it.next();
+                if (this.equals(link.getFrom())) {
+                    linkedNodes.add(link.getTo());
+                }
+                if (this.equals(link.getTo())) {
+                    linkedNodes.add(link.getFrom());
+                }
             }
+
         }
-        return list;
+        return linkedNodes;
     }
 
     /**
@@ -105,8 +109,8 @@ public class Node {
      *
      * @return linked nodes matching the given search criteria
      */
-    public List<Node> getLinkedNodes(LinkFilter filter) {
-        ArrayList<Node> linkedNodes = new ArrayList<>();
+    public Set<Node> getLinkedNodes(LinkFilter filter) {
+        Set<Node> linkedNodes = new HashSet<>();
         for (Link link : getLinkList(filter)) {
             switch (filter.getDirection()) {
                 case FROM:
@@ -136,12 +140,52 @@ public class Node {
         return linkedNodes;
     }
 
-    public String getId() {
-        return id;
+    public Set<Node> getLinkedNodes(List<LinkFilter> filters) {
+        if (filters != null) {
+            switch (filters.size()) {
+                case 0:
+                    return getLinkedNodes();
+                case 1:
+                    return getLinkedNodes(filters.get(0));
+                default:
+                    //Build a set of all nodes matching one of the filters
+                    Set<Node> result = new HashSet<>();
+                    for (Iterator<LinkFilter> it = filters.iterator(); it.hasNext();) {
+                        for (Iterator<Node> it1 = getLinkedNodes(it.next()).iterator(); it1.hasNext();) {
+                            result.add(it1.next());
+                        }
+                    }
+                    return result;
+            }
+        } else {
+            return getLinkedNodes();
+        }
+    }
+
+    /**
+     * Returns the list of links of the current node that satisfy the given
+     * search criterias
+     *
+     * @param filter define the link exclusion criteria
+     * @return list of links according to the given search criteria
+     */
+    public Set<Link> getLinkList(LinkFilter filter) {
+        Set<Link> list = new HashSet<>();
+        for (Iterator<Link> it = links.get(filter.getType()).iterator(); it.hasNext();) {
+            Link link = it.next();
+            if (link.equals(filter)) {
+                list.add(link);
+            }
+        }
+        return list;
     }
 
     public Map<String, ArrayList<Link>> getLinks() {
         return links;
+    }
+
+    public String getId() {
+        return id;
     }
 
     @Override
