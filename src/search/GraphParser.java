@@ -93,7 +93,7 @@ public class GraphParser implements IGraphParser {
                 return result;
             case GLOBALNODE:
             default:
-                return globalNodeDFS(startingNode, filters, maxDepth);
+                return globalNodeDFSStep1(startingNode, filters, maxDepth);
         }
     }
 
@@ -101,7 +101,7 @@ public class GraphParser implements IGraphParser {
      * Perform the first step of research. Select the first set of Nodes that
      * will be used to perform the second step of research
      */
-    private SearchResult globalNodeDFS(Node startNode, List<LinkFilter> filters, int maxDepth) {
+    private SearchResult globalNodeDFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
         SearchResult result = new SearchResult();
         result.addNode(startNode);
 
@@ -120,11 +120,11 @@ public class GraphParser implements IGraphParser {
         //visit the matching nodes
         if (filters == null) {
             for (Iterator<Node> it = toVisit.iterator(); it.hasNext();) {
-                globalNodeDFS(it.next(), result, 1, maxDepth);
+                globalNodeDFSStep2(it.next(), result, 1, maxDepth);
             }
         } else {
             for (Iterator<Node> it = toVisit.iterator(); it.hasNext();) {
-                globalNodeDFS(it.next(), filters, result, 1, maxDepth);
+                globalNodeDFSStep2(it.next(), filters, result, 1, maxDepth);
             }
         }
 
@@ -135,11 +135,11 @@ public class GraphParser implements IGraphParser {
      * Perform the second step of research. Add recursivly all linked nodes to
      * the result until the given maxDepth is reached
      */
-    private void globalNodeDFS(Node currentNode, SearchResult result, int currentDepth, int maxDepth) {
+    private void globalNodeDFSStep2(Node currentNode, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
             if (currentDepth <= maxDepth) {
                 for (Node n : currentNode.getLinkedNodes()) {
-                    globalNodeDFS(n, result, currentDepth + 1, maxDepth);
+                    globalNodeDFSStep2(n, result, currentDepth + 1, maxDepth);
                 }
             }
         }
@@ -149,11 +149,11 @@ public class GraphParser implements IGraphParser {
      * Perform the second step of research. Add recursivly the nodes matchink
      * the given filters until the given maxDepth is reached
      */
-    private void globalNodeDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
+    private void globalNodeDFSStep2(Node currentNode, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
             if (currentDepth <= maxDepth) {
                 for (Node n : currentNode.getLinkedNodes(filters)) {
-                    globalNodeDFS(n, filters, result, currentDepth + 1, maxDepth);
+                    globalNodeDFSStep2(n, filters, result, currentDepth + 1, maxDepth);
                 }
             }
         }
