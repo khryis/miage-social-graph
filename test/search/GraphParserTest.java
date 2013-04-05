@@ -8,7 +8,9 @@ import factory.GraphFactory;
 import factory.IGraphFactory;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -49,32 +51,20 @@ public class GraphParserTest {
 
         String filePath = "testfiles/JUnitTestDFS.txt";
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
+        
+        Set<Node> expResult = new HashSet<>();
+        expResult.add(graph.getNode("carol"));
+        expResult.add(graph.getNode("elizabeth"));
+        expResult.add(graph.getNode("anna"));
+        expResult.add(graph.getNode("julie"));
 
-        Node[] expResult = new Node[4];
-        expResult[0] = graph.getNode("carol");
-        expResult[1] = graph.getNode("elizabeth");
-        expResult[2] = graph.getNode("anna");
-        expResult[3] = graph.getNode("julie");
-
-        GraphParser parser = new GraphParser(graph);
         List<LinkFilter> filters = new ArrayList<>();
         LinkFilter f1 = new LinkFilter("friend", LinkFilter.Direction.BLIND);
         filters.add(f1);
-        SearchResult result = parser.search("barbara", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
-        Node[] resultNodes = result.getResultNodesAsArray();
+        SearchResult result = graph.parser.search("barbara", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+        Set<Node> resultNodes = result.getResultNodes();
 
-        /*System.out.println("*************************");
-         for (int i = 0; i < expResult.length; i++) {
-         System.out.println(expResult[i]);
-         }
-         System.out.println("--------------------------");
-         for (int i = 0; i < resultNodes.length; i++) {
-         System.out.println(resultNodes[i]);
-         }
-         System.out.println("***************************");*/
-
-        //TODO use a different assert function (the order given by parser.search "cannot" be predicted)
-        assertArrayEquals(expResult, resultNodes);
+        assertEquals(expResult, resultNodes);
     }
 
     /**
@@ -90,22 +80,11 @@ public class GraphParserTest {
         Node[] expResult = new Node[1];
         expResult[0] = graph.getNode("barbara");
 
-        GraphParser parser = new GraphParser(graph);
         List<LinkFilter> filters = new ArrayList<>();
         LinkFilter f1 = new LinkFilter("employee_of", LinkFilter.Direction.BLIND);
         filters.add(f1);
-        SearchResult result = parser.search("anna", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+        SearchResult result = graph.parser.search("anna", filters, SearchMethod.DFS, Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Node[] resultNodes = result.getResultNodesAsArray();
-
-        /*System.out.println("*************************");
-         for (int i = 0; i < expResult.length; i++) {
-         System.out.println(expResult[i]);
-         }
-         System.out.println("--------------------------");
-         for (int i = 0; i < resultNodes.length; i++) {
-         System.out.println(resultNodes[i]);
-         }
-         System.out.println("***************************");*/
 
         assertArrayEquals(expResult, resultNodes);
     }
