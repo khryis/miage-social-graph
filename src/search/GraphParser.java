@@ -95,8 +95,7 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the first step of research. Select the first set of Nodes that
-     * will be used to perform the second step of research
+     * Perform the first step of research. Select the first set of Nodes that will be used to perform the second step of research
      */
     private SearchResult globalNodeDFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
         SearchResult result = new SearchResult();
@@ -112,7 +111,6 @@ public class GraphParser implements IGraphParser {
             toVisit = startNode.getLinkedNodes();
             filters = null;
         }
-
         //visit the matching nodes
         if (filters == null) {
             for (Iterator<Node> it = toVisit.iterator(); it.hasNext();) {
@@ -128,8 +126,7 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the second step of research. Add recursivly all linked nodes to
-     * the result until the given maxDepth is reached
+     * Perform the second step of research. Add recursivly all linked nodes to the result until the given maxDepth is reached
      */
     private void globalNodeDFSStep2(Node currentNode, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
@@ -142,14 +139,16 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the second step of research. Add recursivly the nodes matchink
-     * the given filters until the given maxDepth is reached
+     * Perform the second step of research. Add recursivly the nodes matchink the given filters until the given maxDepth is reached
      */
     private void globalNodeDFSStep2(Node currentNode, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
             if (currentDepth <= maxDepth) {
-                for (Node n : currentNode.getLinkedNodes(filters)) {
-                    globalNodeDFSStep2(n, filters, result, currentDepth + 1, maxDepth);
+                Set<Node> nodeSet = currentNode.getLinkedNodes(filters);
+                if (!(nodeSet == null)) {
+                    for (Node n : nodeSet) {
+                        globalNodeDFSStep2(n, filters, result, currentDepth + 1, maxDepth);
+                    }
                 }
             }
         }
