@@ -67,8 +67,6 @@ public class NodeTest {
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
         from = graph.getNode("1");
 
-        //System.out.println(from.getLink("l", graph.getNode("1"), graph.getNode("2")));
-
         Set<Link> expResult = new HashSet<>();
         expResult.add(new Link("l", graph.getNode("1"), graph.getNode("2")));
         expResult.add(new Link("l", graph.getNode("1"), graph.getNode("3")));
@@ -94,11 +92,11 @@ public class NodeTest {
     public void testAddLink() {
         System.out.println("addLink : testAddLink");
 
-        Link link = new Link("friends", new Node("Carol"), new Node("Barbara"));
+        Link link = new Link("friends", from, to);
         from.addLink(link);
 
         Link expResult;
-        expResult = new Link(linkType, new Node("Carol"), new Node("Barbara"));
+        expResult = new Link(linkType, from, to);
 
         Set<Link> fromfriendsLinks = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.BLIND));
 
@@ -113,7 +111,7 @@ public class NodeTest {
         System.out.println("addLink : testSizeOfLinkArrayListAfterAddLink");
         from.addLink(new Link(linkType, from, to));
 
-        Set<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
+        Set<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.TO));
         long expResult = 1;
         assertEquals(expResult, friendlist.size());
     }
@@ -146,7 +144,7 @@ public class NodeTest {
 
         Set<Link> resultLinks = startNode.getLinkList(f1);
 
-        assertTrue(expResult.containsAll(resultLinks));
+        assertTrue(resultLinks.containsAll(expResult));
     }
 
     @Test
@@ -155,8 +153,6 @@ public class NodeTest {
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
         from = graph.getNode("1");
-
-        //System.out.println(from.getLink("l", graph.getNode("1"), graph.getNode("2")));
 
         Set<Link> expResult = new HashSet<>();
         expResult.add(new Link("l", graph.getNode("1"), graph.getNode("2")));
@@ -173,6 +169,7 @@ public class NodeTest {
 
         Set<Link> resultLinks = startNode.getLinkList(linkFilters);
 
-        assertTrue(expResult.containsAll(resultLinks));
+        assertEquals(expResult, resultLinks);
+        assertTrue(resultLinks.containsAll(expResult));
     }
 }
