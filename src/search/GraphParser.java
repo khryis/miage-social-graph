@@ -144,8 +144,11 @@ public class GraphParser implements IGraphParser {
     private void globalNodeDFSStep2(Node currentNode, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
             if (currentDepth <= maxDepth) {
-                for (Node n : currentNode.getLinkedNodes(filters)) {
-                    globalNodeDFSStep2(n, filters, result, currentDepth + 1, maxDepth);
+                Set<Node> nodeSet = currentNode.getLinkedNodes(filters);
+                if (!(nodeSet == null)) {
+                    for (Node n : nodeSet) {
+                        globalNodeDFSStep2(n, filters, result, currentDepth + 1, maxDepth);
+                    }
                 }
             }
         }
