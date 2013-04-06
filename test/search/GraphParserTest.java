@@ -92,9 +92,6 @@ public class GraphParserTest {
         assertTrue(resultNodes.containsAll(expResult));
     }
 
-    /**
-     * Test 3 of search method, of class GraphParser.
-     */
     @Test
     public void testSearch_DFS_GlobalNode_3() throws Exception {
         System.out.println("search DFS global node filter f(to) then f(from),l(to),e(to) start node = 1 level = 3");
@@ -124,9 +121,6 @@ public class GraphParserTest {
         assertEquals(expResult, resultNodes);
     }
 
-    /**
-     * Test 4 of search method, of class GraphParser.
-     */
     @Test
     public void testSearch_DFS_GlobalNode_4() throws Exception {
         System.out.println("search DFS global node filter l(to) then f(blind) start node = 1 level = Max");
@@ -156,12 +150,9 @@ public class GraphParserTest {
         assertTrue(resultNodes.containsAll(expResult));
     }
 
-    /**
-     * Test 5 of search method, of class GraphParser.
-     */
     @Test
     public void testSearch_DFS_GlobalNode_5() throws Exception {
-        System.out.println("search DFS global node filter l(to) then f(blind),e(blind) start node = 1 level = 4");
+        System.out.println("search DFS global node filter l(to) then f(blind),e(blind) start node = 1 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -176,6 +167,7 @@ public class GraphParserTest {
         expResult.add(graph.getNode("13"));
         expResult.add(graph.getNode("9"));
         expResult.add(graph.getNode("4"));
+        expResult.add(graph.getNode("10"));
 
         List<LinkFilter> filters = new ArrayList<>();
         LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.TO);
@@ -185,10 +177,8 @@ public class GraphParserTest {
         filters.add(f2);
         filters.add(f3);
         SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                                                  4, GraphParser.Unicity.GLOBALNODE);
+                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
-
-        System.out.println(resultNodes);
 
         assertEquals(expResult, resultNodes);
         assertTrue(resultNodes.containsAll(expResult));
@@ -345,7 +335,6 @@ public class GraphParserTest {
     /**
      * Test 7 of search method, of class GraphParser.
      */
-    //@Test
     public void testSearch_BFS_GlobalNode_Friend() throws Exception {
         System.out.println("search BFS global node friend");
 
