@@ -1,5 +1,9 @@
 package domain;
 
+import static domain.LinkFilter.Direction.BLIND;
+import static domain.LinkFilter.Direction.BOTH;
+import static domain.LinkFilter.Direction.FROM;
+import static domain.LinkFilter.Direction.TO;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,7 +55,7 @@ public class Node {
             for (int i = 0; i < linksList.size() && !found; i++) {
                 Link currentLink = linksList.get(i);
                 if (currentLink.getFrom().equals(from)
-                    && currentLink.getTo().equals(to)) {
+                        && currentLink.getTo().equals(to)) {
                     link = currentLink;
                     found = true;
                 }
@@ -73,7 +77,7 @@ public class Node {
             for (int i = 0; i < linksList.size() && !contains; i++) {
                 Link currentLink = linksList.get(i);
                 if (currentLink.getFrom().equals(link.getFrom())
-                    && currentLink.getTo().equals(link.getTo())) {
+                        && currentLink.getTo().equals(link.getTo())) {
                     contains = true;
                 }
             }
@@ -103,7 +107,8 @@ public class Node {
     }
 
     /**
-     * Returns the linked nodes list to the current node according to the given filter
+     * Returns the linked nodes list to the current node according to the given
+     * filter
      *
      * @param filter Criteria of link acceptation
      *
@@ -173,17 +178,40 @@ public class Node {
     }
 
     /**
-     * Returns the list of links of the current node that satisfy the given search criterias
+     * Returns the list of links of the current node that satisfy the given
+     * search criterias
      *
      * @param filter define the link exclusion criteria
      * @return list of links according to the given search criteria
      */
     public Set<Link> getLinkList(LinkFilter filter) {
         Set<Link> list = new HashSet<>();
+        System.out.println(filter);
         for (Iterator<Link> it = (links.get(filter.getType())).iterator(); it.hasNext();) {
             Link link = it.next();
             if (link.equals(filter)) {
-                list.add(link);
+                switch (filter.getDirection()) {
+                    case FROM:
+                        if (this.equals(link.getFrom())) {
+                            list.add(link);
+                        }
+                        break;
+                    case TO:
+                        if (this.equals(link.getTo())) {
+                            list.add(link);
+                        }
+                        break;
+                    case BOTH:
+                        //TODO
+                        break;
+                    case BLIND:
+                        if (this.equals(link.getFrom())) {
+                            list.add(link);
+                        } else if (this.equals(link.getTo())) {
+                            list.add(link);
+                        }
+                        break;
+                }
             }
         }
         return list;
