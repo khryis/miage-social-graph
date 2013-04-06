@@ -95,7 +95,8 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the first step of research. Select the first set of Nodes that will be used to perform the second step of research
+     * Perform the first step of research. Select the first set of Nodes that
+     * will be used to perform the second step of research
      */
     private SearchResult globalNodeDFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
         SearchResult result = new SearchResult();
@@ -126,7 +127,8 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the second step of research. Add recursivly all linked nodes to the result until the given maxDepth is reached
+     * Perform the second step of research. Add recursivly all linked nodes to
+     * the result until the given maxDepth is reached
      */
     private void globalNodeDFSStep2(Node currentNode, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
@@ -139,7 +141,8 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the second step of research. Add recursivly the nodes matchink the given filters until the given maxDepth is reached
+     * Perform the second step of research. Add recursivly the nodes matchink
+     * the given filters until the given maxDepth is reached
      */
     private void globalNodeDFSStep2(Node currentNode, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
@@ -190,11 +193,11 @@ public class GraphParser implements IGraphParser {
         Set<Link> visited = new HashSet<>();
         if (filters == null) {
             for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
-                globalRelationDFSStep2(startNode, it.next(), visited, result, 1, maxDepth);
+                globalRelationDFSStep2(startNode, it.next(), visited, result, 0, maxDepth);
             }
         } else {
             for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
-                globalRelationDFSStep2(startNode, it.next(), filters, visited, result, 1, maxDepth);
+                globalRelationDFSStep2(startNode, it.next(), filters, visited, result, 0, maxDepth);
             }
         }
 
@@ -205,6 +208,7 @@ public class GraphParser implements IGraphParser {
         if (visited.add(currentLink)) {
             if (currentDepth < maxDepth) {
                 Node target = (currentLink.getTo().getId().equals(currentNode.getId()) ? currentLink.getFrom() : currentLink.getTo());
+                result.addNode(target);
                 for (Link l : target.getLinkList()) {
                     globalRelationDFSStep2(target, l, visited, result, currentDepth + 1, maxDepth);
                 }
@@ -216,6 +220,7 @@ public class GraphParser implements IGraphParser {
         if (visited.add(currentLink)) {
             if (currentDepth < maxDepth) {
                 Node target = (currentLink.getTo().getId().equals(currentNode.getId()) ? currentLink.getFrom() : currentLink.getTo());
+                result.addNode(target);
                 for (Link l : target.getLinkList(filters)) {
                     globalRelationDFSStep2(target, l, filters, visited, result, currentDepth + 1, maxDepth);
                 }
