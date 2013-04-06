@@ -201,7 +201,7 @@ public class Node {
         if (linkList == null) {
             list = null;
         } else {
-            for (Iterator<Link> it = links.get(filter.getType()).iterator(); it.hasNext();) {
+            for (Iterator<Link> it = linkList.iterator(); it.hasNext();) {
                 Link link = it.next();
                 if (link.equals(filter)) {
                     switch (filter.getDirection()) {

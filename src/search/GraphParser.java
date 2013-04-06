@@ -130,7 +130,7 @@ public class GraphParser implements IGraphParser {
      */
     private void globalNodeDFSStep2(Node currentNode, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
-            if (currentDepth <= maxDepth) {
+            if (currentDepth < maxDepth) {
                 for (Node n : currentNode.getLinkedNodes()) {
                     globalNodeDFSStep2(n, result, currentDepth + 1, maxDepth);
                 }
@@ -143,7 +143,7 @@ public class GraphParser implements IGraphParser {
      */
     private void globalNodeDFSStep2(Node currentNode, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
-            if (currentDepth <= maxDepth) {
+            if (currentDepth < maxDepth) {
                 Set<Node> nodeSet = currentNode.getLinkedNodes(filters);
                 if (!(nodeSet == null)) {
                     for (Node n : nodeSet) {
@@ -203,7 +203,7 @@ public class GraphParser implements IGraphParser {
 
     private void globalRelationDFSStep2(Node currentNode, Link currentLink, Set<Link> visited, SearchResult result, int currentDepth, int maxDepth) {
         if (visited.add(currentLink)) {
-            if (currentDepth <= maxDepth) {
+            if (currentDepth < maxDepth) {
                 Node target = (currentLink.getTo().getId().equals(currentNode.getId()) ? currentLink.getFrom() : currentLink.getTo());
                 for (Link l : target.getLinkList()) {
                     globalRelationDFSStep2(target, l, visited, result, currentDepth + 1, maxDepth);
@@ -214,7 +214,7 @@ public class GraphParser implements IGraphParser {
 
     private void globalRelationDFSStep2(Node currentNode, Link currentLink, List<LinkFilter> filters, Set<Link> visited, SearchResult result, int currentDepth, int maxDepth) {
         if (visited.add(currentLink)) {
-            if (currentDepth <= maxDepth) {
+            if (currentDepth < maxDepth) {
                 Node target = (currentLink.getTo().getId().equals(currentNode.getId()) ? currentLink.getFrom() : currentLink.getTo());
                 for (Link l : target.getLinkList(filters)) {
                     globalRelationDFSStep2(target, l, filters, visited, result, currentDepth + 1, maxDepth);
