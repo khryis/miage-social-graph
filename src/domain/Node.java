@@ -89,6 +89,7 @@ public class Node {
         for (Map.Entry<String, ArrayList<Link>> entry : links.entrySet()) {
             for (Iterator<Link> it = entry.getValue().iterator(); it.hasNext();) {
                 Link link = it.next();
+                System.out.println(link);
                 if (this.equals(link.getFrom())) {
                     linkedNodes.add(link.getTo());
                 }
