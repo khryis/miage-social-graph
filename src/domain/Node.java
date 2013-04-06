@@ -185,7 +185,6 @@ public class Node {
      */
     public Set<Link> getLinkList(LinkFilter filter) {
         Set<Link> list = new HashSet<>();
-        System.out.println(filter);
         for (Iterator<Link> it = (links.get(filter.getType())).iterator(); it.hasNext();) {
             Link link = it.next();
             if (link.equals(filter)) {
