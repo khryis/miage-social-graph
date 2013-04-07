@@ -60,7 +60,7 @@ public class GraphParserTest {
         LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.FROM);
         filters.add(f1);
         SearchResult result = graph.parser.search("5", filters, SearchMethod.DFS,
-                                                  1, GraphParser.Unicity.GLOBALNODE);
+                1, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -85,7 +85,7 @@ public class GraphParserTest {
         filters.add(f1);
         filters.add(f2);
         SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -115,7 +115,7 @@ public class GraphParserTest {
         filters.add(f3);
         filters.add(f4);
         SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                                                  3, GraphParser.Unicity.GLOBALNODE);
+                3, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -143,7 +143,7 @@ public class GraphParserTest {
         filters.add(f1);
         filters.add(f2);
         SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -177,7 +177,7 @@ public class GraphParserTest {
         filters.add(f2);
         filters.add(f3);
         SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -198,7 +198,7 @@ public class GraphParserTest {
         filters.add(f1);
         filters.add(f2);
         SearchResult result = graph.parser.search("11", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
         Set<Node> resultNodes = result.getResultNodes();
 
         System.out.println(expResult);
@@ -210,7 +210,7 @@ public class GraphParserTest {
 
     @Test
     public void testSearch_DFS_GlobaleRelation_1() throws Exception {
-        System.out.println("search DFS global node filter f(from) start node = 5 level 1");
+        System.out.println("search DFS global relation filter f(from) start node = 5 level 1");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -221,18 +221,19 @@ public class GraphParserTest {
         LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.FROM);
         filters.add(f1);
         SearchResult result = graph.parser.search("5", filters, SearchMethod.DFS,
-                                                  1, GraphParser.Unicity.GLOBALRELATION);
+                1, GraphParser.Unicity.GLOBALRELATION);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
     }
 
     /**
-     * Test 2 of search method, of class GraphParser. Check that the 12 are not in the Node List
+     * Test 2 of search method, of class GraphParser. Check that the 12 are not
+     * in the Node List
      */
     @Test
     public void testSearch_DFS_GlobaleRelation_2() throws Exception {
-        System.out.println("search DFS global node filter f(to) then l(blind), f(from) start node = 12 level = Max");
+        System.out.println("search DFS global relation filter f(to) then l(blind), f(from) start node = 12 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -252,7 +253,7 @@ public class GraphParserTest {
         filters.add(f2);
         filters.add(f3);
         SearchResult result = graph.parser.search("12", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -260,11 +261,12 @@ public class GraphParserTest {
     }
 
     /**
-     * Test 3 of search method, of class GraphParser. Check That node 1 is not in the List
+     * Test 3 of search method, of class GraphParser. Check That node 1 is not
+     * in the List
      */
     @Test
     public void testSearch_DFS_GlobaleRelation_3() throws Exception {
-        System.out.println("search DFS global node filter l(to) then l(from) start node = 1 level = Max");
+        System.out.println("search DFS global relation filter l(to) then l(from) start node = 1 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -279,7 +281,7 @@ public class GraphParserTest {
         filters.add(f1);
         filters.add(f2);
         SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -290,7 +292,7 @@ public class GraphParserTest {
      */
     @Test
     public void testSearch_DFS_GlobaleRelation_4() throws Exception {
-        System.out.println("search DFS global node filter e(to) then f(blind) start node = 11 level = Max");
+        System.out.println("search DFS global relation filter e(to) then f(blind) start node = 11 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -302,7 +304,7 @@ public class GraphParserTest {
         filters.add(f1);
         filters.add(f2);
         SearchResult result = graph.parser.search("11", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
         Set<Node> resultNodes = result.getResultNodes();
 
         System.out.println(expResult);
@@ -342,7 +344,7 @@ public class GraphParserTest {
         filters.add(f2);
         filters.add(f3);
         SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -367,7 +369,7 @@ public class GraphParserTest {
         LinkFilter f1 = new LinkFilter("friend", LinkFilter.Direction.BLIND);
         filters.add(f1);
         SearchResult result = graph.parser.search("barbara", filters, SearchMethod.BFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -389,7 +391,7 @@ public class GraphParserTest {
         LinkFilter f1 = new LinkFilter("employee_of", LinkFilter.Direction.BLIND);
         filters.add(f1);
         SearchResult result = graph.parser.search("anna", filters, SearchMethod.BFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
         Node[] resultNodes = result.getResultNodesAsArray();
 
         assertArrayEquals(expResult, resultNodes);

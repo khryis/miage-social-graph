@@ -19,11 +19,11 @@ import java.util.Set;
 public class Node {
 
     private String id;
-    private HashMap<String, ArrayList<Link>> links;
+    private HashMap<String, List<Link>> links;
 
     public Node(String id) {
         this.id = id;
-        this.links = new HashMap();
+        this.links = new HashMap<>();
     }
 
     /**
@@ -33,7 +33,7 @@ public class Node {
         if (links.containsKey(link.getType())) {
             links.get(link.getType()).add(link);
         } else {
-            ArrayList<Link> arrayListLinks = new ArrayList();
+            List<Link> arrayListLinks = new ArrayList<>();
             arrayListLinks.add(link);
             links.put(link.getType(), arrayListLinks);
         }
@@ -55,7 +55,7 @@ public class Node {
             for (int i = 0; i < linksList.size() && !found; i++) {
                 Link currentLink = linksList.get(i);
                 if (currentLink.getFrom().equals(from)
-                    && currentLink.getTo().equals(to)) {
+                        && currentLink.getTo().equals(to)) {
                     link = currentLink;
                     found = true;
                 }
@@ -77,7 +77,7 @@ public class Node {
             for (int i = 0; i < linksList.size() && !contains; i++) {
                 Link currentLink = linksList.get(i);
                 if (currentLink.getFrom().equals(link.getFrom())
-                    && currentLink.getTo().equals(link.getTo())) {
+                        && currentLink.getTo().equals(link.getTo())) {
                     contains = true;
                 }
             }
@@ -90,7 +90,7 @@ public class Node {
      */
     public Set<Node> getLinkedNodes() {
         Set<Node> linkedNodes = new HashSet<>();
-        for (Map.Entry<String, ArrayList<Link>> entry : links.entrySet()) {
+        for (Map.Entry<String, List<Link>> entry : links.entrySet()) {
             for (Iterator<Link> it = entry.getValue().iterator(); it.hasNext();) {
                 Link link = it.next();
                 if (this.equals(link.getFrom())) {
@@ -106,79 +106,75 @@ public class Node {
     }
 
     /**
-     * Returns the linked nodes list to the current node according to the given filter
+     * Returns the linked nodes list to the current node according to the given
+     * filter
      *
      * @param filter Criteria of link acceptation
      *
-     * @return linked nodes matching the given search criteria and null if no nodes matche
+     * @return linked nodes matching the given search criteria and null if no
+     * nodes matche
      */
     public Set<Node> getLinkedNodes(LinkFilter filter) {
         Set<Node> linkedNodes = new HashSet<>();
-        Set<Link> linkSet = getLinkList(filter);
-        if (linkSet == null) {
-            linkedNodes = null;
-        } else {
-            for (Link link : getLinkList(filter)) {
-                switch (filter.getDirection()) {
-                    case FROM:
-                        if (this.equals(link.getTo())) {
-                            linkedNodes.add(link.getFrom());
-                        }
-                        break;
-                    case TO:
-                        if (this.equals(link.getFrom())) {
-                            linkedNodes.add(link.getTo());
-                        }
-                        break;
-                    case BOTH:
-                        //TODO
-                        break;
-                    case BLIND:
-                        if (this.equals(link.getFrom())) {
-                            linkedNodes.add(link.getTo());
-                        }
-                        if (this.equals(link.getTo())) {
-                            linkedNodes.add(link.getFrom());
-                        }
-                        break;
-                }
+        for (Link link : getLinkList(filter)) {
+            switch (filter.getDirection()) {
+                case FROM:
+                    if (this.equals(link.getTo())) {
+                        linkedNodes.add(link.getFrom());
+                    }
+                    break;
+                case TO:
+                    if (this.equals(link.getFrom())) {
+                        linkedNodes.add(link.getTo());
+                    }
+                    break;
+                case BOTH:
+                    //TODO
+                    break;
+                case BLIND:
+                    if (this.equals(link.getFrom())) {
+                        linkedNodes.add(link.getTo());
+                    }
+                    if (this.equals(link.getTo())) {
+                        linkedNodes.add(link.getFrom());
+                    }
+                    break;
             }
         }
         return linkedNodes;
     }
 
     public Set<Node> getLinkedNodes(List<LinkFilter> filters) {
-        if (filters != null) {
-            switch (filters.size()) {
-                case 0:
-                    return getLinkedNodes();
-                case 1:
-                    return getLinkedNodes(filters.get(0));
-                default:
-                    //Build a set of all nodes matching one of the filters
-                    Set<Node> result = new HashSet<>();
-                    for (Iterator<LinkFilter> it = filters.iterator(); it.hasNext();) {
-                        LinkFilter lf = it.next();
-                        Set<Link> linkSet = getLinkList(lf);
-                        if (linkSet != null) {
-                            Set<Node> nodeSet = getLinkedNodes(lf);
-                            if (nodeSet != null) {
-                                for (Iterator<Node> it1 = nodeSet.iterator(); it1.hasNext();) {
-                                    result.add(it1.next());
-                                }
+        if (filters == null) {
+            return getLinkedNodes();
+        }
+        switch (filters.size()) {
+            case 0:
+                return getLinkedNodes();
+            case 1:
+                return getLinkedNodes(filters.get(0));
+            default:
+                //Build a set of all nodes matching one of the filters
+                Set<Node> result = new HashSet<>();
+                for (Iterator<LinkFilter> it = filters.iterator(); it.hasNext();) {
+                    LinkFilter lf = it.next();
+                    Set<Link> linkSet = getLinkList(lf);
+                    if (linkSet != null) {
+                        Set<Node> nodeSet = getLinkedNodes(lf);
+                        if (nodeSet != null) {
+                            for (Iterator<Node> it1 = nodeSet.iterator(); it1.hasNext();) {
+                                result.add(it1.next());
                             }
                         }
                     }
-                    return result;
-            }
-        } else {
-            return getLinkedNodes();
+                }
+                return result;
         }
     }
 
     public Set<Link> getLinkList() {
         Set<Link> list = new HashSet<>();
-        for (Map.Entry<String, ArrayList<Link>> entry : links.entrySet()) {
+        for (Map.Entry<String, List<Link>> entry : links.entrySet()) {
             for (Iterator<Link> it = entry.getValue().iterator(); it.hasNext();) {
                 list.add(it.next());
             }
@@ -187,14 +183,16 @@ public class Node {
     }
 
     /**
-     * Returns the list of links of the current node that satisfy the given search criterias
+     * Returns the list of links of the current node that satisfy the given
+     * search criterias
      *
      * @param filter define the link exclusion criteria
      * @return list of links according to the given search criteria
      */
+    @SuppressWarnings("IncompatibleEquals")
     public Set<Link> getLinkList(LinkFilter filter) {
         Set<Link> list = new HashSet<>();
-        ArrayList<Link> linkList = linkList = links.get(filter.getType());
+        List<Link> linkList = links.get(filter.getType());
         if (linkList != null) {
             for (Iterator<Link> it = linkList.iterator(); it.hasNext();) {
                 Link link = it.next();
@@ -228,31 +226,30 @@ public class Node {
     }
 
     public Set<Link> getLinkList(List<LinkFilter> filters) {
-        if (filters != null) {
-            switch (filters.size()) {
-                case 0:
-                    return getLinkList();
-                case 1:
-                    return getLinkList(filters.get(0));
-                default:
-                    //Build a set of all links matching one of the filters
-                    Set<Link> result = new HashSet<>();
-                    for (Iterator<LinkFilter> it = filters.iterator(); it.hasNext();) {
-                        Set<Link> listSet = getLinkList(it.next());
-                        if (listSet != null) {
-                            for (Iterator<Link> it1 = listSet.iterator(); it1.hasNext();) {
-                                result.add(it1.next());
-                            }
+        if (filters == null) {
+            return getLinkList();
+        }
+        switch (filters.size()) {
+            case 0:
+                return getLinkList();
+            case 1:
+                return getLinkList(filters.get(0));
+            default:
+                //Build a set of all links matching one of the filters
+                Set<Link> result = new HashSet<>();
+                for (Iterator<LinkFilter> it = filters.iterator(); it.hasNext();) {
+                    Set<Link> listSet = getLinkList(it.next());
+                    if (listSet != null) {
+                        for (Iterator<Link> it1 = listSet.iterator(); it1.hasNext();) {
+                            result.add(it1.next());
                         }
                     }
-                    return result;
-            }
-        } else {
-            return getLinkList();
+                }
+                return result;
         }
     }
 
-    public Map<String, ArrayList<Link>> getLinks() {
+    public Map<String, List<Link>> getLinks() {
         return links;
     }
 
@@ -265,7 +262,7 @@ public class Node {
         StringBuilder display = new StringBuilder();
         display.append("#### Noeud : ").append(id).append("\n");
         // Prints a list of links grouped by type
-        for (Map.Entry<String, ArrayList<Link>> link : links.entrySet()) {
+        for (Map.Entry<String, List<Link>> link : links.entrySet()) {
             display.append("##").append(link.getKey()).append("\n");
             for (Link linkDetail : link.getValue()) {
                 display.append(linkDetail).append("\n");
@@ -289,10 +286,10 @@ public class Node {
             return false;
         }
         final Node other = (Node) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.id, other.getId())) {
             return false;
         }
-        if (!Objects.equals(this.links, other.links)) {
+        if (!Objects.equals(this.links, other.getLinks())) {
             return false;
         }
         return true;
