@@ -7,7 +7,7 @@ import java.util.List;
  * Interface IGraphParser
  */
 public interface IGraphParser {
-    
+
     public enum Unicity {
 
         GLOBALNODE,
@@ -24,11 +24,11 @@ public interface IGraphParser {
      */
     public SearchResult search(String startingNode, List<LinkFilter> filters) throws SearchException;
 
-    public SearchResult search(String startingNode, List<LinkFilter> filters, int level) throws SearchException;
+    public SearchResult search(String startingNode, List<LinkFilter> filters, int maxDepth) throws SearchException;
 
     public SearchResult search(String startingNode, List<LinkFilter> filters, Unicity unicity) throws SearchException;
 
-    public SearchResult search(String startingNode, List<LinkFilter> filters, int level, Unicity unicity) throws SearchException;
+    public SearchResult search(String startingNode, List<LinkFilter> filters, int maxDepth, Unicity unicity) throws SearchException;
 
     /**
      * Search with the given search method
@@ -41,9 +41,9 @@ public interface IGraphParser {
      */
     public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod) throws SearchException;
 
-    public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod, int level) throws SearchException;
+    public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod, int maxDepth) throws SearchException;
 
     public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod, Unicity unicity) throws SearchException;
 
-    public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod, int level, Unicity unicity) throws SearchException;
+    public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod, int maxDepth, Unicity unicity) throws SearchException;
 }

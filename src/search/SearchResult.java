@@ -20,12 +20,16 @@ public class SearchResult {
     /**
      * Add a node if it isn't already present
      */
-    public void addNode(Node node) {
-        resultNodes.add(node);
+    public boolean addNode(Node node) {
+        return resultNodes.add(node);
     }
 
     public boolean containsNode(Node node) {
         return resultNodes.contains(node);
+    }
+
+    public boolean removeNode(Node node) {
+        return resultNodes.remove(node);
     }
 
     public Set<Node> getResultNodes() {

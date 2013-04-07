@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 class GraphFileParser {
 
     private static final String REGEX =
-            "\\w+\\s--\\w+\\[((((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)),)*)((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+))))\\]-->\\s\\w+";
+            "(\\w+|\\w\\s)*\\s--\\w+(\\[((((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)),)*)((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+))))\\]|)-->\\s(\\w+|\\w\\s)*";
     private Pattern pattern;
     private FileReader fileReader;
     private BufferedReader reader;

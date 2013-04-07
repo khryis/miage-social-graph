@@ -1,8 +1,13 @@
 package domain;
 
+import factory.GraphBuildingMethod;
+import factory.GraphFactory;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -15,6 +20,8 @@ public class NodeTest {
     private Node from;
     private Node to;
     private String linkType;
+    private String filePath;
+    private GraphFactory factory;
 
     public NodeTest() {
     }
@@ -32,6 +39,8 @@ public class NodeTest {
         from = new Node("Carol");
         to = new Node("Barbara");
         linkType = "friends";
+        filePath = "testfiles/JUnitTestSearch2.txt";
+        factory = new GraphFactory();
     }
 
     @After
@@ -39,13 +48,41 @@ public class NodeTest {
     }
 
     /**
-     * Test of getTypeLinkArrayList method, of class Node
+     * Test of getTypeLinkList method, of class Node
      */
     @Test
     public void testGetLinkList() {
         from.addLink(new Link(linkType, from, to));
-        List<Link> friendsLink = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
+        Set<Link> friendsLink = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
         assertNotNull(friendsLink);
+    }
+
+    /**
+     * Test 2 of getTypeLinkList method, of class Node
+     */
+    @Test
+    public void testGetLinkList_2() throws Exception {
+        System.out.println("addLink : testLinkGetLinkList_2");
+
+        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
+        from = graph.getNode("1");
+
+        Set<Link> expResult = new HashSet<>();
+        expResult.add(new Link("l", graph.getNode("1"), graph.getNode("2")));
+        expResult.add(new Link("l", graph.getNode("1"), graph.getNode("3")));
+        expResult.add(new Link("l", graph.getNode("1"), graph.getNode("4")));
+        expResult.add(new Link("f", graph.getNode("1"), graph.getNode("5")));
+
+        List<LinkFilter> linkFilters = new ArrayList<>();
+        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.BLIND);
+        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
+        linkFilters.add(f1);
+        linkFilters.add(f2);
+        Node startNode = graph.getNode("1");
+
+        Set<Link> resultLinks = startNode.getLinkList(linkFilters);
+
+        assertTrue(expResult.containsAll(resultLinks));
     }
 
     /**
@@ -55,15 +92,15 @@ public class NodeTest {
     public void testAddLink() {
         System.out.println("addLink : testAddLink");
 
-        Link link = new Link("friends", new Node("Carol"), new Node("Barbara"));
+        Link link = new Link("friends", from, to);
         from.addLink(link);
 
-        Link expected;
-        expected = new Link(linkType, new Node("Carol"), new Node("Barbara"));
+        Link expResult;
+        expResult = new Link(linkType, from, to);
 
-        List<Link> fromfriendsLinks = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.BLIND));
+        Set<Link> fromfriendsLinks = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.BLIND));
 
-        assertTrue(fromfriendsLinks.contains(expected));
+        assertTrue(fromfriendsLinks.contains(expResult));
     }
 
     /**
@@ -74,9 +111,9 @@ public class NodeTest {
         System.out.println("addLink : testSizeOfLinkArrayListAfterAddLink");
         from.addLink(new Link(linkType, from, to));
 
-        List<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
-        long expected = 1;
-        assertEquals(expected, friendlist.size());
+        Set<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.TO));
+        long expResult = 1;
+        assertEquals(expResult, friendlist.size());
     }
 
     /**
@@ -87,7 +124,53 @@ public class NodeTest {
     public void testLinkTypeExistAfterAddLink() {
         System.out.println("addLink : testKeyExistAfterAddLink");
         from.addLink(new Link(linkType, from, to));
-        Map<String, ArrayList<Link>> links = from.getLinks();
+        Map<String, List<Link>> links = from.getLinks();
         assertTrue(links.containsKey(linkType));
+    }
+
+    @Test
+    public void testLinkGetLinkList_Filter() throws Exception {
+        System.out.println("addLink : testLinkGetLinkList_Filter");
+
+        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
+        from = graph.getNode("1");
+
+        Set<Link> expResult = new HashSet<>();
+        expResult.add(new Link("l", graph.getNode("1"), graph.getNode("2")));
+        expResult.add(new Link("l", graph.getNode("1"), graph.getNode("3")));
+        expResult.add(new Link("l", graph.getNode("1"), graph.getNode("4")));
+
+        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.BLIND);
+        Node startNode = graph.getNode("1");
+
+        Set<Link> resultLinks = startNode.getLinkList(f1);
+
+        assertTrue(resultLinks.containsAll(expResult));
+    }
+
+    @Test
+    public void testLinkGetLinkList_Filters() throws Exception {
+        System.out.println("addLink : testLinkGetLinkList_Filters");
+
+        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
+        from = graph.getNode("1");
+
+        Set<Link> expResult = new HashSet<>();
+        expResult.add(new Link("l", graph.getNode("1"), graph.getNode("2")));
+        expResult.add(new Link("l", graph.getNode("1"), graph.getNode("3")));
+        expResult.add(new Link("l", graph.getNode("1"), graph.getNode("4")));
+        expResult.add(new Link("f", graph.getNode("1"), graph.getNode("5")));
+
+        List<LinkFilter> linkFilters = new ArrayList<>();
+        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.BLIND);
+        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
+        linkFilters.add(f1);
+        linkFilters.add(f2);
+        Node startNode = graph.getNode("1");
+
+        Set<Link> resultLinks = startNode.getLinkList(linkFilters);
+
+        assertEquals(expResult, resultLinks);
+        assertTrue(resultLinks.containsAll(expResult));
     }
 }

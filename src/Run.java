@@ -95,7 +95,7 @@ public class Run {
     }
 
     public static void main(String[] args) {
-        String filePath = "testfiles/WellFormedFileWithAttr.txt";
+        String filePath = "testfiles/WellFormedFileWithoutAttr.txt";
         if (args.length != 0) {
             filePath = args[0];
         }
@@ -144,6 +144,7 @@ public class Run {
                     }
                 }
                 GraphParser parser = new GraphParser(g);
+                //TODO change parser args
                 /*try {
                  SearchResult result = parser.search(strStartNode, filters);
                  System.out.println("--------- Voici le resultat -----------");
