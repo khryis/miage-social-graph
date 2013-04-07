@@ -95,8 +95,7 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the first step of research. Select the first set of Nodes that
-     * will be used to perform the second step of research
+     * Perform the first step of research. Select the first set of Nodes that will be used to perform the second step of research
      */
     private SearchResult globalNodeDFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
         SearchResult result = new SearchResult();
@@ -127,8 +126,7 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the second step of research. Add recursivly all linked nodes to
-     * the result until the given maxDepth is reached
+     * Perform the second step of research. Add recursivly all linked nodes to the result until the given maxDepth is reached
      */
     private void globalNodeDFSStep2(Node currentNode, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
@@ -141,8 +139,7 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the second step of research. Add recursivly the nodes matchink
-     * the given filters until the given maxDepth is reached
+     * Perform the second step of research. Add recursivly the nodes matchink the given filters until the given maxDepth is reached
      */
     private void globalNodeDFSStep2(Node currentNode, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
@@ -178,7 +175,7 @@ public class GraphParser implements IGraphParser {
         SearchResult result = new SearchResult();
 
         //get the matching nodes
-        Set<Link> toVisit;
+        Set<Link> toVisit = new HashSet<>();
         if (filters != null && filters.size() > 0) {
             toVisit = startNode.getLinkList(filters.remove(0));
             if (filters.size() == 0) {
@@ -200,7 +197,6 @@ public class GraphParser implements IGraphParser {
                 globalRelationDFSStep2(startNode, it.next(), filters, visited, result, 0, maxDepth);
             }
         }
-
         return result;
     }
 

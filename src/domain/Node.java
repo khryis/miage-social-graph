@@ -55,7 +55,7 @@ public class Node {
             for (int i = 0; i < linksList.size() && !found; i++) {
                 Link currentLink = linksList.get(i);
                 if (currentLink.getFrom().equals(from)
-                        && currentLink.getTo().equals(to)) {
+                    && currentLink.getTo().equals(to)) {
                     link = currentLink;
                     found = true;
                 }
@@ -77,7 +77,7 @@ public class Node {
             for (int i = 0; i < linksList.size() && !contains; i++) {
                 Link currentLink = linksList.get(i);
                 if (currentLink.getFrom().equals(link.getFrom())
-                        && currentLink.getTo().equals(link.getTo())) {
+                    && currentLink.getTo().equals(link.getTo())) {
                     contains = true;
                 }
             }
@@ -106,13 +106,11 @@ public class Node {
     }
 
     /**
-     * Returns the linked nodes list to the current node according to the given
-     * filter
+     * Returns the linked nodes list to the current node according to the given filter
      *
      * @param filter Criteria of link acceptation
      *
-     * @return linked nodes matching the given search criteria and null if no
-     * nodes matche
+     * @return linked nodes matching the given search criteria and null if no nodes matche
      */
     public Set<Node> getLinkedNodes(LinkFilter filter) {
         Set<Node> linkedNodes = new HashSet<>();
@@ -189,18 +187,15 @@ public class Node {
     }
 
     /**
-     * Returns the list of links of the current node that satisfy the given
-     * search criterias
+     * Returns the list of links of the current node that satisfy the given search criterias
      *
      * @param filter define the link exclusion criteria
      * @return list of links according to the given search criteria
      */
     public Set<Link> getLinkList(LinkFilter filter) {
         Set<Link> list = new HashSet<>();
-        ArrayList<Link> linkList = links.get(filter.getType());
-        if (linkList == null) {
-            list = null;
-        } else {
+        ArrayList<Link> linkList = linkList = links.get(filter.getType());
+        if (linkList != null) {
             for (Iterator<Link> it = linkList.iterator(); it.hasNext();) {
                 Link link = it.next();
                 if (link.equals(filter)) {

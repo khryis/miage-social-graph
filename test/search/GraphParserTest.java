@@ -185,6 +185,30 @@ public class GraphParserTest {
     }
 
     @Test
+    public void testSearch_DFS_GlobaleNode_6() throws Exception {
+        System.out.println("search DFS global node filter e(to) then f(blind) start node = 11 level = Max");
+
+        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
+
+        Set<Node> expResult = new HashSet<>();
+
+        List<LinkFilter> filters = new ArrayList<>();
+        LinkFilter f1 = new LinkFilter("e", LinkFilter.Direction.TO);
+        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
+        filters.add(f1);
+        filters.add(f2);
+        SearchResult result = graph.parser.search("11", filters, SearchMethod.DFS,
+                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
+        Set<Node> resultNodes = result.getResultNodes();
+
+        System.out.println(expResult);
+        System.out.println(resultNodes);
+
+        assertEquals(expResult, resultNodes);
+        assertTrue(resultNodes.containsAll(expResult));
+    }
+
+    @Test
     public void testSearch_DFS_GlobaleRelation_1() throws Exception {
         System.out.println("search DFS global node filter f(from) start node = 5 level 1");
 
@@ -204,24 +228,30 @@ public class GraphParserTest {
     }
 
     /**
-     * Test 2 of search method, of class GraphParser.
+     * Test 2 of search method, of class GraphParser. Check that the 12 are not in the Node List
      */
-    //@Test
+    @Test
     public void testSearch_DFS_GlobaleRelation_2() throws Exception {
-        System.out.println("search DFS global node filter f(to) then l(from) start node = 1 level = Max");
+        System.out.println("search DFS global node filter f(to) then l(blind), f(from) start node = 12 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("5"));
+        expResult.add(graph.getNode("9"));
+        expResult.add(graph.getNode("13"));
+        expResult.add(graph.getNode("4"));
         expResult.add(graph.getNode("1"));
+        expResult.add(graph.getNode("2"));
+        expResult.add(graph.getNode("3"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.TO);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.TO);
+        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.TO);
+        LinkFilter f2 = new LinkFilter("l", LinkFilter.Direction.BLIND);
+        LinkFilter f3 = new LinkFilter("f", LinkFilter.Direction.FROM);
         filters.add(f1);
         filters.add(f2);
-        SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
+        filters.add(f3);
+        SearchResult result = graph.parser.search("12", filters, SearchMethod.DFS,
                                                   Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
         Set<Node> resultNodes = result.getResultNodes();
 
@@ -230,34 +260,26 @@ public class GraphParserTest {
     }
 
     /**
-     * Test 3 of search method, of class GraphParser.
+     * Test 3 of search method, of class GraphParser. Check That node 1 is not in the List
      */
-    //@Test
+    @Test
     public void testSearch_DFS_GlobaleRelation_3() throws Exception {
-        System.out.println("search DFS global node filter f(to) then f(from),l(to),e(to) start node = 1 level = 3");
+        System.out.println("search DFS global node filter l(to) then l(from) start node = 1 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("5"));
-        expResult.add(graph.getNode("1"));
         expResult.add(graph.getNode("2"));
         expResult.add(graph.getNode("3"));
         expResult.add(graph.getNode("4"));
-        expResult.add(graph.getNode("6"));
-        expResult.add(graph.getNode("9"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.TO);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.FROM);
-        LinkFilter f3 = new LinkFilter("l", LinkFilter.Direction.TO);
-        LinkFilter f4 = new LinkFilter("e", LinkFilter.Direction.TO);
+        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.TO);
+        LinkFilter f2 = new LinkFilter("l", LinkFilter.Direction.FROM);
         filters.add(f1);
         filters.add(f2);
-        filters.add(f3);
-        filters.add(f4);
         SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                                                  3, GraphParser.Unicity.GLOBALNODE);
+                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
@@ -266,30 +288,25 @@ public class GraphParserTest {
     /**
      * Test 4 of search method, of class GraphParser.
      */
-    //@Test
+    @Test
     public void testSearch_DFS_GlobaleRelation_4() throws Exception {
-        System.out.println("search DFS global node filter l(to) then f(blind) start node = 1 level = Max");
+        System.out.println("search DFS global node filter e(to) then f(blind) start node = 11 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("2"));
-        expResult.add(graph.getNode("7"));
-        expResult.add(graph.getNode("3"));
-        expResult.add(graph.getNode("8"));
-        expResult.add(graph.getNode("4"));
-        expResult.add(graph.getNode("13"));
-        expResult.add(graph.getNode("12"));
-        expResult.add(graph.getNode("9"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.TO);
+        LinkFilter f1 = new LinkFilter("e", LinkFilter.Direction.TO);
         LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
         filters.add(f1);
         filters.add(f2);
-        SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
+        SearchResult result = graph.parser.search("11", filters, SearchMethod.DFS,
+                                                  Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
         Set<Node> resultNodes = result.getResultNodes();
+
+        System.out.println(expResult);
+        System.out.println(resultNodes);
 
         assertEquals(expResult, resultNodes);
         assertTrue(resultNodes.containsAll(expResult));
