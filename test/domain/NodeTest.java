@@ -117,13 +117,14 @@ public class NodeTest {
     }
 
     /**
-     * <p><strong>Test 3 of addLink method, of class Node.</strong></p> <p>When add a new type of link, new entry (key) in HashMap.</p>
+     * <p><strong>Test 3 of addLink method, of class Node.</strong></p> <p>When
+     * add a new type of link, new entry (key) in HashMap.</p>
      */
     @Test
     public void testLinkTypeExistAfterAddLink() {
         System.out.println("addLink : testKeyExistAfterAddLink");
         from.addLink(new Link(linkType, from, to));
-        Map<String, ArrayList<Link>> links = from.getLinks();
+        Map<String, List<Link>> links = from.getLinks();
         assertTrue(links.containsKey(linkType));
     }
 

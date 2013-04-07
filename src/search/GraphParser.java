@@ -95,7 +95,8 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the first step of research. Select the first set of Nodes that will be used to perform the second step of research
+     * Perform the first step of research. Select the first set of Nodes that
+     * will be used to perform the second step of research
      */
     private SearchResult globalNodeDFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
         SearchResult result = new SearchResult();
@@ -126,7 +127,8 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the second step of research. Add recursivly all linked nodes to the result until the given maxDepth is reached
+     * Perform the second step of research. Add recursivly all linked nodes to
+     * the result until the given maxDepth is reached
      */
     private void globalNodeDFSStep2(Node currentNode, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
@@ -139,7 +141,8 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the second step of research. Add recursivly the nodes matchink the given filters until the given maxDepth is reached
+     * Perform the second step of research. Add recursivly the nodes matchink
+     * the given filters until the given maxDepth is reached
      */
     private void globalNodeDFSStep2(Node currentNode, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
@@ -154,40 +157,22 @@ public class GraphParser implements IGraphParser {
         }
     }
 
-    @Deprecated
-    private void recursiveGlobalNodeDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Node> exploredNodes, int currentLevel, int maxLevel) {
-        exploredNodes.add(currentNode);
-        currentLevel++;
-        for (Node n : currentNode.getLinkedNodes(filters.get(currentLevel >= filters.size() ? filters.size() - 1 : currentLevel))) {
-            if (!exploredNodes.contains(n)) {
-                int delta = currentLevel - filters.size();
-                if (delta >= 0) {
-                    result.addNode(n);
-                }
-                if (delta < maxLevel) {
-                    recursiveGlobalNodeDFS(n, filters, result, exploredNodes, currentLevel, maxLevel);
-                }
-            }
-        }
-    }
-
     private SearchResult globalRelationDFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
-        SearchResult result = new SearchResult();
-
         //get the matching nodes
         Set<Link> toVisit = new HashSet<>();
-        if (filters != null && filters.size() > 0) {
-            toVisit = startNode.getLinkList(filters.remove(0));
-            if (filters.size() == 0) {
+        if (filters != null) {
+            if (filters.isEmpty()) {
                 filters = null;
+            } else {
+                toVisit = startNode.getLinkList(filters.remove(0));
             }
         } else {
             toVisit = startNode.getLinkList();
-            filters = null;
         }
 
         //visit the matching nodes
         Set<Link> visited = new HashSet<>();
+        SearchResult result = new SearchResult();
         if (filters == null) {
             for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
                 globalRelationDFSStep2(startNode, it.next(), visited, result, 0, maxDepth);
@@ -219,23 +204,6 @@ public class GraphParser implements IGraphParser {
                 result.addNode(target);
                 for (Link l : target.getLinkList(filters)) {
                     globalRelationDFSStep2(target, l, filters, visited, result, currentDepth + 1, maxDepth);
-                }
-            }
-        }
-    }
-
-    @Deprecated
-    private void recursiveGlobalRelationDFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {
-        currentLevel++;
-        for (Link l : currentNode.getLinkList(filters.get(currentLevel >= filters.size() ? filters.size() - 1 : currentLevel))) {
-            if (!exploredLinks.contains(l)) {
-                Node target = (l.getTo().getId().equals(currentNode.getId()) ? l.getFrom() : l.getTo());
-                int delta = currentLevel - filters.size();
-                if (delta >= 0) {
-                    result.addNode(target);
-                }
-                if (delta < maxLevel) {
-                    recursiveGlobalRelationDFS(target, filters, result, exploredLinks, currentLevel, maxLevel);
                 }
             }
         }
