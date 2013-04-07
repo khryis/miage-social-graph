@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import search.GraphParser;
-import search.SearchException;
-import search.SearchResult;
 
 public class Run {
 
@@ -129,15 +127,15 @@ public class Run {
             strStartNode = nextLineNotBlank();
 
             message = "Choisissez un type de parcours : \n"
-                      + "1 - Profondeur\n"
-                      + "2 - Largeur\n";
+                    + "1 - Profondeur\n"
+                    + "2 - Largeur\n";
             choice = nextIntRangedNotBlank(1, 2, "Faite un choix ! ", "Erreur de saisie", message);
             if (choice == 1) {
                 List<String> filters = new ArrayList<>();
                 boolean endFilterChoice = false;
                 while (!endFilterChoice) {
                     System.out.println("Donner un nom de type de lien pour filtrer les noeuds\n"
-                                       + "(stop pour arrêter d'ajouter des filtres)");
+                            + "(stop pour arrêter d'ajouter des filtres)");
                     strFilter = nextLineNotBlank();
                     if (strFilter.compareToIgnoreCase("stop") == 0) {
                         endFilterChoice = true;
@@ -146,15 +144,15 @@ public class Run {
                     }
                 }
                 GraphParser parser = new GraphParser(g);
-                try {
-                    SearchResult result = parser.search(strStartNode, filters);
-                    System.out.println("--------- Voici le resultat -----------");
-                    System.out.println(result);
-                    System.out.println("---------------------------------------");
-                    // Supposed result : carol, dawn, elizabeth, anna
-                } catch (SearchException ex) {
-                    Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                /*try {
+                 SearchResult result = parser.search(strStartNode, filters);
+                 System.out.println("--------- Voici le resultat -----------");
+                 System.out.println(result);
+                 System.out.println("---------------------------------------");
+                 // Supposed result : carol, dawn, elizabeth, anna
+                 } catch (SearchException ex) {
+                 Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
+                 }*/
             } else if (choice == 2) {
                 System.out.println("Not implemented");
             }

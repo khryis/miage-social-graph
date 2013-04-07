@@ -3,15 +3,18 @@ package domain;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import search.GraphParser;
 
 /**
  * Class Graph
  */
 public class Graph {
 
+    public GraphParser parser;
     private HashMap<String, Node> nodes;
 
     public Graph() {
+        parser = new GraphParser(this);
         this.nodes = new HashMap();
     }
 
