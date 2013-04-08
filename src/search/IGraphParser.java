@@ -10,8 +10,17 @@ public interface IGraphParser {
 
     public enum Unicity {
 
-        GLOBALNODE,
-        GLOBALRELATION
+        GLOBALNODE("GLOBAL NODE"),
+        GLOBALRELATION("GLOBAL RELATION");
+        String description;
+
+        Unicity(String description) {
+            this.description = description;
+        }
+
+        public String toString() {
+            return description;
+        }
     }
 
     /**

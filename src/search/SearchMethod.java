@@ -5,16 +5,22 @@ package search;
  */
 public enum SearchMethod {
 
-    DFS("Depth-first search (default)"),
-    BFS("Breadth-first search");
+    DFS("Depth-first search (default)", "DFS"),
+    BFS("Breadth-first search", "BFS");
     String description;
+    String shortName;
 
-    SearchMethod(String description) {
+    SearchMethod(String description, String shortName) {
         this.description = description;
+        this.shortName = shortName;
     }
 
     @Override
     public String toString() {
         return description;
+    }
+
+    public String getShortName() {
+        return shortName;
     }
 }
