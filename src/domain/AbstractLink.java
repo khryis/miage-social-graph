@@ -51,7 +51,12 @@ public abstract class AbstractLink {
     public abstract String toString();
 
     @Override
-    public abstract int hashCode();
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 17 + type.hashCode();
+        hash = hash * 31 + attributes.hashCode();
+        return hash;
+    }
 
     @Override
     public boolean equals(Object obj) {

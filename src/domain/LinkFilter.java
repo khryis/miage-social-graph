@@ -43,7 +43,9 @@ public class LinkFilter extends AbstractLink {
 
     @Override
     public int hashCode() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int hash = super.hashCode();
+        hash = hash * 31 + direction.toString().hashCode();
+        return hash;
     }
 
     @Override
