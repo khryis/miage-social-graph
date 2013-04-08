@@ -39,158 +39,271 @@ public class GraphParserTest {
     public static Collection<Object[]> data() {
         Object[][] data = new Object[][]{
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{"1"},
-                new LinkFilter[]{new LinkFilter("f", LinkFilter.Direction.IN)},
-                "5",
-                SearchMethod.DFS,
-                1,
-                IGraphParser.Unicity.GLOBALNODE
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"1"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.IN)
+                },
+                "5",//startNode
+                SearchMethod.DFS,//searchMethod
+                1,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
             },
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{"5", "1"},
-                new LinkFilter[]{new LinkFilter("f", LinkFilter.Direction.OUT), new LinkFilter("f", LinkFilter.Direction.IN)},
-                "1",
-                SearchMethod.DFS,
-                Integer.MAX_VALUE,
-                IGraphParser.Unicity.GLOBALNODE
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"5", "1"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.IN)
+                },
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
             },
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{"5", "1", "2", "3", "4"},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"5", "1", "2", "3", "4"},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("f", LinkFilter.Direction.OUT),
                     new LinkFilter("f", LinkFilter.Direction.IN),
                     new LinkFilter("l", LinkFilter.Direction.OUT),
                     new LinkFilter("e", LinkFilter.Direction.OUT)
                 },
-                "1",
-                SearchMethod.DFS,
-                3,
-                IGraphParser.Unicity.GLOBALNODE
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
             },
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{"2", "7", "3", "8", "4", "13", "12", "9"},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "7", "3", "8", "4", "13", "12", "9"},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("l", LinkFilter.Direction.OUT),
                     new LinkFilter("f", LinkFilter.Direction.BLIND),},
-                "1",
-                SearchMethod.DFS,
-                Integer.MAX_VALUE,
-                IGraphParser.Unicity.GLOBALNODE
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
             },
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{"2", "6", "7", "11", "3", "8", "12", "13", "9", "4", "10"},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "6", "7", "11", "3", "8", "12", "13", "9", "4", "10"},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("l", LinkFilter.Direction.OUT),
                     new LinkFilter("f", LinkFilter.Direction.BLIND),
                     new LinkFilter("e", LinkFilter.Direction.BLIND)},
-                "1",
-                SearchMethod.DFS,
-                Integer.MAX_VALUE,
-                IGraphParser.Unicity.GLOBALNODE
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
             },
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("e", LinkFilter.Direction.OUT),
                     new LinkFilter("f", LinkFilter.Direction.BLIND),},
-                "11",
-                SearchMethod.DFS,
-                Integer.MAX_VALUE,
-                IGraphParser.Unicity.GLOBALNODE
+                "11",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
             },
             {
-                "testfiles/JUnitTestSearch.txt",
-                new String[]{"carol", "elizabeth", "anna", "julie"},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{"carol", "elizabeth", "anna", "julie"},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("friend", LinkFilter.Direction.OUT),
                     new LinkFilter("friend", LinkFilter.Direction.OUT),},
-                "barbara",
-                SearchMethod.DFS,
-                Integer.MAX_VALUE,
-                IGraphParser.Unicity.GLOBALNODE
+                "barbara",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
             },
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{"1"},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"1"},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("f", LinkFilter.Direction.IN)},
-                "5",
-                SearchMethod.DFS,
-                1,
-                IGraphParser.Unicity.GLOBALRELATION
+                "5",//startNode
+                SearchMethod.DFS,//searchMethod
+                1,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
             },
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{"9", "13", "4", "1", "2", "3"},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"9", "13", "4", "1", "2", "3"},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("f", LinkFilter.Direction.OUT),
                     new LinkFilter("l", LinkFilter.Direction.BLIND),
                     new LinkFilter("f", LinkFilter.Direction.IN)},
-                "12",
-                SearchMethod.DFS,
-                Integer.MAX_VALUE,
-                IGraphParser.Unicity.GLOBALRELATION
+                "12",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
             },
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{"2", "3", "4"},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4"},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("l", LinkFilter.Direction.OUT),
                     new LinkFilter("l", LinkFilter.Direction.IN),},
-                "1",
-                SearchMethod.DFS,
-                Integer.MAX_VALUE,
-                IGraphParser.Unicity.GLOBALRELATION
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
             },
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("e", LinkFilter.Direction.OUT),
                     new LinkFilter("f", LinkFilter.Direction.BLIND),},
-                "11",
-                SearchMethod.DFS,
-                Integer.MAX_VALUE,
-                IGraphParser.Unicity.GLOBALRELATION
+                "11",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
             },
             {
-                "testfiles/JUnitTestSearch2.txt",
-                new String[]{},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("e", LinkFilter.Direction.OUT),
                     new LinkFilter("f", LinkFilter.Direction.BLIND),},
-                "11",
-                SearchMethod.DFS,
-                Integer.MAX_VALUE,
-                IGraphParser.Unicity.GLOBALRELATION
+                "11",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
             },
             {
-                "testfiles/JUnitTestSearch.txt",
-                new String[]{"carol", "barbara", "elizabeth", "anna", "julie"},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{"carol", "barbara", "elizabeth", "anna", "julie"},//expResult
+                new LinkFilter[]{//filters
                     new LinkFilter("friend", LinkFilter.Direction.OUT)
                 },
-                "barbara",
-                SearchMethod.BFS,
-                Integer.MAX_VALUE,
-                IGraphParser.Unicity.GLOBALNODE
+                "barbara",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
             },
             {
-                "testfiles/JUnitTestSearch.txt",
-                new String[]{"barbara"},
-                new LinkFilter[]{
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{"barbara", "anna"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("employee_of", LinkFilter.Direction.OUT),
+                    new LinkFilter("employee_of", LinkFilter.Direction.IN)
+                },
+                "anna",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{"barbara"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("employee_of", LinkFilter.Direction.OUT),
                     new LinkFilter("employee_of", LinkFilter.Direction.OUT)
                 },
-                "anna",
-                SearchMethod.BFS,
-                1,
-                IGraphParser.Unicity.GLOBALNODE
+                "anna",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("employee_of", LinkFilter.Direction.IN)
+                },
+                "anna",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{"barbara", "carol", "elizabeth", "anna", "julie"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("employee_of", LinkFilter.Direction.OUT)
+                },
+                "anna",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4", "7", "8", "13"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.OUT)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.IN),
+                    new LinkFilter("f", LinkFilter.Direction.OUT)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"1"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.IN),
+                    new LinkFilter("f", LinkFilter.Direction.OUT)
+                },
+                "5",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"1"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.IN),
+                    new LinkFilter("f", LinkFilter.Direction.OUT)
+                },
+                "5",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("l", LinkFilter.Direction.BLIND)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4", "6", "7", "8", "9", "13", "11", "12", "10"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),
+                    new LinkFilter("e", LinkFilter.Direction.BLIND)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode//searchMethode
+                Integer.MAX_VALUE,
+                IGraphParser.Unicity.GLOBALRELATION//unicity
             }
         };
         return Arrays.asList(data);
@@ -239,15 +352,16 @@ public class GraphParserTest {
             LinkFilter filter = filtersTab[i];
             filters.add(filter);
         }
-        SearchResult result = graph.parser.search(startNode, filters, searchMethod,
-                                                  level, unicity);
-        Set<Node> resultNodes = result.getResultNodes();
 
         System.out.println("search : " + searchMethod.getShortName() + "\n"
                            + "Unicity : " + unicity.toString() + "\n"
                            + "LinkFilters : " + filters.toString() + "\n"
                            + "StartNode : " + startNode + "\n"
-                           + "level : " + level + "\n\n");
+                           + "level : " + (level == Integer.MAX_VALUE ? "MAX" : level) + "\n\n");
+
+        SearchResult result = graph.parser.search(startNode, filters, searchMethod,
+                                                  level, unicity);
+        Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
         assertEquals(resultNodes.size(), expResult.size());

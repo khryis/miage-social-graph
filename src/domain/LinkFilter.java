@@ -31,7 +31,7 @@ public class LinkFilter extends AbstractLink {
     @Override
     public String toString() {
         StringBuilder display = new StringBuilder();
-        display.append("Direction: ").append(direction);
+        display.append("\"").append(getType()).append("\"->").append(direction);
         // For each attribute, prints his name and his value(s)
         for (Map.Entry<String, AttributeValues> attribute : getAttributes().entrySet()) {
             display.append(" | ").append(attribute.getKey()).append(" = ");

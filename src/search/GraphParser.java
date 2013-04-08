@@ -209,7 +209,7 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * The Breadth First Search method
+     * The Breadth First Search method (BFS)
      *
      * @param startingNode the starting node
      * @param filters search criteria
@@ -217,51 +217,154 @@ public class GraphParser implements IGraphParser {
      * @param unicity set the parsing rule (default = GLOBALNODE)
      * @return an instance of <code>SearchResult</code>
      */
-    private SearchResult BFS(Node startingNode, List<LinkFilter> filters, int level, Unicity unicity) {
-        SearchResult result = new SearchResult();
+    private SearchResult BFS(Node startingNode, List<LinkFilter> filters, int maxDepth, Unicity unicity) {
         switch (unicity) {
             case GLOBALRELATION:
-                Set<Link> exploredLinksList = new HashSet<>();
-                globalRelationBFS(startingNode, filters, result, exploredLinksList, 0, level);
-                break;
+                return globalRelationBFSStep1(startingNode, filters, maxDepth);
             default:
-                Set<Node> exploredNodesList = new HashSet<>();
-                globalNodeBFS(startingNode, filters, result, exploredNodesList, 0, level);
-                break;
+                return globalNodeBFSStep1(startingNode, filters, maxDepth);
         }
+    }
+
+    /**
+     * Perform the first step of BFS research for global node. Select the first set of Nodes that will be used to perform the second step of research
+     */
+    private SearchResult globalNodeBFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
+        //get the matching nodes
+        Set<Node> toVisit = new HashSet<>();
+        if (filters != null) {
+            if (filters.isEmpty()) {
+                filters = null;
+            } else {
+                toVisit = startNode.getLinkedNodes(filters.remove(0));
+            }
+        } else {
+            toVisit = startNode.getLinkedNodes();
+        }
+
+        //visit the matching nodes
+        SearchResult result = new SearchResult();
+        ArrayDeque<Node> nodesQueue = new ArrayDeque();
+        for (Iterator<Node> it = toVisit.iterator(); it.hasNext();) {
+            nodesQueue.add(it.next());
+        }
+        if (filters == null) {
+            globalNodeBFSStep2(nodesQueue, result, 1, maxDepth);
+        } else {
+            globalNodeBFSStep2(nodesQueue, filters, result, 1, maxDepth);
+        }
+
         return result;
     }
 
-    private SearchResult BFS(Node startingNode, List<LinkFilter> filters, int maxDepth, Unicity unicity) {
-        SearchResult result = new SearchResult();
-        switch (unicity) {
-            case GLOBALRELATION:
-                return globalRelationDFSStep1(startingNode, filters, maxDepth);
-            case GLOBALNODE:
-            default:
-                return globalNodeDFSStep1(startingNode, filters, maxDepth);
+    //TODO handle the depth
+    /**
+     * Perform the second step of BFS research without filters for global node.
+     */
+    private void globalNodeBFSStep2(ArrayDeque<Node> nodesQueue, SearchResult result, int currentDepth, int maxDepth) {
+        Node currentNode;
+        while (!nodesQueue.isEmpty()) {
+            currentNode = nodesQueue.pollFirst();
+            if (result.addNode(currentNode)) {
+                //if (currentDepth < maxDepth) {
+                for (Node n : currentNode.getLinkedNodes()) {
+                    nodesQueue.add(n);
+                }
+                //}
+            }
+            //currentDepth++;
         }
     }
 
-    private void globalNodeBFS(Node startingNode, List<LinkFilter> filters, SearchResult result, Set<Node> exploredNodes, int currentLevel, int maxLevel) {
-        //exploredNodes.add(startingNode);
+    //TODO handle the depth
+    /**
+     * Perform the second step of BFS research with filters for global node.
+     */
+    private void globalNodeBFSStep2(ArrayDeque<Node> nodesQueue, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
+        Node currentNode;
+        while (!nodesQueue.isEmpty()) {
+            currentNode = nodesQueue.pollFirst();
+            if (result.addNode(currentNode)) {
+                //if (currentDepth < maxDepth) {
+                for (Node n : currentNode.getLinkedNodes(filters)) {
+                    nodesQueue.add(n);
+                }
+                //}
+            }
+            //currentDepth++;
+        }
+    }
+
+    /**
+     * Perform the first step of BFS research for global relation. Select the first set of Nodes that will be used to perform the second step of research
+     */
+    private SearchResult globalRelationBFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
+        //get the matching nodes
+        Set<Link> toVisit = new HashSet<>();
+        if (filters != null) {
+            if (filters.isEmpty()) {
+                filters = null;
+            } else {
+                toVisit = startNode.getLinkList(filters.remove(0));
+            }
+        } else {
+            toVisit = startNode.getLinkList();
+        }
+
+        //visit the matching nodes
+        SearchResult result = new SearchResult();
+        Set<Link> visited = new HashSet<>();
         ArrayDeque<Node> nodesQueue = new ArrayDeque();
-        nodesQueue.add(startingNode);
+        for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
+            Link currentLink = it.next();
+            if (visited.add(currentLink)) {
+                nodesQueue.add((currentLink.getTo().getId().equals(startNode.getId()) ? currentLink.getFrom() : currentLink.getTo()));
+            }
+        }
+        if (filters == null) {
+            globalRelationBFSStep2(nodesQueue, visited, result, 1, maxDepth);
+        } else {
+            globalRelationBFSStep2(nodesQueue, visited, filters, result, 1, maxDepth);
+        }
+
+        return result;
+    }
+
+    //TODO handle the depth
+    /**
+     * Perform the second step of BFS research without filters for global relation.
+     */
+    private void globalRelationBFSStep2(ArrayDeque<Node> nodesQueue, Set<Link> visited, SearchResult result, int currentDepth, int maxDepth) {
         Node currentNode;
         while (!nodesQueue.isEmpty()) {
             currentNode = nodesQueue.pollFirst();
             result.addNode(currentNode);
-            for (Iterator<Node> it = currentNode.getLinkedNodes(filters.get(currentLevel)).iterator(); it.hasNext();) {
-                Node n = it.next();
-                if (!exploredNodes.contains(n)) {
-                    exploredNodes.add(n);
-                    nodesQueue.add(n);
+            Set<Link> toVisit = currentNode.getLinkList();
+            for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
+                Link currentLink = it.next();
+                if (visited.add(currentLink)) {
+                    nodesQueue.add((currentLink.getTo().getId().equals(currentNode.getId()) ? currentLink.getFrom() : currentLink.getTo()));
                 }
             }
         }
     }
 
-    private void globalRelationBFS(Node currentNode, List<LinkFilter> filters, SearchResult result, Set<Link> exploredLinks, int currentLevel, int maxLevel) {
-        //TODO add this kind of parsing
+    //TODO handle the depth
+    /**
+     * Perform the second step of BFS research with filters for global relation.
+     */
+    private void globalRelationBFSStep2(ArrayDeque<Node> nodesQueue, Set<Link> visited, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
+        Node currentNode;
+        while (!nodesQueue.isEmpty()) {
+            currentNode = nodesQueue.pollFirst();
+            result.addNode(currentNode);
+            Set<Link> toVisit = currentNode.getLinkList(filters);
+            for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
+                Link currentLink = it.next();
+                if (visited.add(currentLink)) {
+                    nodesQueue.add((currentLink.getTo().getId().equals(currentNode.getId()) ? currentLink.getFrom() : currentLink.getTo()));
+                }
+            }
+        }
     }
 }
