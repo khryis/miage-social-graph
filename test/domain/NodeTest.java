@@ -53,7 +53,7 @@ public class NodeTest {
     @Test
     public void testGetLinkList() {
         from.addLink(new Link(linkType, from, to));
-        Set<Link> friendsLink = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.FROM));
+        Set<Link> friendsLink = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.OUT));
         assertNotNull(friendsLink);
     }
 
@@ -111,7 +111,7 @@ public class NodeTest {
         System.out.println("addLink : testSizeOfLinkArrayListAfterAddLink");
         from.addLink(new Link(linkType, from, to));
 
-        Set<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.TO));
+        Set<Link> friendlist = from.getLinkList(new LinkFilter(linkType, LinkFilter.Direction.OUT));
         long expResult = 1;
         assertEquals(expResult, friendlist.size());
     }

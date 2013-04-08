@@ -49,7 +49,7 @@ public class GraphParserTest {
      */
     @Test
     public void testSearch_DFS_GlobalNode_1() throws Exception {
-        System.out.println("search DFS global node filter f(from) start node = 5 level 1");
+        System.out.println("search DFS global node filter f(IN) start node = 5 level 1");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -57,7 +57,7 @@ public class GraphParserTest {
         expResult.add(graph.getNode("1"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.FROM);
+        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.IN);
         filters.add(f1);
         SearchResult result = graph.parser.search("5", filters, SearchMethod.DFS,
                 1, GraphParser.Unicity.GLOBALNODE);
@@ -71,7 +71,7 @@ public class GraphParserTest {
      */
     @Test
     public void testSearch_DFS_GlobalNode_2() throws Exception {
-        System.out.println("search DFS global node filter f(to) then l(from) start node = 1 level = Max");
+        System.out.println("search DFS global node filter f(OUT) then l(IN) start node = 1 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -80,8 +80,8 @@ public class GraphParserTest {
         expResult.add(graph.getNode("1"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.TO);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.FROM);
+        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.OUT);
+        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.IN);
         filters.add(f1);
         filters.add(f2);
         SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
@@ -94,7 +94,7 @@ public class GraphParserTest {
 
     @Test
     public void testSearch_DFS_GlobalNode_3() throws Exception {
-        System.out.println("search DFS global node filter f(to) then f(from),l(to),e(to) start node = 1 level = 3");
+        System.out.println("search DFS global node filter f(OUT) then f(IN),l(OUT),e(OUT) start node = 1 level = 3");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -106,10 +106,10 @@ public class GraphParserTest {
         expResult.add(graph.getNode("4"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.TO);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.FROM);
-        LinkFilter f3 = new LinkFilter("l", LinkFilter.Direction.TO);
-        LinkFilter f4 = new LinkFilter("e", LinkFilter.Direction.TO);
+        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.OUT);
+        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.IN);
+        LinkFilter f3 = new LinkFilter("l", LinkFilter.Direction.OUT);
+        LinkFilter f4 = new LinkFilter("e", LinkFilter.Direction.OUT);
         filters.add(f1);
         filters.add(f2);
         filters.add(f3);
@@ -123,7 +123,7 @@ public class GraphParserTest {
 
     @Test
     public void testSearch_DFS_GlobalNode_4() throws Exception {
-        System.out.println("search DFS global node filter l(to) then f(blind) start node = 1 level = Max");
+        System.out.println("search DFS global node filter l(OUT) then f(blind) start node = 1 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -138,7 +138,7 @@ public class GraphParserTest {
         expResult.add(graph.getNode("9"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.TO);
+        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.OUT);
         LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
         filters.add(f1);
         filters.add(f2);
@@ -152,7 +152,7 @@ public class GraphParserTest {
 
     @Test
     public void testSearch_DFS_GlobalNode_5() throws Exception {
-        System.out.println("search DFS global node filter l(to) then f(blind),e(blind) start node = 1 level = Max");
+        System.out.println("search DFS global node filter l(OUT) then f(blind),e(blind) start node = 1 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -170,7 +170,7 @@ public class GraphParserTest {
         expResult.add(graph.getNode("10"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.TO);
+        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.OUT);
         LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
         LinkFilter f3 = new LinkFilter("e", LinkFilter.Direction.BLIND);
         filters.add(f1);
@@ -186,14 +186,14 @@ public class GraphParserTest {
 
     @Test
     public void testSearch_DFS_GlobaleNode_6() throws Exception {
-        System.out.println("search DFS global node filter e(to) then f(blind) start node = 11 level = Max");
+        System.out.println("search DFS global node filter e(OUT) then f(blind) start node = 11 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Set<Node> expResult = new HashSet<>();
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("e", LinkFilter.Direction.TO);
+        LinkFilter f1 = new LinkFilter("e", LinkFilter.Direction.OUT);
         LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
         filters.add(f1);
         filters.add(f2);
@@ -210,7 +210,7 @@ public class GraphParserTest {
 
     @Test
     public void testSearch_DFS_GlobaleRelation_1() throws Exception {
-        System.out.println("search DFS global relation filter f(from) start node = 5 level 1");
+        System.out.println("search DFS global relation filter f(IN) start node = 5 level 1");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -218,7 +218,7 @@ public class GraphParserTest {
         expResult.add(graph.getNode("1"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.FROM);
+        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.IN);
         filters.add(f1);
         SearchResult result = graph.parser.search("5", filters, SearchMethod.DFS,
                 1, GraphParser.Unicity.GLOBALRELATION);
@@ -233,7 +233,7 @@ public class GraphParserTest {
      */
     @Test
     public void testSearch_DFS_GlobaleRelation_2() throws Exception {
-        System.out.println("search DFS global relation filter f(to) then l(blind), f(from) start node = 12 level = Max");
+        System.out.println("search DFS global relation filter f(OUT) then l(blind), f(IN) start node = 12 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -246,9 +246,9 @@ public class GraphParserTest {
         expResult.add(graph.getNode("3"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.TO);
+        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.OUT);
         LinkFilter f2 = new LinkFilter("l", LinkFilter.Direction.BLIND);
-        LinkFilter f3 = new LinkFilter("f", LinkFilter.Direction.FROM);
+        LinkFilter f3 = new LinkFilter("f", LinkFilter.Direction.IN);
         filters.add(f1);
         filters.add(f2);
         filters.add(f3);
@@ -266,7 +266,7 @@ public class GraphParserTest {
      */
     @Test
     public void testSearch_DFS_GlobaleRelation_3() throws Exception {
-        System.out.println("search DFS global relation filter l(to) then l(from) start node = 1 level = Max");
+        System.out.println("search DFS global relation filter l(OUT) then l(IN) start node = 1 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -276,8 +276,8 @@ public class GraphParserTest {
         expResult.add(graph.getNode("4"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.TO);
-        LinkFilter f2 = new LinkFilter("l", LinkFilter.Direction.FROM);
+        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.OUT);
+        LinkFilter f2 = new LinkFilter("l", LinkFilter.Direction.IN);
         filters.add(f1);
         filters.add(f2);
         SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
@@ -292,14 +292,14 @@ public class GraphParserTest {
      */
     @Test
     public void testSearch_DFS_GlobaleRelation_4() throws Exception {
-        System.out.println("search DFS global relation filter e(to) then f(blind) start node = 11 level = Max");
+        System.out.println("search DFS global relation filter e(OUT) then f(blind) start node = 11 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Set<Node> expResult = new HashSet<>();
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("e", LinkFilter.Direction.TO);
+        LinkFilter f1 = new LinkFilter("e", LinkFilter.Direction.OUT);
         LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
         filters.add(f1);
         filters.add(f2);
@@ -319,7 +319,7 @@ public class GraphParserTest {
      */
     //@Test
     public void testSearch_DFS_GlobaleRelation_5() throws Exception {
-        System.out.println("search DFS global node filter l(to) then f(blind),e(blind) start node = 1 level = Max");
+        System.out.println("search DFS global node filter l(OUT) then f(blind),e(blind) start node = 1 level = Max");
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
@@ -337,7 +337,7 @@ public class GraphParserTest {
         expResult.add(graph.getNode("10"));
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.TO);
+        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.OUT);
         LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
         LinkFilter f3 = new LinkFilter("e", LinkFilter.Direction.BLIND);
         filters.add(f1);

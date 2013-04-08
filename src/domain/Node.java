@@ -2,8 +2,8 @@ package domain;
 
 import static domain.LinkFilter.Direction.BLIND;
 import static domain.LinkFilter.Direction.BOTH;
-import static domain.LinkFilter.Direction.FROM;
-import static domain.LinkFilter.Direction.TO;
+import static domain.LinkFilter.Direction.IN;
+import static domain.LinkFilter.Direction.OUT;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -118,12 +118,12 @@ public class Node {
         Set<Node> linkedNodes = new HashSet<>();
         for (Link link : getLinkList(filter)) {
             switch (filter.getDirection()) {
-                case FROM:
+                case IN:
                     if (this.equals(link.getTo())) {
                         linkedNodes.add(link.getFrom());
                     }
                     break;
-                case TO:
+                case OUT:
                     if (this.equals(link.getFrom())) {
                         linkedNodes.add(link.getTo());
                     }
@@ -198,12 +198,12 @@ public class Node {
                 Link link = it.next();
                 if (link.equals(filter)) {
                     switch (filter.getDirection()) {
-                        case FROM:
+                        case IN:
                             if (this.equals(link.getTo())) {
                                 list.add(link);
                             }
                             break;
-                        case TO:
+                        case OUT:
                             if (this.equals(link.getFrom())) {
                                 list.add(link);
                             }

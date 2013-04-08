@@ -53,8 +53,8 @@ public class LinkFilter extends AbstractLink {
 
     public enum Direction {
 
-        FROM, //The node from which the search starts must be equivalent to the from contained in the link
-        TO, //must be equivalent to the to of the link
+        OUT, //The node from which the search starts must be equivalent to the from contained in the link
+        IN, //must be equivalent to the to of the link
         BOTH, //The link must exist in both directions (there is one link with from and another with to that contains the search start node)
         BLIND //The direction doesn't matter
     }
