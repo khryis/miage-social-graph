@@ -72,6 +72,20 @@ public class GraphParserTest {
                 },
                 "1",//startNode
                 SearchMethod.DFS,//searchMethod
+                3,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"5", "1", "4", "9", "13", "10", "12", "3", "2", "6"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.IN),
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("e", LinkFilter.Direction.OUT)
+                },
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
                 Integer.MAX_VALUE,//level
                 IGraphParser.Unicity.GLOBALNODE//unicity
             },
@@ -303,6 +317,34 @@ public class GraphParserTest {
                 "1",//startNode
                 SearchMethod.BFS,//searchMethode//searchMethode
                 Integer.MAX_VALUE,
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4", "6", "7", "1", "8", "9", "13"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),
+                    new LinkFilter("e", LinkFilter.Direction.BLIND),
+                    new LinkFilter("l", LinkFilter.Direction.BLIND)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode//searchMethode
+                2,
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4", "6", "7", "8", "9", "13"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),
+                    new LinkFilter("e", LinkFilter.Direction.BLIND),
+                    new LinkFilter("l", LinkFilter.Direction.BLIND)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode//searchMethode
+                2,
                 IGraphParser.Unicity.GLOBALRELATION//unicity
             }
         };

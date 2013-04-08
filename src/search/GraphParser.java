@@ -245,13 +245,15 @@ public class GraphParser implements IGraphParser {
         //visit the matching nodes
         SearchResult result = new SearchResult();
         ArrayDeque<Node> nodesQueue = new ArrayDeque();
+        int nbNodesInDepth = 0;
         for (Iterator<Node> it = toVisit.iterator(); it.hasNext();) {
             nodesQueue.add(it.next());
+            nbNodesInDepth++;
         }
         if (filters == null) {
-            globalNodeBFSStep2(nodesQueue, result, 1, maxDepth);
+            globalNodeBFSStep2(nodesQueue, result, nbNodesInDepth, maxDepth);
         } else {
-            globalNodeBFSStep2(nodesQueue, filters, result, 1, maxDepth);
+            globalNodeBFSStep2(nodesQueue, filters, result, nbNodesInDepth, maxDepth);
         }
 
         return result;
@@ -261,18 +263,30 @@ public class GraphParser implements IGraphParser {
     /**
      * Perform the second step of BFS research without filters for global node.
      */
-    private void globalNodeBFSStep2(ArrayDeque<Node> nodesQueue, SearchResult result, int currentDepth, int maxDepth) {
+    private void globalNodeBFSStep2(ArrayDeque<Node> nodesQueue, SearchResult result, int nbNodesInDepth, int maxDepth) {
         Node currentNode;
+        int currentDepth = 1, maxNodesInDepth = nbNodesInDepth, numCurrentNode = 0;
+        nbNodesInDepth = 0;
         while (!nodesQueue.isEmpty()) {
-            currentNode = nodesQueue.pollFirst();
-            if (result.addNode(currentNode)) {
-                //if (currentDepth < maxDepth) {
-                for (Node n : currentNode.getLinkedNodes()) {
-                    nodesQueue.add(n);
+            if (currentDepth <= maxDepth) {
+                if (numCurrentNode < maxNodesInDepth) {
+                    currentNode = nodesQueue.pollFirst();
+                    if (result.addNode(currentNode)) {
+                        for (Node n : currentNode.getLinkedNodes()) {
+                            nodesQueue.add(n);
+                            nbNodesInDepth++;
+                        }
+                    }
+                    numCurrentNode++;
+                } else {
+                    currentDepth++;
+                    maxNodesInDepth = nbNodesInDepth;
+                    nbNodesInDepth = 0;
+                    numCurrentNode = 0;
                 }
-                //}
+            } else {
+                nodesQueue.clear();
             }
-            //currentDepth++;
         }
     }
 
@@ -280,18 +294,30 @@ public class GraphParser implements IGraphParser {
     /**
      * Perform the second step of BFS research with filters for global node.
      */
-    private void globalNodeBFSStep2(ArrayDeque<Node> nodesQueue, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
+    private void globalNodeBFSStep2(ArrayDeque<Node> nodesQueue, List<LinkFilter> filters, SearchResult result, int nbNodesInDepth, int maxDepth) {
         Node currentNode;
+        int currentDepth = 1, maxNodesInDepth = nbNodesInDepth, numCurrentNode = 0;
+        nbNodesInDepth = 0;
         while (!nodesQueue.isEmpty()) {
-            currentNode = nodesQueue.pollFirst();
-            if (result.addNode(currentNode)) {
-                //if (currentDepth < maxDepth) {
-                for (Node n : currentNode.getLinkedNodes(filters)) {
-                    nodesQueue.add(n);
+            if (currentDepth <= maxDepth) {
+                if (numCurrentNode < maxNodesInDepth) {
+                    currentNode = nodesQueue.pollFirst();
+                    if (result.addNode(currentNode)) {
+                        for (Node n : currentNode.getLinkedNodes(filters)) {
+                            nodesQueue.add(n);
+                            nbNodesInDepth++;
+                        }
+                    }
+                    numCurrentNode++;
+                } else {
+                    currentDepth++;
+                    maxNodesInDepth = nbNodesInDepth;
+                    nbNodesInDepth = 0;
+                    numCurrentNode = 0;
                 }
-                //}
+            } else {
+                nodesQueue.clear();
             }
-            //currentDepth++;
         }
     }
 
@@ -315,16 +341,18 @@ public class GraphParser implements IGraphParser {
         SearchResult result = new SearchResult();
         Set<Link> visited = new HashSet<>();
         ArrayDeque<Node> nodesQueue = new ArrayDeque();
+        int nbNodesInDepth = 0;
         for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
             Link currentLink = it.next();
             if (visited.add(currentLink)) {
                 nodesQueue.add((currentLink.getTo().getId().equals(startNode.getId()) ? currentLink.getFrom() : currentLink.getTo()));
+                nbNodesInDepth++;
             }
         }
         if (filters == null) {
-            globalRelationBFSStep2(nodesQueue, visited, result, 1, maxDepth);
+            globalRelationBFSStep2(nodesQueue, visited, result, nbNodesInDepth, maxDepth);
         } else {
-            globalRelationBFSStep2(nodesQueue, visited, filters, result, 1, maxDepth);
+            globalRelationBFSStep2(nodesQueue, visited, filters, result, nbNodesInDepth, maxDepth);
         }
 
         return result;
@@ -334,17 +362,32 @@ public class GraphParser implements IGraphParser {
     /**
      * Perform the second step of BFS research without filters for global relation.
      */
-    private void globalRelationBFSStep2(ArrayDeque<Node> nodesQueue, Set<Link> visited, SearchResult result, int currentDepth, int maxDepth) {
+    private void globalRelationBFSStep2(ArrayDeque<Node> nodesQueue, Set<Link> visited, SearchResult result, int nbNodesInDepth, int maxDepth) {
         Node currentNode;
+        int currentDepth = 1, maxNodesInDepth = nbNodesInDepth, numCurrentNode = 0;
+        nbNodesInDepth = 0;
         while (!nodesQueue.isEmpty()) {
-            currentNode = nodesQueue.pollFirst();
-            result.addNode(currentNode);
-            Set<Link> toVisit = currentNode.getLinkList();
-            for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
-                Link currentLink = it.next();
-                if (visited.add(currentLink)) {
-                    nodesQueue.add((currentLink.getTo().getId().equals(currentNode.getId()) ? currentLink.getFrom() : currentLink.getTo()));
+            if (currentDepth <= maxDepth) {
+                if (numCurrentNode < maxNodesInDepth) {
+                    currentNode = nodesQueue.pollFirst();
+                    result.addNode(currentNode);
+                    Set<Link> toVisit = currentNode.getLinkList();
+                    for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
+                        Link currentLink = it.next();
+                        if (visited.add(currentLink)) {
+                            nodesQueue.add((currentLink.getTo().getId().equals(currentNode.getId()) ? currentLink.getFrom() : currentLink.getTo()));
+                            nbNodesInDepth++;
+                        }
+                    }
+                    numCurrentNode++;
+                } else {
+                    currentDepth++;
+                    maxNodesInDepth = nbNodesInDepth;
+                    nbNodesInDepth = 0;
+                    numCurrentNode = 0;
                 }
+            } else {
+                nodesQueue.clear();
             }
         }
     }
@@ -353,17 +396,32 @@ public class GraphParser implements IGraphParser {
     /**
      * Perform the second step of BFS research with filters for global relation.
      */
-    private void globalRelationBFSStep2(ArrayDeque<Node> nodesQueue, Set<Link> visited, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
+    private void globalRelationBFSStep2(ArrayDeque<Node> nodesQueue, Set<Link> visited, List<LinkFilter> filters, SearchResult result, int nbNodesInDepth, int maxDepth) {
         Node currentNode;
+        int currentDepth = 1, maxNodesInDepth = nbNodesInDepth, numCurrentNode = 0;
+        nbNodesInDepth = 0;
         while (!nodesQueue.isEmpty()) {
-            currentNode = nodesQueue.pollFirst();
-            result.addNode(currentNode);
-            Set<Link> toVisit = currentNode.getLinkList(filters);
-            for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
-                Link currentLink = it.next();
-                if (visited.add(currentLink)) {
-                    nodesQueue.add((currentLink.getTo().getId().equals(currentNode.getId()) ? currentLink.getFrom() : currentLink.getTo()));
+            if (currentDepth <= maxDepth) {
+                if (numCurrentNode < maxNodesInDepth) {
+                    currentNode = nodesQueue.pollFirst();
+                    result.addNode(currentNode);
+                    Set<Link> toVisit = currentNode.getLinkList(filters);
+                    for (Iterator<Link> it = toVisit.iterator(); it.hasNext();) {
+                        Link currentLink = it.next();
+                        if (visited.add(currentLink)) {
+                            nodesQueue.add((currentLink.getTo().getId().equals(currentNode.getId()) ? currentLink.getFrom() : currentLink.getTo()));
+                            nbNodesInDepth++;
+                        }
+                    }
+                    numCurrentNode++;
+                } else {
+                    currentDepth++;
+                    maxNodesInDepth = nbNodesInDepth;
+                    nbNodesInDepth = 0;
+                    numCurrentNode = 0;
                 }
+            } else {
+                nodesQueue.clear();
             }
         }
     }
