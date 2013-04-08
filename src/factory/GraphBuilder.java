@@ -69,7 +69,6 @@ abstract class GraphBuilder {
             }
         } else {
             linkType = line.substring(0, line.indexOf("-->"));
-            linkType.trim();
         }
 
         // Fills the returned map
