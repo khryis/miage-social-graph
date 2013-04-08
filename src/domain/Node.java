@@ -21,9 +21,13 @@ public class Node {
     private String id;
     private Map<String, List<Link>> links;
 
-    public Node(String id) {
-        this.id = id;
+    public Node() {
         this.links = new HashMap<>();
+    }
+
+    public Node(String id) {
+        this();
+        this.id = id;
     }
 
     /**
@@ -63,9 +67,11 @@ public class Node {
         }
         return link;
     }
-    /**s
+
+    /**
+     * s
      * Gets all links of the node
-     * 
+     *
      * @return an instance of <code>List</code> of <code>Link</code>
      */
     public List<Link> getLinksList() {
@@ -285,7 +291,12 @@ public class Node {
 
     @Override
     public int hashCode() {
-        int hash = 7;
+        int hash = 31 + id.hashCode();
+        for (Map.Entry<String, List<Link>> entry : links.entrySet()) {
+            for (Iterator<Link> it = entry.getValue().iterator(); it.hasNext();) {
+                hash = hash * 31 + it.next().hashCode();
+            }
+        }
         return hash;
     }
 
