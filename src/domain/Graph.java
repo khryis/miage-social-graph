@@ -32,7 +32,7 @@ public class Graph {
      * @throws IOException
      */
     public File export(String fileName) throws IOException {
-        File file = new File("./" + fileName);
+        File file = new File("./" + fileName + ".txt");
         try (FileWriter writer = new FileWriter(file); BufferedWriter bw = new BufferedWriter(writer)) {
             List<Link> visitedLinks = new ArrayList<>();
             // Parses nodes
