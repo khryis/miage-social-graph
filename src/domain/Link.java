@@ -47,8 +47,8 @@ public class Link extends AbstractLink {
     @Override
     public int hashCode() {
         int hash = super.hashCode();
-        hash = hash * 17 + from.hashCode();
-        hash = hash * 31 + to.hashCode();
+        hash = hash * 17 + from.getId().hashCode();
+        hash = hash * 31 + to.getId().hashCode();
         return hash;
     }
 
