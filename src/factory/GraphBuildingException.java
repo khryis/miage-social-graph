@@ -2,6 +2,8 @@ package factory;
 
 public class GraphBuildingException extends Exception {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Creates a new instance of
      * <code>GraphBuildingException</code> without detail message.

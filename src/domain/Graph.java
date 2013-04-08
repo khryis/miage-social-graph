@@ -16,12 +16,13 @@ import search.GraphParser;
  */
 public class Graph {
 
+    @SuppressWarnings("PublicField")
     public GraphParser parser;
     private Map<String, Node> nodes;
 
     public Graph() {
         parser = new GraphParser(this);
-        this.nodes = new HashMap();
+        this.nodes = new HashMap<>();
     }
 
     /**

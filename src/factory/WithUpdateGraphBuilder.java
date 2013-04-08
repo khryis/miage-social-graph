@@ -54,9 +54,8 @@ class WithUpdateGraphBuilder extends GraphBuilder {
      */
     private void updateLink(Link link, Map<String, AttributeValues> attributes) {
         Set<String> attributesName = attributes.keySet();
-        Iterator iterator = attributesName.iterator();
-        while (iterator.hasNext()) {
-            String attributeName = (String) iterator.next();
+        for (Iterator<String> it = attributesName.iterator(); it.hasNext();) {
+            String attributeName = it.next();
             AttributeValues tmpAttributeValues = attributes.get(attributeName);
             AttributeValues attributeValues = link.getAttributes().get(attributeName);
             // if the current link has not this attribute

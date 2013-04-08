@@ -6,6 +6,8 @@ package factory;
  */
 public class GraphFileParserException extends Exception {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Creates a new instance of
      * <code>GraphFileParserException</code> without detail message.
