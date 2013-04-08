@@ -21,14 +21,24 @@ public class GraphFactory implements IGraphFactory {
     @Override
     public Graph getGraph(File file)
             throws GraphFileParserException, GraphBuildingException, IOException {
-        return getGraph(file, GraphBuildingMethod.STRICT);
+        return getGraph(file, new Graph(), GraphBuildingMethod.STRICT);
+    }
+
+    @Override
+    public Graph getGraph(File file, Graph graph)
+            throws GraphFileParserException, GraphBuildingException, IOException {
+        return getGraph(file, graph, GraphBuildingMethod.WITH_UPDATE);
     }
 
     @Override
     public Graph getGraph(File file, GraphBuildingMethod buildingMethod)
             throws GraphFileParserException, GraphBuildingException, IOException {
+        return getGraph(file, new Graph(), buildingMethod);
+    }
+
+    private Graph getGraph(File file, Graph graph, GraphBuildingMethod buildingMethod)
+            throws GraphFileParserException, GraphBuildingException, IOException {
         GraphFileParser parser = new GraphFileParser(file);
-        Graph graph = new Graph();
         GraphBuilder builder = initBuilder(graph, buildingMethod);
         String currentLine;
         while ((currentLine = parser.readNextLine()) != null) {
