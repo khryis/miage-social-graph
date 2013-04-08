@@ -19,7 +19,7 @@ import java.util.Set;
 public class Node {
 
     private String id;
-    private HashMap<String, List<Link>> links;
+    private Map<String, List<Link>> links;
 
     public Node(String id) {
         this.id = id;
@@ -62,6 +62,18 @@ public class Node {
             }
         }
         return link;
+    }
+    /**s
+     * Gets all links of the node
+     * 
+     * @return an instance of <code>List</code> of <code>Link</code>
+     */
+    public List<Link> getLinksList() {
+        List<Link> linksList = new ArrayList<>();
+        for (List<Link> currentLinks : links.values()) {
+            linksList.addAll(currentLinks);
+        }
+        return linksList;
     }
 
     /**

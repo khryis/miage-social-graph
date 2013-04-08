@@ -104,7 +104,7 @@ public class Run {
 
         String message = "", strFilePath = "", strStartNode = "", strSearchMethod = "", strFilter = "", strLevel = "", strUnicity = "";
         int choice = 0;
-        List<String> listFilter = new ArrayList<String>();
+        List<String> listFilter = new ArrayList<>();
         boolean quit = false;
 
         System.out.println("Ecrire le nom du fichier à parser (ne pas oublier l'extension) : ");
