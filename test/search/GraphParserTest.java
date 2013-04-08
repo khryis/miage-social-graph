@@ -8,6 +8,8 @@ import factory.GraphFactory;
 import factory.IGraphFactory;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,13 +19,346 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
+@RunWith(value = Parameterized.class)
 public class GraphParserTest {
 
     private IGraphFactory factory;
     private String filePath;
+    private String[] expResultNodeTab;
+    private LinkFilter[] filtersTab;
+    private String startNode;
+    private SearchMethod searchMethod;
+    private int level;
+    private IGraphParser.Unicity unicity;
 
-    public GraphParserTest() {
+    @Parameters
+    public static Collection<Object[]> data() {
+        Object[][] data = new Object[][]{
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"1"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.IN)
+                },
+                "5",//startNode
+                SearchMethod.DFS,//searchMethod
+                1,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"5", "1"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.IN)
+                },
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"5", "1", "2", "3", "4"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.IN),
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("e", LinkFilter.Direction.OUT)
+                },
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                3,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"5", "1", "4", "9", "13", "10", "12", "3", "2", "6"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.IN),
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("e", LinkFilter.Direction.OUT)
+                },
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "7", "3", "8", "4", "13", "12", "9"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),},
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "6", "7", "11", "3", "8", "12", "13", "9", "4", "10"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),
+                    new LinkFilter("e", LinkFilter.Direction.BLIND)},
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("e", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),},
+                "11",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{"carol", "elizabeth", "anna", "julie"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("friend", LinkFilter.Direction.OUT),
+                    new LinkFilter("friend", LinkFilter.Direction.OUT),},
+                "barbara",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"1"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.IN)},
+                "5",//startNode
+                SearchMethod.DFS,//searchMethod
+                1,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"9", "13", "4", "1", "2", "3"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.OUT),
+                    new LinkFilter("l", LinkFilter.Direction.BLIND),
+                    new LinkFilter("f", LinkFilter.Direction.IN)},
+                "12",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("l", LinkFilter.Direction.IN),},
+                "1",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("e", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),},
+                "11",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("e", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),},
+                "11",//startNode
+                SearchMethod.DFS,//searchMethod
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{"carol", "barbara", "elizabeth", "anna", "julie"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("friend", LinkFilter.Direction.OUT)
+                },
+                "barbara",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{"barbara", "anna"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("employee_of", LinkFilter.Direction.OUT),
+                    new LinkFilter("employee_of", LinkFilter.Direction.IN)
+                },
+                "anna",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{"barbara"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("employee_of", LinkFilter.Direction.OUT),
+                    new LinkFilter("employee_of", LinkFilter.Direction.OUT)
+                },
+                "anna",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("employee_of", LinkFilter.Direction.IN)
+                },
+                "anna",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch.txt",//filepath
+                new String[]{"barbara", "carol", "elizabeth", "anna", "julie"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("employee_of", LinkFilter.Direction.OUT)
+                },
+                "anna",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4", "7", "8", "13"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.OUT)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.IN),
+                    new LinkFilter("f", LinkFilter.Direction.OUT)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"1"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.IN),
+                    new LinkFilter("f", LinkFilter.Direction.OUT)
+                },
+                "5",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"1"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("f", LinkFilter.Direction.IN),
+                    new LinkFilter("f", LinkFilter.Direction.OUT)
+                },
+                "5",//startNode
+                SearchMethod.BFS,//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("l", LinkFilter.Direction.BLIND)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode//searchMethode
+                Integer.MAX_VALUE,//level
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4", "6", "7", "8", "9", "13", "11", "12", "10"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),
+                    new LinkFilter("e", LinkFilter.Direction.BLIND)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode//searchMethode
+                Integer.MAX_VALUE,
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4", "6", "7", "1", "8", "9", "13"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),
+                    new LinkFilter("e", LinkFilter.Direction.BLIND),
+                    new LinkFilter("l", LinkFilter.Direction.BLIND)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode//searchMethode
+                2,
+                IGraphParser.Unicity.GLOBALNODE//unicity
+            },
+            {
+                "testfiles/JUnitTestSearch2.txt",//filepath
+                new String[]{"2", "3", "4", "6", "7", "8", "9", "13"},//expResult
+                new LinkFilter[]{//filters
+                    new LinkFilter("l", LinkFilter.Direction.OUT),
+                    new LinkFilter("f", LinkFilter.Direction.BLIND),
+                    new LinkFilter("e", LinkFilter.Direction.BLIND),
+                    new LinkFilter("l", LinkFilter.Direction.BLIND)
+                },
+                "1",//startNode
+                SearchMethod.BFS,//searchMethode//searchMethode
+                2,
+                IGraphParser.Unicity.GLOBALRELATION//unicity
+            }
+        };
+        return Arrays.asList(data);
+    }
+
+    public GraphParserTest(String filePath, String[] expResultNodeTab, LinkFilter[] filtersTab, String startNode, SearchMethod searchMethod, int level, IGraphParser.Unicity unicity) {
+        this.filePath = filePath;
+        this.expResultNodeTab = expResultNodeTab;
+        this.filtersTab = filtersTab;
+        this.startNode = startNode;
+        this.searchMethod = searchMethod;
+        this.level = level;
+        this.unicity = unicity;
     }
 
     @BeforeClass
@@ -37,363 +372,41 @@ public class GraphParserTest {
     @Before
     public void setUp() {
         factory = new GraphFactory();
-        filePath = "testfiles/JUnitTestSearch2.txt";
     }
 
     @After
     public void tearDown() {
     }
 
-    /**
-     * Test 1 of search method, of class GraphParser.
-     */
     @Test
-    public void testSearch_DFS_GlobalNode_1() throws Exception {
-        System.out.println("search DFS global node filter f(IN) start node = 5 level 1");
+    public void testSearch() throws Exception {
 
         Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
 
         Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("1"));
+        for (int i = 0; i < expResultNodeTab.length; i++) {
+            String string = expResultNodeTab[i];
+            expResult.add(graph.getNode(string));
+        }
 
         List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.IN);
-        filters.add(f1);
-        SearchResult result = graph.parser.search("5", filters, SearchMethod.DFS,
-                1, GraphParser.Unicity.GLOBALNODE);
+        for (int i = 0; i < filtersTab.length; i++) {
+            LinkFilter filter = filtersTab[i];
+            filters.add(filter);
+        }
+
+        System.out.println("search : " + searchMethod.getShortName() + "\n"
+                           + "Unicity : " + unicity.toString() + "\n"
+                           + "LinkFilters : " + filters.toString() + "\n"
+                           + "StartNode : " + startNode + "\n"
+                           + "level : " + (level == Integer.MAX_VALUE ? "MAX" : level) + "\n\n");
+
+        SearchResult result = graph.parser.search(startNode, filters, searchMethod,
+                                                  level, unicity);
         Set<Node> resultNodes = result.getResultNodes();
 
         assertEquals(expResult, resultNodes);
-    }
-
-    /**
-     * Test 2 of search method, of class GraphParser.
-     */
-    @Test
-    public void testSearch_DFS_GlobalNode_2() throws Exception {
-        System.out.println("search DFS global node filter f(OUT) then l(IN) start node = 1 level = Max");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("5"));
-        expResult.add(graph.getNode("1"));
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.OUT);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.IN);
-        filters.add(f1);
-        filters.add(f2);
-        SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        assertEquals(expResult, resultNodes);
+        assertEquals(resultNodes.size(), expResult.size());
         assertTrue(resultNodes.containsAll(expResult));
-    }
-
-    @Test
-    public void testSearch_DFS_GlobalNode_3() throws Exception {
-        System.out.println("search DFS global node filter f(OUT) then f(IN),l(OUT),e(OUT) start node = 1 level = 3");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("5"));
-        expResult.add(graph.getNode("1"));
-        expResult.add(graph.getNode("2"));
-        expResult.add(graph.getNode("3"));
-        expResult.add(graph.getNode("4"));
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.OUT);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.IN);
-        LinkFilter f3 = new LinkFilter("l", LinkFilter.Direction.OUT);
-        LinkFilter f4 = new LinkFilter("e", LinkFilter.Direction.OUT);
-        filters.add(f1);
-        filters.add(f2);
-        filters.add(f3);
-        filters.add(f4);
-        SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                3, GraphParser.Unicity.GLOBALNODE);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        assertEquals(expResult, resultNodes);
-    }
-
-    @Test
-    public void testSearch_DFS_GlobalNode_4() throws Exception {
-        System.out.println("search DFS global node filter l(OUT) then f(blind) start node = 1 level = Max");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("2"));
-        expResult.add(graph.getNode("7"));
-        expResult.add(graph.getNode("3"));
-        expResult.add(graph.getNode("8"));
-        expResult.add(graph.getNode("4"));
-        expResult.add(graph.getNode("13"));
-        expResult.add(graph.getNode("12"));
-        expResult.add(graph.getNode("9"));
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.OUT);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
-        filters.add(f1);
-        filters.add(f2);
-        SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        assertEquals(expResult, resultNodes);
-        assertTrue(resultNodes.containsAll(expResult));
-    }
-
-    @Test
-    public void testSearch_DFS_GlobalNode_5() throws Exception {
-        System.out.println("search DFS global node filter l(OUT) then f(blind),e(blind) start node = 1 level = Max");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("2"));
-        expResult.add(graph.getNode("6"));
-        expResult.add(graph.getNode("7"));
-        expResult.add(graph.getNode("11"));
-        expResult.add(graph.getNode("3"));
-        expResult.add(graph.getNode("8"));
-        expResult.add(graph.getNode("12"));
-        expResult.add(graph.getNode("13"));
-        expResult.add(graph.getNode("9"));
-        expResult.add(graph.getNode("4"));
-        expResult.add(graph.getNode("10"));
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.OUT);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
-        LinkFilter f3 = new LinkFilter("e", LinkFilter.Direction.BLIND);
-        filters.add(f1);
-        filters.add(f2);
-        filters.add(f3);
-        SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        assertEquals(expResult, resultNodes);
-        assertTrue(resultNodes.containsAll(expResult));
-    }
-
-    @Test
-    public void testSearch_DFS_GlobaleNode_6() throws Exception {
-        System.out.println("search DFS global node filter e(OUT) then f(blind) start node = 11 level = Max");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("e", LinkFilter.Direction.OUT);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
-        filters.add(f1);
-        filters.add(f2);
-        SearchResult result = graph.parser.search("11", filters, SearchMethod.DFS,
-                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        System.out.println(expResult);
-        System.out.println(resultNodes);
-
-        assertEquals(expResult, resultNodes);
-        assertTrue(resultNodes.containsAll(expResult));
-    }
-
-    @Test
-    public void testSearch_DFS_GlobaleRelation_1() throws Exception {
-        System.out.println("search DFS global relation filter f(IN) start node = 5 level 1");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("1"));
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.IN);
-        filters.add(f1);
-        SearchResult result = graph.parser.search("5", filters, SearchMethod.DFS,
-                1, GraphParser.Unicity.GLOBALRELATION);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        assertEquals(expResult, resultNodes);
-    }
-
-    /**
-     * Test 2 of search method, of class GraphParser. Check that the 12 are not
-     * in the Node List
-     */
-    @Test
-    public void testSearch_DFS_GlobaleRelation_2() throws Exception {
-        System.out.println("search DFS global relation filter f(OUT) then l(blind), f(IN) start node = 12 level = Max");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("9"));
-        expResult.add(graph.getNode("13"));
-        expResult.add(graph.getNode("4"));
-        expResult.add(graph.getNode("1"));
-        expResult.add(graph.getNode("2"));
-        expResult.add(graph.getNode("3"));
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("f", LinkFilter.Direction.OUT);
-        LinkFilter f2 = new LinkFilter("l", LinkFilter.Direction.BLIND);
-        LinkFilter f3 = new LinkFilter("f", LinkFilter.Direction.IN);
-        filters.add(f1);
-        filters.add(f2);
-        filters.add(f3);
-        SearchResult result = graph.parser.search("12", filters, SearchMethod.DFS,
-                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        assertEquals(expResult, resultNodes);
-        assertTrue(resultNodes.containsAll(expResult));
-    }
-
-    /**
-     * Test 3 of search method, of class GraphParser. Check That node 1 is not
-     * in the List
-     */
-    @Test
-    public void testSearch_DFS_GlobaleRelation_3() throws Exception {
-        System.out.println("search DFS global relation filter l(OUT) then l(IN) start node = 1 level = Max");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("2"));
-        expResult.add(graph.getNode("3"));
-        expResult.add(graph.getNode("4"));
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.OUT);
-        LinkFilter f2 = new LinkFilter("l", LinkFilter.Direction.IN);
-        filters.add(f1);
-        filters.add(f2);
-        SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        assertEquals(expResult, resultNodes);
-    }
-
-    /**
-     * Test 4 of search method, of class GraphParser.
-     */
-    @Test
-    public void testSearch_DFS_GlobaleRelation_4() throws Exception {
-        System.out.println("search DFS global relation filter e(OUT) then f(blind) start node = 11 level = Max");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("e", LinkFilter.Direction.OUT);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
-        filters.add(f1);
-        filters.add(f2);
-        SearchResult result = graph.parser.search("11", filters, SearchMethod.DFS,
-                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALRELATION);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        System.out.println(expResult);
-        System.out.println(resultNodes);
-
-        assertEquals(expResult, resultNodes);
-        assertTrue(resultNodes.containsAll(expResult));
-    }
-
-    /**
-     * Test 5 of search method, of class GraphParser.
-     */
-    //@Test
-    public void testSearch_DFS_GlobaleRelation_5() throws Exception {
-        System.out.println("search DFS global node filter l(OUT) then f(blind),e(blind) start node = 1 level = Max");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("2"));
-        expResult.add(graph.getNode("6"));
-        expResult.add(graph.getNode("7"));
-        expResult.add(graph.getNode("11"));
-        expResult.add(graph.getNode("3"));
-        expResult.add(graph.getNode("8"));
-        expResult.add(graph.getNode("12"));
-        expResult.add(graph.getNode("13"));
-        expResult.add(graph.getNode("9"));
-        expResult.add(graph.getNode("4"));
-        expResult.add(graph.getNode("10"));
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("l", LinkFilter.Direction.OUT);
-        LinkFilter f2 = new LinkFilter("f", LinkFilter.Direction.BLIND);
-        LinkFilter f3 = new LinkFilter("e", LinkFilter.Direction.BLIND);
-        filters.add(f1);
-        filters.add(f2);
-        filters.add(f3);
-        SearchResult result = graph.parser.search("1", filters, SearchMethod.DFS,
-                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        assertEquals(expResult, resultNodes);
-        assertTrue(resultNodes.containsAll(expResult));
-    }
-
-    /**
-     * Test 7 of search method, of class GraphParser.
-     */
-    public void testSearch_BFS_GlobalNode_Friend() throws Exception {
-        System.out.println("search BFS global node friend");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Set<Node> expResult = new HashSet<>();
-        expResult.add(graph.getNode("carol"));
-        expResult.add(graph.getNode("elizabeth"));
-        expResult.add(graph.getNode("anna"));
-        expResult.add(graph.getNode("julie"));
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("friend", LinkFilter.Direction.BLIND);
-        filters.add(f1);
-        SearchResult result = graph.parser.search("barbara", filters, SearchMethod.BFS,
-                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
-        Set<Node> resultNodes = result.getResultNodes();
-
-        assertEquals(expResult, resultNodes);
-    }
-
-    /**
-     * Test 8 of search method, of class GraphParser.
-     */
-    //@Test
-    public void testSearch_BFS_GlobalNode_EmployeeOf() throws Exception {
-        System.out.println("search BFS global node employee of");
-
-        Graph graph = factory.getGraph(new File(filePath), GraphBuildingMethod.STRICT);
-
-        Node[] expResult = new Node[1];
-        expResult[0] = graph.getNode("barbara");
-
-        List<LinkFilter> filters = new ArrayList<>();
-        LinkFilter f1 = new LinkFilter("employee_of", LinkFilter.Direction.BLIND);
-        filters.add(f1);
-        SearchResult result = graph.parser.search("anna", filters, SearchMethod.BFS,
-                Integer.MAX_VALUE, GraphParser.Unicity.GLOBALNODE);
-        Node[] resultNodes = result.getResultNodesAsArray();
-
-        assertArrayEquals(expResult, resultNodes);
     }
 }
