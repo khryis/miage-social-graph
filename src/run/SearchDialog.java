@@ -27,7 +27,7 @@ public class SearchDialog extends JDialog {
     private JLabel nomLabel, startNodeLabel, cheveuxLabel, ageLabel, linkLabel, link2Label, icon;
     private JRadioButton profondeur, largeur, tranche3, tranche4;
     private JComboBox startNode, cheveux;
-    private JTextField nom, link;
+    private JTextField link;
     private Graph graph;
 
     public SearchDialog(JFrame parent, String title, boolean modal, Graph g) {
@@ -102,20 +102,18 @@ public class SearchDialog extends JDialog {
 
         okBouton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                zInfo = new SearchDialogInfo(nom.getText(), (String) startNode.getSelectedItem(), getAge(), (String) cheveux.getSelectedItem(), getTaille());
+                zInfo = new SearchDialogInfo(startNode.getSelectedItem(), getSearchMethod(), getLinks());
                 setVisible(false);
             }
 
-            public String getAge() {
+            public String getSearchMethod() {
                 return (profondeur.isSelected()) ? profondeur.getText()
                         : (largeur.isSelected()) ? largeur.getText()
-                        : (tranche3.isSelected()) ? tranche3.getText()
-                        : (tranche4.isSelected()) ? tranche4.getText()
                         : profondeur.getText();
             }
 
-            public String getTaille() {
-                return (link.getText().equals("")) ? "180" : link.getText();
+            public String getLinks() {
+                return link.getText();
             }
         });
 

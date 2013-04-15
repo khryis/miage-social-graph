@@ -1,32 +1,25 @@
 package run;
 
+import domain.Node;
+
 public class SearchDialogInfo {
 
-    private String nom, sexe, age, cheveux, taille;
+    private Object node;
+    private String searchMethod;
+    private String links;
 
     public SearchDialogInfo() {
     }
 
-    public SearchDialogInfo(String nom, String sexe, String age, String cheveux, String taille) {
-        this.nom = nom;
-        this.sexe = sexe;
-        this.age = age;
-        this.cheveux = cheveux;
-        this.taille = taille;
+    public SearchDialogInfo(Object node, String searchMethod, String links) {
+        this.node = node;
+        this.searchMethod = searchMethod;
+        this.links = links;
     }
 
     public String toString() {
-        String str;
-        if (this.nom != null && this.sexe != null && this.taille != null && this.age != null && this.cheveux != null) {
-            str = "Description de l'objet InfoZDialog";
-            str += "Nom : " + this.nom + "\n";
-            str += "Sexe : " + this.sexe + "\n";
-            str += "Age : " + this.age + "\n";
-            str += "Cheveux : " + this.cheveux + "\n";
-            str += "Taille : " + this.taille + "\n";
-        } else {
-            str = "Aucune information !";
-        }
+        String str = "toString";
+
         return str;
     }
 }
