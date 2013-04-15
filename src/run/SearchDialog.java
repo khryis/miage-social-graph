@@ -24,10 +24,10 @@ public class SearchDialog extends JDialog {
 
     private SearchDialogInfo zInfo = new SearchDialogInfo();
     private boolean sendData;
-    private JLabel nomLabel, startNodeLabel, cheveuxLabel, ageLabel, tailleLabel, taille2Label, icon;
-    private JRadioButton tranche1, tranche2, tranche3, tranche4;
+    private JLabel nomLabel, startNodeLabel, cheveuxLabel, ageLabel, linkLabel, link2Label, icon;
+    private JRadioButton profondeur, largeur, tranche3, tranche4;
     private JComboBox startNode, cheveux;
-    private JTextField nom, taille;
+    private JTextField nom, link;
     private Graph graph;
 
     public SearchDialog(JFrame parent, String title, boolean modal, Graph g) {
@@ -48,7 +48,6 @@ public class SearchDialog extends JDialog {
 
     private void initComponent() {
 
-
         //Noeud de depart
         JPanel panStartNode = new JPanel();
         panStartNode.setBackground(Color.white);
@@ -63,53 +62,40 @@ public class SearchDialog extends JDialog {
         panStartNode.add(startNode);
 
         //Type de parcours
-        JPanel panAge = new JPanel();
-        panAge.setBackground(Color.white);
-        panAge.setBorder(BorderFactory.createTitledBorder("Type de parcours"));
-        panAge.setPreferredSize(new Dimension(440, 60));
-        tranche1 = new JRadioButton("Profondeur");
-        tranche1.setSelected(true);
-        tranche2 = new JRadioButton("Largeur");
+        JPanel panSearchMethod = new JPanel();
+        panSearchMethod.setBackground(Color.white);
+        panSearchMethod.setBorder(BorderFactory.createTitledBorder("Type de parcours"));
+        panSearchMethod.setPreferredSize(new Dimension(440, 60));
+        profondeur = new JRadioButton("Profondeur");
+        profondeur.setSelected(true);
+        largeur = new JRadioButton("Largeur");
         ButtonGroup bg = new ButtonGroup();
-        bg.add(tranche1);
-        bg.add(tranche2);
-        panAge.add(tranche1);
-        panAge.add(tranche2);
+        bg.add(profondeur);
+        bg.add(largeur);
+        panSearchMethod.add(profondeur);
+        panSearchMethod.add(largeur);
 
-        //La taille
-        JPanel panTaille = new JPanel();
-        panTaille.setBackground(Color.white);
-        panTaille.setPreferredSize(new Dimension(220, 60));
-        panTaille.setBorder(BorderFactory.createTitledBorder("Taille du personnage"));
-        tailleLabel = new JLabel("Taille : ");
-        taille2Label = new JLabel(" cm");
-        taille = new JTextField("180");
-        taille.setPreferredSize(new Dimension(90, 25));
-        panTaille.add(tailleLabel);
-        panTaille.add(taille);
-        panTaille.add(taille2Label);
+        //Les liens
+        JPanel panLink = new JPanel();
+        panLink.setBackground(Color.white);
+        panLink.setPreferredSize(new Dimension(440, 60));
+        panLink.setBorder(BorderFactory.createTitledBorder("Les liens à rechercher"));
+        linkLabel = new JLabel("liens : ");
+        link2Label = new JLabel(" les séparer par des ;");
+        link = new JTextField("");
+        link.setPreferredSize(new Dimension(190, 25));
+        panLink.add(linkLabel);
+        panLink.add(link);
+        panLink.add(link2Label);
 
-        //La couleur des cheveux
-        JPanel panCheveux = new JPanel();
-        panCheveux.setBackground(Color.white);
-        panCheveux.setPreferredSize(new Dimension(220, 60));
-        panCheveux.setBorder(BorderFactory.createTitledBorder("Couleur de cheveux du personnage"));
-        cheveux = new JComboBox();
-        cheveux.addItem("Blond");
-        cheveux.addItem("Brun");
-        cheveux.addItem("Roux");
-        cheveux.addItem("Blanc");
-        cheveuxLabel = new JLabel("Cheveux");
-        panCheveux.add(cheveuxLabel);
-        panCheveux.add(cheveux);
+
 
         JPanel content = new JPanel();
         content.setBackground(Color.white);
         //content.add(panNom);
         content.add(panStartNode);
-        content.add(panAge);
-        content.add(panTaille);
-        content.add(panCheveux);
+        content.add(panSearchMethod);
+        content.add(panLink);
 
         JPanel control = new JPanel();
         JButton okBouton = new JButton("OK");
@@ -121,15 +107,15 @@ public class SearchDialog extends JDialog {
             }
 
             public String getAge() {
-                return (tranche1.isSelected()) ? tranche1.getText()
-                        : (tranche2.isSelected()) ? tranche2.getText()
+                return (profondeur.isSelected()) ? profondeur.getText()
+                        : (largeur.isSelected()) ? largeur.getText()
                         : (tranche3.isSelected()) ? tranche3.getText()
                         : (tranche4.isSelected()) ? tranche4.getText()
-                        : tranche1.getText();
+                        : profondeur.getText();
             }
 
             public String getTaille() {
-                return (taille.getText().equals("")) ? "180" : taille.getText();
+                return (link.getText().equals("")) ? "180" : link.getText();
             }
         });
 
