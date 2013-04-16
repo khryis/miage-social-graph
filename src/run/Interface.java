@@ -64,6 +64,7 @@ public class Interface extends JPanel implements ActionListener {
         add(logScrollPane, BorderLayout.CENTER);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == importButton) {
             int returnVal = fc.showOpenDialog(Interface.this);

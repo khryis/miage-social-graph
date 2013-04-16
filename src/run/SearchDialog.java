@@ -22,8 +22,7 @@ import javax.swing.JTextField;
 public class SearchDialog extends JDialog {
 
     private SearchDialogInfo zInfo = new SearchDialogInfo();
-    private boolean sendData;
-    private JLabel nomLabel, startNodeLabel, cheveuxLabel, ageLabel, linkLabel, link2Label;
+    private JLabel startNodeLabel, linkLabel, link2Label;
     private JRadioButton profondeur, largeur;
     private JComboBox startNode;
     private JTextField link;
@@ -40,13 +39,11 @@ public class SearchDialog extends JDialog {
     }
 
     public SearchDialogInfo showZDialog() {
-        this.sendData = false;
         this.setVisible(true);
         return this.zInfo;
     }
 
     private void initComponent() {
-
         //Noeud de depart
         JPanel panStartNode = new JPanel();
         panStartNode.setBackground(Color.white);
@@ -87,8 +84,7 @@ public class SearchDialog extends JDialog {
         panLink.add(link);
         panLink.add(link2Label);
 
-
-
+        // Création du panel
         JPanel content = new JPanel();
         content.setBackground(Color.white);
         content.add(panStartNode);
@@ -98,6 +94,7 @@ public class SearchDialog extends JDialog {
         JButton okBouton = new JButton("OK");
 
         okBouton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent arg0) {
                 zInfo = new SearchDialogInfo((String) startNode.getSelectedItem(), getSearchMethod(), getLinks());
                 setVisible(false);
@@ -116,15 +113,14 @@ public class SearchDialog extends JDialog {
 
         JButton cancelBouton = new JButton("Annuler");
         cancelBouton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent arg0) {
                 setVisible(false);
             }
         });
-
         control.add(okBouton);
         control.add(cancelBouton);
 
-        // this.getContentPane().add(panIcon, BorderLayout.WEST);
         this.getContentPane().add(content, BorderLayout.CENTER);
         this.getContentPane().add(control, BorderLayout.SOUTH);
     }
