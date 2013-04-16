@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -24,9 +23,9 @@ public class SearchDialog extends JDialog {
 
     private SearchDialogInfo zInfo = new SearchDialogInfo();
     private boolean sendData;
-    private JLabel nomLabel, startNodeLabel, cheveuxLabel, ageLabel, linkLabel, link2Label, icon;
-    private JRadioButton profondeur, largeur, tranche3, tranche4;
-    private JComboBox startNode, cheveux;
+    private JLabel nomLabel, startNodeLabel, cheveuxLabel, ageLabel, linkLabel, link2Label;
+    private JRadioButton profondeur, largeur;
+    private JComboBox startNode;
     private JTextField link;
     private Graph graph;
 
@@ -92,17 +91,15 @@ public class SearchDialog extends JDialog {
 
         JPanel content = new JPanel();
         content.setBackground(Color.white);
-        //content.add(panNom);
         content.add(panStartNode);
         content.add(panSearchMethod);
         content.add(panLink);
-
         JPanel control = new JPanel();
         JButton okBouton = new JButton("OK");
 
         okBouton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                zInfo = new SearchDialogInfo(startNode.getSelectedItem(), getSearchMethod(), getLinks());
+                zInfo = new SearchDialogInfo((String) startNode.getSelectedItem(), getSearchMethod(), getLinks());
                 setVisible(false);
             }
 
