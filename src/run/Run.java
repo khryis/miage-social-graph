@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import search.GraphParser;
@@ -102,12 +103,11 @@ public class Run {
 
     public static void main(String[] args) {
 
-
-        Frame.createAndShowFrame();
-
-
-
-
+        JFrame frame = new JFrame("SocialGraph");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new Interface());
+        frame.pack();
+        frame.setVisible(true);
         /**
          * String filePath = "testfiles/WellFormedFileWithoutAttr.txt"; if
          * (args.length != 0) { filePath = args[0]; } IGraphFactory factory =

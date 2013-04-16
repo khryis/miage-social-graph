@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -28,7 +27,7 @@ import search.GraphParser;
 import search.SearchException;
 import search.SearchResult;
 
-public class Frame extends JPanel implements ActionListener {
+public class Interface extends JPanel implements ActionListener {
 
     private static final String newline = "\n";
     private JButton importButton, exportButton, searchButton, showGraph;
@@ -38,7 +37,7 @@ public class Frame extends JPanel implements ActionListener {
     private IGraphFactory factory;
     private Graph g;
 
-    public Frame() {
+    public Interface() {
         super(new BorderLayout());
         log = new JTextArea(5, 20);
         log.setMargin(new Insets(5, 5, 5, 5));
@@ -67,7 +66,7 @@ public class Frame extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == importButton) {
-            int returnVal = fc.showOpenDialog(Frame.this);
+            int returnVal = fc.showOpenDialog(Interface.this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 file = fc.getSelectedFile();
                 log.append("Opening: " + file.getName() + "." + newline);
@@ -93,32 +92,27 @@ public class Frame extends JPanel implements ActionListener {
             String startNode = zInfo.getStartNode();
             String searchMethod = zInfo.getSearchMethod();
             String[] links = zInfo.getLinks();
-            if (searchMethod.equals("Profondeur")) {
-                List<LinkFilter> filters = new ArrayList<>();
-                for (String link : links) {
-                    if (!link.isEmpty()) {
-                        filters.add(new LinkFilter(link));
+            switch (searchMethod) {
+                case "Profondeur":
+                    List<LinkFilter> filters = new ArrayList<>();
+                    for (String link : links) {
+                        if (!link.isEmpty()) {
+                            filters.add(new LinkFilter(link));
+                        }
                     }
-                }
-                GraphParser parser = new GraphParser(g);
-                try {
-                    SearchResult result = parser.search(startNode, filters);
-                    log.append("Result: \n" + result.toString() + newline);
-                } catch (SearchException ex) {
-                    Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else if (searchMethod.equals("Profondeur")) {
-                System.out.println("Not implemented");
+                    GraphParser parser = new GraphParser(g);
+                    try {
+                        SearchResult result = parser.search(startNode, filters);
+                        log.append(result.toString() + newline);
+                    } catch (SearchException ex) {
+                        Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    break;
+                case "Largeur":
+                    System.out.println("Not implemented");
+                    break;
             }
         } else if (e.getSource() == exportButton) {
         }
-    }
-
-    public static void createAndShowFrame() {
-        JFrame frame = new JFrame("SocialGraph");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new Frame());
-        frame.pack();
-        frame.setVisible(true);
     }
 }
