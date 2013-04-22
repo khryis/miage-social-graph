@@ -70,9 +70,8 @@ public class GraphTest {
     @Test
     public void testHashCodeIntegrity() {
         System.out.println("hashCode : same object, same integer");
-        Graph testGraph = new Graph();
-        int expected = testGraph.hashCode();
-        assertEquals(expected, testGraph.hashCode());
+        int expected = testGraph1.hashCode();
+        assertEquals(expected, testGraph1.hashCode());
     }
 
     /**

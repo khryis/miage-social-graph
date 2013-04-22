@@ -19,6 +19,7 @@ public class NodeTest {
 
     private Node from;
     private Node to;
+    private Node testNode;
     private String linkType;
     private String filePath;
     private GraphFactory factory;
@@ -38,6 +39,7 @@ public class NodeTest {
     public void setUp() {
         from = new Node("Carol");
         to = new Node("Barbara");
+        testNode = new Node("Carol");
         linkType = "friends";
         filePath = "testfiles/JUnitTestSearch2.txt";
         factory = new GraphFactory();
@@ -172,5 +174,56 @@ public class NodeTest {
 
         assertEquals(expResult, resultLinks);
         assertTrue(resultLinks.containsAll(expResult));
+    }
+
+    /**
+     * Test 1 of hashCode method, of class Node
+     */
+    @Test
+    public void testHashCodeIntegrity() {
+        System.out.println("hashCode : same object, same integer");
+        int expected = from.hashCode();
+        assertEquals(expected, from.hashCode());
+    }
+
+    /**
+     * Test 2 of hashCode method, of class Node
+     */
+    @Test
+    public void testHashCodeOnEquals() {
+        System.out.println("hashCode : if object equals true");
+        from.addLink(new Link(linkType, from, to));
+        testNode.addLink(new Link(linkType, from, to));
+        int expected = from.hashCode();
+        assertEquals(expected, testNode.hashCode());
+    }
+
+    /**
+     * Test 1 of equals method, of class Graph
+     */
+    @Test
+    public void testEqualsOnEquals() {
+        System.out.println("equals : if objects are equals");
+        from.addLink(new Link(linkType, from, to));
+        testNode.addLink(new Link(linkType, from, to));
+        assertTrue(from.equals(testNode));
+    }
+
+    /**
+     * Test 2 of equals method, of class Graph
+     */
+    @Test
+    public void testEqualsOnDifferent() {
+        System.out.println("equals : if objects are different");
+        assertFalse(from.equals(to));
+    }
+
+    /**
+     * Test 3 of equals method, of class Node
+     */
+    @Test
+    public void testEqualsOnNull() {
+        System.out.println("equals : if target object is null");
+        assertFalse(from.equals(null));
     }
 }
