@@ -1,6 +1,5 @@
 package domain;
 
-import domain.LinkFilter.Direction;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -8,13 +7,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class LinkFilterTest {
+public class AttributeValuesTest {
 
-    private LinkFilter linkFilterTest;
-    private LinkFilter linkFilterSame;
-    private LinkFilter linkFilterDifferent;
+    private AttributeValues attributeValuesTest1;
+    private AttributeValues attributeValuesTest2;
 
-    public LinkFilterTest() {
+    public AttributeValuesTest() {
     }
 
     @BeforeClass
@@ -27,9 +25,8 @@ public class LinkFilterTest {
 
     @Before
     public void setUp() {
-        linkFilterTest = new LinkFilter("friend");
-        linkFilterSame = new LinkFilter("friend");
-        linkFilterDifferent = new LinkFilter("friend", Direction.IN);
+        attributeValuesTest1 = new AttributeValues();
+        attributeValuesTest2 = new AttributeValues();
     }
 
     @After
@@ -42,8 +39,9 @@ public class LinkFilterTest {
     @Test
     public void testHashCodeIntegrity() {
         System.out.println("hashCode : same object, same integer");
-        int expected = linkFilterTest.hashCode();
-        assertEquals(expected, linkFilterTest.hashCode());
+        attributeValuesTest1.addValue("Tasty");
+        int expected = attributeValuesTest1.hashCode();
+        assertEquals(expected, attributeValuesTest1.hashCode());
     }
 
     /**
@@ -52,8 +50,10 @@ public class LinkFilterTest {
     @Test
     public void testHashCodeOnEquals() {
         System.out.println("hashCode : if object equals true");
-        int expected = linkFilterTest.hashCode();
-        assertEquals(expected, linkFilterSame.hashCode());
+        attributeValuesTest1.addValue("Tasty");
+        attributeValuesTest2.addValue("Tasty");
+        int expected = attributeValuesTest1.hashCode();
+        assertEquals(expected, attributeValuesTest2.hashCode());
     }
 
     /**
@@ -62,7 +62,9 @@ public class LinkFilterTest {
     @Test
     public void testEqualsOnEquals() {
         System.out.println("equals : if objects are equals");
-        assertTrue(linkFilterTest.equals(linkFilterSame));
+        attributeValuesTest1.addValue("Tasty");
+        attributeValuesTest2.addValue("Tasty");
+        assertTrue(attributeValuesTest1.equals(attributeValuesTest2));
     }
 
     /**
@@ -71,7 +73,9 @@ public class LinkFilterTest {
     @Test
     public void testEqualsOnDifferent() {
         System.out.println("equals : if objects are different");
-        assertFalse(linkFilterTest.equals(linkFilterDifferent));
+        attributeValuesTest1.addValue("Tasty");
+        attributeValuesTest2.addValue("Disgusting");
+        assertFalse(attributeValuesTest1.equals(attributeValuesTest2));
     }
 
     /**
@@ -80,6 +84,7 @@ public class LinkFilterTest {
     @Test
     public void testEqualsOnNull() {
         System.out.println("equals : if target object is null");
-        assertFalse(linkFilterTest.equals(null));
+        attributeValuesTest1.addValue("Tasty");
+        assertFalse(attributeValuesTest1.equals(null));
     }
 }
