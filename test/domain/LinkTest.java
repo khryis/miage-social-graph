@@ -10,22 +10,22 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class LinkTest {
-    
+
     public LinkTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -45,7 +45,7 @@ public class LinkTest {
         boolean result = link.equals(linkFilter);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test 2 of equals method, of class Link.
      */
@@ -61,7 +61,7 @@ public class LinkTest {
         boolean result = link.equals(linkFilter);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test 3 of equals method, of class Link.
      */
@@ -78,7 +78,7 @@ public class LinkTest {
         boolean result = link.equals(linkFilter);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test 4 of equals method, of class Link.
      */
@@ -101,7 +101,7 @@ public class LinkTest {
         boolean result = link.equals(linkFilter);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test 5 of equals method, of class Link.
      */
@@ -118,7 +118,7 @@ public class LinkTest {
         boolean result = link1.equals(link2);
         assertEquals(expResult, result);
     }
-    
+
     /**
      * Test 6 of equals method, of class Link.
      */
@@ -137,5 +137,28 @@ public class LinkTest {
         boolean expResult = false;
         boolean result = link1.equals(link2);
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test 1 of hashCode method, of class Link
+     */
+    @Test
+    public void testHashCodeIntegrity() {
+        System.out.println("hashCode : same object, same integer");
+        Link testLink = new Link("friend", new Node("barbara"), new Node("sophie"));
+        int expected = testLink.hashCode();
+        assertEquals(expected, testLink.hashCode());
+    }
+
+    /**
+     * Test 2 of hashCode method, of class Link
+     */
+    @Test
+    public void testHashCodeOnEquals() {
+        System.out.println("hashCode : if object equals true");
+        Link link1 = new Link("friend", new Node("barbara"), new Node("sophie"));
+        Link link2 = new Link("friend", new Node("barbara"), new Node("sophie"));
+        int expected = link1.hashCode();
+        assertEquals(expected, link2.hashCode());
     }
 }
