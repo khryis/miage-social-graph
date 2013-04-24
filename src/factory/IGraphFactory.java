@@ -37,7 +37,7 @@ public interface IGraphFactory {
      * building method
      *
      * @param file the file to parse
-     * @param graph the graph to pars
+     * @param graph the graph to parse
      * @return an instance of <code>Graph</code>
      * @throws GraphFileParserException
      * @throws GraphBuildingException
