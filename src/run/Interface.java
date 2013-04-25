@@ -113,7 +113,12 @@ public class Interface extends JPanel implements ActionListener {
             switch (searchMethod) {
                 case "DFS":
                     try {
-                        SearchResult result = parser.search(startNode, filters, SearchMethod.DFS, searchLevel, unicity);
+                        SearchResult result;
+                        if (searchLevel > 0) {
+                            result = parser.search(startNode, filters, SearchMethod.DFS, searchLevel, unicity);
+                        } else {
+                            result = parser.search(startNode, filters, SearchMethod.DFS, unicity);
+                        }
                         log.append(result.toString() + newline);
                     } catch (SearchException ex) {
                         Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,7 +126,12 @@ public class Interface extends JPanel implements ActionListener {
                     break;
                 case "BFS":
                     try {
-                        SearchResult result = parser.search(startNode, filters, SearchMethod.BFS, searchLevel, unicity);
+                        SearchResult result;
+                        if (searchLevel > 0) {
+                            result = parser.search(startNode, filters, SearchMethod.DFS, searchLevel, unicity);
+                        } else {
+                            result = parser.search(startNode, filters, SearchMethod.DFS, unicity);
+                        }
                         log.append(result.toString() + newline);
                     } catch (SearchException ex) {
                         Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
