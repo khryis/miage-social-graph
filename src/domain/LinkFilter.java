@@ -50,7 +50,15 @@ public class LinkFilter extends AbstractLink {
 
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (!super.equals(obj)) {
+            return false;
+        } else {
+            if (obj instanceof LinkFilter) {
+                return this.getDirection().equals(((LinkFilter) obj).getDirection());
+            } else {
+                return false;
+            }
+        }
     }
 
     public enum Direction {

@@ -37,7 +37,10 @@ public class AttributeValues {
     public String toString() {
         StringBuilder display = new StringBuilder(values.get(0));
         for (int i = 1; i < values.size(); i++) {
-            display.append(", ").append(values.get(i));
+            display.append("|").append(values.get(i));
+        }
+        if (values.size() > 1) {
+            display.insert(0, "[").append("]");
         }
         return display.toString();
     }

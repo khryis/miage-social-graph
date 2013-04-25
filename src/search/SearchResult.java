@@ -46,15 +46,19 @@ public class SearchResult {
 
     @Override
     public String toString() {
-        StringBuilder display = new StringBuilder("Result : ");
+        StringBuilder result = new StringBuilder("Resultat : ");
+        StringBuilder display = new StringBuilder();
         if (resultNodes.isEmpty()) {
             display.append("0 node found");
         } else {
             for (Iterator<Node> it = resultNodes.iterator(); it.hasNext();) {
-                display.append(it.next());
+                Node n = it.next();
+                result.append(n.getId()).append(", ");
+                display.append(n);
             }
+            result.replace(result.length() - 2, result.length(), "\n");
         }
-        return display.toString();
+        return result.append(display).toString();
     }
 
     @Override

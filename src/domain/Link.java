@@ -32,14 +32,19 @@ public class Link extends AbstractLink {
 
     @Override
     public String toString() {
-        StringBuilder display = new StringBuilder();
-        display.append("Source: ").append(from.getId());
-        display.append(" | To: ").append(to.getId());
-        // For each attribute, prints his name and his value(s)
+        StringBuilder display = new StringBuilder(getType());
+        if (getAttributes().size() > 0) {
+            display.append("[");
+        }
+        StringBuilder attr = new StringBuilder();
         for (Entry<String, AttributeValues> attribute : getAttributes().entrySet()) {
-            display.append(" | ").append(attribute.getKey()).append(" = ");
-            AttributeValues value = attribute.getValue();
-            display.append(value);
+            attr.append(attribute.getKey()).append("=").append(attribute.getValue()).append(", ");
+        }
+        if (attr.length() > 2) {
+            display.append(attr, 0, attr.length() - 2);
+        }
+        if (getAttributes().size() > 0) {
+            display.append("]");
         }
         return display.toString();
     }

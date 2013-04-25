@@ -278,14 +278,21 @@ public class Node {
     @Override
     public String toString() {
         StringBuilder display = new StringBuilder();
-        display.append("#### Noeud : ").append(id).append("\n");
+        display.append(id).append("\n");
         // Prints a list of links grouped by type
+        StringBuilder in = new StringBuilder();
+        StringBuilder out = new StringBuilder();
         for (Map.Entry<String, List<Link>> link : links.entrySet()) {
-            display.append("##").append(link.getKey()).append("\n");
             for (Link linkDetail : link.getValue()) {
-                display.append(linkDetail).append("\n");
+                if (linkDetail.getFrom().getId().equals(id)) {
+                    out.append("   --").append(linkDetail).append("--> ").append(linkDetail.getTo().getId()).append("\n");
+                } else {
+                    in.append("   <--").append(linkDetail).append("-- ").append(linkDetail.getFrom().getId()).append("\n");
+                }
             }
         }
+        display.append(out);
+        display.append(in);
         return display.toString();
     }
 
