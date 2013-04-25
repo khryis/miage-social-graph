@@ -27,6 +27,7 @@ public class SearchDialogInfo {
         return links.split(";");
     }
 
+    @Override
     public String toString() {
         String str = "     Noeud de départ: " + startNode + "\n";
         str += "     Méthode de recherche: " + searchMethod + "\n";
