@@ -24,7 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import search.GraphParser;
+import search.IGraphParser.Unicity;
 import search.SearchException;
+import search.SearchMethod;
 import search.SearchResult;
 
 public class Interface extends JPanel implements ActionListener {
@@ -92,25 +94,38 @@ public class Interface extends JPanel implements ActionListener {
             log.append("Search: \n" + zInfo.toString() + newline);
             String startNode = zInfo.getStartNode();
             String searchMethod = zInfo.getSearchMethod();
+            int searchLevel = zInfo.getSearchLevel();
+            String unicityStr = zInfo.getUnicity();
+            Unicity unicity = null;
+            if (unicityStr.equals("GLOBAL NODE")) {
+                unicity = Unicity.GLOBALNODE;
+            } else {
+                unicity = Unicity.GLOBALRELATION;
+            }
             String[] links = zInfo.getLinks();
+            List<LinkFilter> filters = new ArrayList<>();
+            for (String link : links) {
+                if (!link.isEmpty()) {
+                    filters.add(new LinkFilter(link));
+                }
+            }
+            GraphParser parser = new GraphParser(g);
             switch (searchMethod) {
-                case "Profondeur":
-                    List<LinkFilter> filters = new ArrayList<>();
-                    for (String link : links) {
-                        if (!link.isEmpty()) {
-                            filters.add(new LinkFilter(link));
-                        }
-                    }
-                    GraphParser parser = new GraphParser(g);
+                case "DFS":
                     try {
-                        SearchResult result = parser.search(startNode, filters);
+                        SearchResult result = parser.search(startNode, filters, SearchMethod.DFS, searchLevel, unicity);
                         log.append(result.toString() + newline);
                     } catch (SearchException ex) {
                         Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     break;
-                case "Largeur":
-                    System.out.println("Not implemented");
+                case "BFS":
+                    try {
+                        SearchResult result = parser.search(startNode, filters, SearchMethod.BFS, searchLevel, unicity);
+                        log.append(result.toString() + newline);
+                    } catch (SearchException ex) {
+                        Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     break;
             }
         } else if (e.getSource() == exportButton) {

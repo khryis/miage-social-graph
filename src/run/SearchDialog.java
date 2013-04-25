@@ -2,6 +2,8 @@ package run;
 
 import domain.Graph;
 import domain.Node;
+import search.SearchMethod;
+import search.IGraphParser;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,22 +18,26 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
 public class SearchDialog extends JDialog {
 
     private SearchDialogInfo zInfo = new SearchDialogInfo();
-    private JLabel startNodeLabel, linkLabel, link2Label;
+    private JLabel startNodeLabel, linkLabel, link2Label, searchMethodLabel, unicityLabel, level2Label, levelLabel;
     private JRadioButton profondeur, largeur;
-    private JComboBox startNode;
-    private JTextField link;
+    private JComboBox startNode, searchMethod, unicity;
+    private JTextArea link;
     private Graph graph;
+    private JSpinner level;
 
     public SearchDialog(JFrame parent, String title, boolean modal, Graph g) {
         super(parent, title, modal);
         graph = g;
-        this.setSize(550, 270);
+        this.setSize(550, 550);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
@@ -57,53 +63,76 @@ public class SearchDialog extends JDialog {
         panStartNode.add(startNodeLabel);
         panStartNode.add(startNode);
 
+
         //Type de parcours
         JPanel panSearchMethod = new JPanel();
         panSearchMethod.setBackground(Color.white);
         panSearchMethod.setBorder(BorderFactory.createTitledBorder("Type de parcours"));
         panSearchMethod.setPreferredSize(new Dimension(440, 60));
-        profondeur = new JRadioButton("Profondeur");
-        profondeur.setSelected(true);
-        largeur = new JRadioButton("Largeur");
-        ButtonGroup bg = new ButtonGroup();
-        bg.add(profondeur);
-        bg.add(largeur);
-        panSearchMethod.add(profondeur);
-        panSearchMethod.add(largeur);
+        searchMethod = new JComboBox();
+        for (SearchMethod sm : SearchMethod.values()) {
+            searchMethod.addItem(sm.getShortName());
+        }
+        searchMethodLabel = new JLabel("Parcours : ");
+        panSearchMethod.add(searchMethodLabel);
+        panSearchMethod.add(searchMethod);
+
+        //Niveau de parcours
+        JPanel panSearchLevel = new JPanel();
+        panSearchLevel.setBackground(Color.white);
+        panSearchLevel.setPreferredSize(new Dimension(440, 60));
+        panSearchLevel.setBorder(BorderFactory.createTitledBorder("Niveau de parcours"));
+        levelLabel = new JLabel("Niveau : ");
+        level2Label = new JLabel(" 0 pour tout le graph");
+        SpinnerModel spinnerModel = new SpinnerNumberModel(0, 0, 100, 1);
+        level = new JSpinner(spinnerModel);
+        panSearchLevel.add(levelLabel);
+        panSearchLevel.add(level);
+        panSearchLevel.add(level2Label);
+
+
+        //Unicité
+        JPanel panUnicity = new JPanel();
+        panUnicity.setBackground(Color.white);
+        panUnicity.setBorder(BorderFactory.createTitledBorder("Unicité"));
+        panUnicity.setPreferredSize(new Dimension(440, 60));
+        unicity = new JComboBox();
+        for (IGraphParser.Unicity u : IGraphParser.Unicity.values()) {
+            unicity.addItem(u);
+        }
+        unicityLabel = new JLabel("Unicité : ");
+        panUnicity.add(unicityLabel);
+        panUnicity.add(unicity);
+
 
         //Les liens
         JPanel panLink = new JPanel();
         panLink.setBackground(Color.white);
-        panLink.setPreferredSize(new Dimension(440, 60));
+        panLink.setPreferredSize(new Dimension(440, 200));
         panLink.setBorder(BorderFactory.createTitledBorder("Les liens à rechercher"));
-        linkLabel = new JLabel("liens : ");
-        link2Label = new JLabel(" les séparer par des ;");
-        link = new JTextField("");
-        link.setPreferredSize(new Dimension(190, 25));
-        panLink.add(linkLabel);
-        panLink.add(link);
-        panLink.add(link2Label);
+        link = new JTextArea();
+        link.setPreferredSize(new Dimension(400, 150));
+        JScrollPane scrollPaneLink = new JScrollPane(link, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        link.setLineWrap(true);
+        panLink.add(scrollPaneLink);
 
         // Création du panel
         JPanel content = new JPanel();
         content.setBackground(Color.white);
         content.add(panStartNode);
         content.add(panSearchMethod);
+        content.add(panSearchLevel);
+        content.add(panUnicity);
         content.add(panLink);
         JPanel control = new JPanel();
+        control.setBackground(Color.white);
         JButton okBouton = new JButton("OK");
-
         okBouton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                zInfo = new SearchDialogInfo((String) startNode.getSelectedItem(), getSearchMethod(), getLinks());
+                zInfo = new SearchDialogInfo((String) startNode.getSelectedItem(), (String) searchMethod.getSelectedItem().toString(), (Integer) level.getValue(), (String) unicity.getSelectedItem().toString(), getLinks());
                 setVisible(false);
-            }
-
-            public String getSearchMethod() {
-                return (profondeur.isSelected()) ? profondeur.getText()
-                        : (largeur.isSelected()) ? largeur.getText()
-                        : profondeur.getText();
             }
 
             public String getLinks() {
