@@ -146,6 +146,7 @@ public class SearchDialog extends JDialog {
         cancelBouton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
+                zInfo = null;
                 setVisible(false);
             }
         });

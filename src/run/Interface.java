@@ -51,10 +51,10 @@ public class Interface extends JPanel implements ActionListener {
         searchButton = new JButton("Rechercher");
         searchButton.addActionListener(this);
         searchButton.setEnabled(false);
-        clear = new JButton("Vider affichage");
-        clear.addActionListener(this);
         exportButton = new JButton("Exporter un fichier");
         exportButton.addActionListener(this);
+        clear = new JButton("Vider affichage");
+        clear.addActionListener(this);
         exportButton.setEnabled(false);
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(importButton);
@@ -69,107 +69,156 @@ public class Interface extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == importButton) {
-            int returnVal = fc.showOpenDialog(Interface.this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                file = fc.getSelectedFile();
-                log.append("Opening: " + file.getName() + "." + newline);
-                showGraph.setEnabled(true);
-                searchButton.setEnabled(true);
+            ImportDialog zd1 = new ImportDialog(null, "Rechercher", true, g);
+            ImportDialogInfo zInfoImport = zd1.showZDialog();
+            if (zInfoImport != null) {
+                int returnVal = fc.showOpenDialog(Interface.this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    file = fc.getSelectedFile();
+                    log.append("Opening: " + file.getName() + "." + newline);
+                    showGraph.setEnabled(true);
+                    searchButton.setEnabled(true);
+                    exportButton.setEnabled(true);
+                    log.setCaretPosition(log.getDocument().getLength());
+                    factory = new GraphFactory();
+                    try {
+                        if (zInfoImport.isStrict()) {
+                            if (zInfoImport.isEcrase()) {
+                                g = factory.getGraph(file, GraphBuildingMethod.STRICT);
+                            } else {
+                                //TODO
+                                // g = factory.getGraph(file, g, GraphBuildingMethod.STRICT);
+                            }
+                        } else {
+                            if (zInfoImport.isEcrase()) {
+                                g = factory.getGraph(file, GraphBuildingMethod.WITH_UPDATE);
+                            } else {
+                                //TODO
+                                // g = factory.getGraph(file, g, GraphBuildingMethod.WITH_UPDATE);
+                            }
+                        }
+                        System.out.println(g);
+                    } catch (GraphFileParserException | GraphBuildingException | IOException ex) {
+                        Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    log.append("Open command cancelled by user." + newline);
+                }
+
+
             } else {
                 log.append("Open command cancelled by user." + newline);
             }
-            log.setCaretPosition(log.getDocument().getLength());
-            factory = new GraphFactory();
-            try {
-                g = factory.getGraph(file, GraphBuildingMethod.STRICT);
-                System.out.println(g);
-            } catch (GraphFileParserException | GraphBuildingException | IOException ex) {
-                Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
-            }
         } else if (e.getSource() == showGraph) {
             log.append("Graph: \n" + g.toString() + newline);
-        } else if (e.getSource() == clear) {
-            log.setText("");
         } else if (e.getSource() == searchButton) {
             SearchDialogInfo zInfo = (new SearchDialog(null, "Rechercher", true, g)).showZDialog();
-            log.append("Search: \n" + zInfo.toString() + newline);
+            if (zInfo != null) {
+                log.append("Search: \n" + zInfo.toString() + newline);
 
-            //Get search parameters
-            String startNode = zInfo.getStartNode();
-            List<LinkFilter> filters = zInfo.getFilters();
-            String searchMethod = zInfo.getSearchMethod();
-            String unicity = zInfo.getUnicity();
-            int searchLevel = zInfo.getSearchLevel();
-            //Call of the search method
-            try {
-                SearchResult result;
-                if (searchMethod.equals(SearchMethod.DFS.toString())) {
-                    if (unicity.equals(Unicity.GLOBALNODE.toString())) {
-                        if (searchLevel == 0) {
-                            result = g.parser.search(startNode, filters, SearchMethod.DFS, Unicity.GLOBALNODE);
+                //Get search parameters
+                String startNode = zInfo.getStartNode();
+                List<LinkFilter> filters = zInfo.getFilters();
+                String searchMethod = zInfo.getSearchMethod();
+                String unicity = zInfo.getUnicity();
+                int searchLevel = zInfo.getSearchLevel();
+                //Call of the search method
+                try {
+                    SearchResult result;
+                    if (searchMethod.equals(SearchMethod.DFS.toString())) {
+                        if (unicity.equals(Unicity.GLOBALNODE.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS, Unicity.GLOBALNODE);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS, searchLevel, Unicity.GLOBALNODE);
+                            }
+                        } else if (unicity.equals(Unicity.GLOBALRELATION.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS, Unicity.GLOBALRELATION);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS, searchLevel, Unicity.GLOBALRELATION);
+                            }
                         } else {
-                            result = g.parser.search(startNode, filters, SearchMethod.DFS, searchLevel, Unicity.GLOBALNODE);
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS, searchLevel);
+                            }
                         }
-                    } else if (unicity.equals(Unicity.GLOBALRELATION.toString())) {
-                        if (searchLevel == 0) {
-                            result = g.parser.search(startNode, filters, SearchMethod.DFS, Unicity.GLOBALRELATION);
+                    } else if (searchMethod.equals(SearchMethod.BFS.toString())) {
+                        if (unicity.equals(Unicity.GLOBALNODE.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS, Unicity.GLOBALNODE);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS, searchLevel, Unicity.GLOBALNODE);
+                            }
+                        } else if (unicity.equals(Unicity.GLOBALRELATION.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS, Unicity.GLOBALRELATION);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS, searchLevel, Unicity.GLOBALRELATION);
+                            }
                         } else {
-                            result = g.parser.search(startNode, filters, SearchMethod.DFS, searchLevel, Unicity.GLOBALRELATION);
-                        }
-                    } else {
-                        if (searchLevel == 0) {
-                            result = g.parser.search(startNode, filters, SearchMethod.DFS);
-                        } else {
-                            result = g.parser.search(startNode, filters, SearchMethod.DFS, searchLevel);
-                        }
-                    }
-                } else if (searchMethod.equals(SearchMethod.BFS.toString())) {
-                    if (unicity.equals(Unicity.GLOBALNODE.toString())) {
-                        if (searchLevel == 0) {
-                            result = g.parser.search(startNode, filters, SearchMethod.BFS, Unicity.GLOBALNODE);
-                        } else {
-                            result = g.parser.search(startNode, filters, SearchMethod.BFS, searchLevel, Unicity.GLOBALNODE);
-                        }
-                    } else if (unicity.equals(Unicity.GLOBALRELATION.toString())) {
-                        if (searchLevel == 0) {
-                            result = g.parser.search(startNode, filters, SearchMethod.BFS, Unicity.GLOBALRELATION);
-                        } else {
-                            result = g.parser.search(startNode, filters, SearchMethod.BFS, searchLevel, Unicity.GLOBALRELATION);
-                        }
-                    } else {
-                        if (searchLevel == 0) {
-                            result = g.parser.search(startNode, filters, SearchMethod.BFS);
-                        } else {
-                            result = g.parser.search(startNode, filters, SearchMethod.BFS, searchLevel);
-                        }
-                    }
-                } else {
-                    if (unicity.equals(Unicity.GLOBALNODE.toString())) {
-                        if (searchLevel == 0) {
-                            result = g.parser.search(startNode, filters, Unicity.GLOBALNODE);
-                        } else {
-                            result = g.parser.search(startNode, filters, searchLevel, Unicity.GLOBALNODE);
-                        }
-                    } else if (unicity.equals(Unicity.GLOBALRELATION.toString())) {
-                        if (searchLevel == 0) {
-                            result = g.parser.search(startNode, filters, Unicity.GLOBALRELATION);
-                        } else {
-                            result = g.parser.search(startNode, filters, searchLevel, Unicity.GLOBALRELATION);
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS, searchLevel);
+                            }
                         }
                     } else {
-                        if (searchLevel == 0) {
-                            result = g.parser.search(startNode, filters);
+                        if (unicity.equals(Unicity.GLOBALNODE.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, Unicity.GLOBALNODE);
+                            } else {
+                                result = g.parser.search(startNode, filters, searchLevel, Unicity.GLOBALNODE);
+                            }
+                        } else if (unicity.equals(Unicity.GLOBALRELATION.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, Unicity.GLOBALRELATION);
+                            } else {
+                                result = g.parser.search(startNode, filters, searchLevel, Unicity.GLOBALRELATION);
+                            }
                         } else {
-                            result = g.parser.search(startNode, filters, searchLevel);
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters);
+                            } else {
+                                result = g.parser.search(startNode, filters, searchLevel);
+                            }
                         }
                     }
+                    log.append(result.toString() + newline);
+                } catch (SearchException ex) {
+                    log.append("Une erreur est survenue pendant la recherche" + newline);
                 }
-                log.append(result.toString() + newline);
-            } catch (SearchException ex) {
-                log.append("Une erreur est survenue pendant la recherche" + newline);
             }
-
         } else if (e.getSource() == exportButton) {
+
+            try {
+                JFileChooser filechoose = new JFileChooser();
+
+                filechoose.setCurrentDirectory(new File("."));
+                String approve = new String("Enregistrer");
+
+                int resultatEnregistrer = filechoose.showDialog(filechoose, approve);
+                if (resultatEnregistrer == JFileChooser.APPROVE_OPTION) {
+                    String monFichier = new String(filechoose.getSelectedFile().toString());
+                    if (monFichier.endsWith(".txt") || monFichier.endsWith(".TXT")) {
+                    } else {
+                        monFichier = monFichier + ".txt";
+                    }
+                    g.export(monFichier);
+                    log.append("Export: " + monFichier + newline);
+
+                }
+
+            } catch (Exception ee) {
+            }
+        } else if (e.getSource() == clear) {
+            log.setText("");
+
         }
+
+
+
     }
 }
