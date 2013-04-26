@@ -1,0 +1,7 @@
+anna --employee_of[hired=mars06,role=developer]--> bigco
+barbara --friend[since=1999]--> carol
+barbara --friend[share=[books|movies|tweets],since=1999]--> elizabeth
+barbara --friend[since=2011]--> anna
+barbara --employee_of[hired=feb04,role=architect]--> bigco
+carol --friend[since=2005]--> dawn
+carol --employee_of[hired=oct08,role=research]--> bigco
