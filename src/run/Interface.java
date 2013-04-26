@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ import run.ImportDialogInfo;
 public class Interface extends JPanel implements ActionListener {
 
     private static final String newline = "\n";
-    private JButton importButton, exportButton, searchButton, showGraph;
+    private JButton importButton, exportButton, searchButton, showGraph, clear;
     private JTextArea log;
     private JFileChooser fc;
     private File file;
@@ -63,11 +64,14 @@ public class Interface extends JPanel implements ActionListener {
         searchButton.setEnabled(false);
         exportButton = new JButton("Exporter un fichier");
         exportButton.addActionListener(this);
+        clear = new JButton("Vider affichage");
+        clear.addActionListener(this);
         exportButton.setEnabled(false);
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(importButton);
         buttonPanel.add(showGraph);
         buttonPanel.add(searchButton);
+        buttonPanel.add(clear);
         buttonPanel.add(exportButton);
         add(buttonPanel, BorderLayout.PAGE_START);
         add(logScrollPane, BorderLayout.CENTER);
@@ -76,26 +80,45 @@ public class Interface extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == importButton) {
-
             ImportDialog zd1 = new ImportDialog(null, "Rechercher", true, g);
-            //ImportDialogInfo zInfo1 = zd1.showZDialog();
+            ImportDialogInfo zInfoImport = zd1.showZDialog();
+            if (zInfoImport != null) {
+                int returnVal = fc.showOpenDialog(Interface.this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    file = fc.getSelectedFile();
+                    log.append("Opening: " + file.getName() + "." + newline);
+                    showGraph.setEnabled(true);
+                    searchButton.setEnabled(true);
+                    exportButton.setEnabled(true);
+                    log.setCaretPosition(log.getDocument().getLength());
+                    factory = new GraphFactory();
+                    try {
+                        if (zInfoImport.isStrict()) {
+                            if (zInfoImport.isEcrase()) {
+                                g = factory.getGraph(file, GraphBuildingMethod.STRICT);
+                            } else {
+                                //TODO
+                                // g = factory.getGraph(file, g, GraphBuildingMethod.STRICT);
+                            }
+                        } else {
+                            if (zInfoImport.isEcrase()) {
+                                g = factory.getGraph(file, GraphBuildingMethod.WITH_UPDATE);
+                            } else {
+                                //TODO
+                                // g = factory.getGraph(file, g, GraphBuildingMethod.WITH_UPDATE);
+                            }
+                        }
+                        System.out.println(g);
+                    } catch (GraphFileParserException | GraphBuildingException | IOException ex) {
+                        Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    log.append("Open command cancelled by user." + newline);
+                }
 
-            int returnVal = fc.showOpenDialog(Interface.this);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                file = fc.getSelectedFile();
-                log.append("Opening: " + file.getName() + "." + newline);
-                showGraph.setEnabled(true);
-                searchButton.setEnabled(true);
+
             } else {
                 log.append("Open command cancelled by user." + newline);
-            }
-            log.setCaretPosition(log.getDocument().getLength());
-            factory = new GraphFactory();
-            try {
-                g = factory.getGraph(file, GraphBuildingMethod.STRICT);
-                System.out.println(g);
-            } catch (GraphFileParserException | GraphBuildingException | IOException ex) {
-                Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (e.getSource() == showGraph) {
             log.append("Graph: \n" + g.toString() + newline);
@@ -108,7 +131,7 @@ public class Interface extends JPanel implements ActionListener {
                 String searchMethod = zInfo.getSearchMethod();
                 int searchLevel = zInfo.getSearchLevel();
                 String unicityStr = zInfo.getUnicity();
-                Unicity unicity = null;
+                Unicity unicity;
                 if (unicityStr.equals("GLOBAL NODE")) {
                     unicity = Unicity.GLOBALNODE;
                 } else {
@@ -143,9 +166,7 @@ public class Interface extends JPanel implements ActionListener {
                                     //values = Arrays.asList(attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1).split("\\|"))
                                     String tmp = attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1);
                                     String[] tabTmp = tmp.split("|");
-                                    for (String att : tabTmp) {
-                                        values.add(att);
-                                    }
+                                    values.addAll(Arrays.asList(tabTmp));
                                 } else {
                                     //"1999"
                                     values.add(attribute.substring(attribute.indexOf("=") + 1));
@@ -227,9 +248,32 @@ public class Interface extends JPanel implements ActionListener {
                         }
                         break;
                 }
-            } else if (e.getSource()
-                    == exportButton) {
             }
+        } else if (e.getSource() == exportButton) {
+
+            try {
+                JFileChooser filechoose = new JFileChooser();
+
+                filechoose.setCurrentDirectory(new File("."));
+                String approve = new String("Enregistrer");
+
+                int resultatEnregistrer = filechoose.showDialog(filechoose, approve);
+                if (resultatEnregistrer == JFileChooser.APPROVE_OPTION) {
+                    String monFichier = new String(filechoose.getSelectedFile().toString());
+                    if (monFichier.endsWith(".txt") || monFichier.endsWith(".TXT")) {
+                    } else {
+                        monFichier = monFichier + ".txt";
+                    }
+                    g.export(monFichier);
+                    log.append("Export: " + monFichier + newline);
+
+                }
+
+            } catch (Exception ee) {
+            }
+        } else if (e.getSource() == clear) {
+            log.setText("");
         }
+
     }
 }

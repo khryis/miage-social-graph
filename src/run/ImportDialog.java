@@ -23,7 +23,7 @@ public class ImportDialog extends JDialog {
     public ImportDialog(JFrame parent, String title, boolean modal, Graph g) {
         super(parent, title, modal);
         graph = g;
-        this.setSize(550, 80);
+        this.setSize(550, 150);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
@@ -42,14 +42,14 @@ public class ImportDialog extends JDialog {
         panParam.setPreferredSize(new Dimension(440, 60));
         panParam.setBorder(BorderFactory.createTitledBorder("Paramètres d'importation"));
         ButtonGroup bg1 = new ButtonGroup();
-        strict = new JRadioButton("Strict", false);
+        strict = new JRadioButton("Strict", true);
         bg1.add(strict);
         noStrict = new JRadioButton("Pas strict", false);
         bg1.add(noStrict);
         panParam.add(strict);
         panParam.add(noStrict);
         ButtonGroup bg2 = new ButtonGroup();
-        ecrase = new JRadioButton("Ecrase", false);
+        ecrase = new JRadioButton("Ecrase", true);
         bg2.add(ecrase);
         update = new JRadioButton("Update", false);
         bg2.add(update);
