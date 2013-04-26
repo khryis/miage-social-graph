@@ -2,7 +2,6 @@ package run;
 
 import domain.Graph;
 import domain.LinkFilter;
-import domain.LinkFilter.Direction;
 import factory.GraphBuildingException;
 import factory.GraphBuildingMethod;
 import factory.GraphFactory;
@@ -14,28 +13,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import search.GraphParser;
 import search.IGraphParser.Unicity;
 import search.SearchException;
 import search.SearchMethod;
 import search.SearchResult;
-import run.ImportDialog;
-import run.ImportDialogInfo;
 
 public class Interface extends JPanel implements ActionListener {
 
@@ -123,130 +112,83 @@ public class Interface extends JPanel implements ActionListener {
         } else if (e.getSource() == showGraph) {
             log.append("Graph: \n" + g.toString() + newline);
         } else if (e.getSource() == searchButton) {
-            SearchDialog zd = new SearchDialog(null, "Rechercher", true, g);
-            SearchDialogInfo zInfo = zd.showZDialog();
+            SearchDialogInfo zInfo = (new SearchDialog(null, "Rechercher", true, g)).showZDialog();
             if (zInfo != null) {
                 log.append("Search: \n" + zInfo.toString() + newline);
-                String startNode = zInfo.getStartNode();
-                String searchMethod = zInfo.getSearchMethod();
-                int searchLevel = zInfo.getSearchLevel();
-                String unicityStr = zInfo.getUnicity();
-                Unicity unicity;
-                if (unicityStr.equals("GLOBAL NODE")) {
-                    unicity = Unicity.GLOBALNODE;
-                } else {
-                    unicity = Unicity.GLOBALRELATION;
-                }
-                String[] links = zInfo.getLinks();
-                List<LinkFilter> filters = new ArrayList<>();
-                for (String link : links) {
-                    if (!link.isEmpty()) {
-                        LinkFilter linkFilter;
-                        String linkType;
-                        Map<String, List<String>> attributes = null;
-                        int direction = 0;
-                        // Has attributes on links
-                        if (link.contains("[")) {
-                            linkType = link.substring(0, link.indexOf("["));
-                            String attributesLine = link.substring(link.indexOf("[") + 1, link.lastIndexOf("]"));
-                            // Gets attributes values
-                            String regex = "((\\w+=(\\[((\\w+)|\\|)+\\]|\\w+)))";
-                            Pattern pattern = Pattern.compile(regex);
-                            Matcher matcher = pattern.matcher(attributesLine);
-                            String attribute, key;
-                            List<String> values = new ArrayList<>();
-                            attributes = new HashMap<>();
-                            while (matcher.find()) {
-                                // attribute : "since=1999" or "share=[book|movie]"
-                                attribute = attributesLine.substring(matcher.start(), matcher.end());
-                                // key = "since"
-                                key = attribute.substring(0, attribute.indexOf("="));
-                                if (attribute.contains("[")) {
-                                    //"[book|movie]"
-                                    //values = Arrays.asList(attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1).split("\\|"))
-                                    String tmp = attribute.substring(attribute.indexOf("[") + 1, attribute.length() - 1);
-                                    String[] tabTmp = tmp.split("|");
-                                    values.addAll(Arrays.asList(tabTmp));
-                                } else {
-                                    //"1999"
-                                    values.add(attribute.substring(attribute.indexOf("=") + 1));
-                                }
-                                attributes.put(key, values);
-                            }
-                            if (link.contains(">") && link.contains(">")) {
-                                direction = 3;
-                            } else if (link.contains(">")) {
-                                direction = 2;
-                            } else if (link.contains("<")) {
-                                direction = 1;
 
+                //Get search parameters
+                String startNode = zInfo.getStartNode();
+                List<LinkFilter> filters = zInfo.getFilters();
+                String searchMethod = zInfo.getSearchMethod();
+                String unicity = zInfo.getUnicity();
+                int searchLevel = zInfo.getSearchLevel();
+                //Call of the search method
+                try {
+                    SearchResult result;
+                    if (searchMethod.equals(SearchMethod.DFS.toString())) {
+                        if (unicity.equals(Unicity.GLOBALNODE.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS, Unicity.GLOBALNODE);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS, searchLevel, Unicity.GLOBALNODE);
+                            }
+                        } else if (unicity.equals(Unicity.GLOBALRELATION.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS, Unicity.GLOBALRELATION);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS, searchLevel, Unicity.GLOBALRELATION);
                             }
                         } else {
-                            if (link.contains(">") && link.contains("<")) {
-                                linkType = link.substring(0, link.indexOf(">"));
-                                direction = 3;
-                            } else if (link.contains(">")) {
-                                linkType = link.substring(0, link.indexOf(">"));
-                                direction = 2;
-                            } else if (link.contains("<")) {
-                                linkType = link.substring(0, link.indexOf("<"));
-                                direction = 1;
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS);
                             } else {
-                                linkType = link;
+                                result = g.parser.search(startNode, filters, SearchMethod.DFS, searchLevel);
                             }
                         }
-                        switch (direction) {
-                            case 1:
-                                linkFilter = new LinkFilter(linkType, Direction.IN);
-                                break;
-                            case 2:
-                                linkFilter = new LinkFilter(linkType, Direction.OUT);
-                                break;
-                            case 3:
-                                linkFilter = new LinkFilter(linkType, Direction.BOTH);
-                                break;
-                            default:
-                                linkFilter = new LinkFilter(linkType);
-                        }
-
-                        if (attributes != null) {
-                            for (String key : attributes.keySet()) {
-                                linkFilter.addAttribute(key, attributes.get(key));
+                    } else if (searchMethod.equals(SearchMethod.BFS.toString())) {
+                        if (unicity.equals(Unicity.GLOBALNODE.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS, Unicity.GLOBALNODE);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS, searchLevel, Unicity.GLOBALNODE);
+                            }
+                        } else if (unicity.equals(Unicity.GLOBALRELATION.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS, Unicity.GLOBALRELATION);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS, searchLevel, Unicity.GLOBALRELATION);
+                            }
+                        } else {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS);
+                            } else {
+                                result = g.parser.search(startNode, filters, SearchMethod.BFS, searchLevel);
                             }
                         }
-
-                        filters.add(linkFilter);
+                    } else {
+                        if (unicity.equals(Unicity.GLOBALNODE.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, Unicity.GLOBALNODE);
+                            } else {
+                                result = g.parser.search(startNode, filters, searchLevel, Unicity.GLOBALNODE);
+                            }
+                        } else if (unicity.equals(Unicity.GLOBALRELATION.toString())) {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters, Unicity.GLOBALRELATION);
+                            } else {
+                                result = g.parser.search(startNode, filters, searchLevel, Unicity.GLOBALRELATION);
+                            }
+                        } else {
+                            if (searchLevel == 0) {
+                                result = g.parser.search(startNode, filters);
+                            } else {
+                                result = g.parser.search(startNode, filters, searchLevel);
+                            }
+                        }
                     }
-
-                }
-                GraphParser parser = new GraphParser(g);
-                switch (searchMethod) {
-                    case "DFS":
-                        try {
-                            SearchResult result;
-                            if (searchLevel > 0) {
-                                result = parser.search(startNode, filters, SearchMethod.DFS, searchLevel, unicity);
-                            } else {
-                                result = parser.search(startNode, filters, SearchMethod.DFS, unicity);
-                            }
-                            log.append(result.toString() + newline);
-                        } catch (SearchException ex) {
-                            Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        break;
-                    case "BFS":
-                        try {
-                            SearchResult result;
-                            if (searchLevel > 0) {
-                                result = parser.search(startNode, filters, SearchMethod.DFS, searchLevel, unicity);
-                            } else {
-                                result = parser.search(startNode, filters, SearchMethod.DFS, unicity);
-                            }
-                            log.append(result.toString() + newline);
-                        } catch (SearchException ex) {
-                            Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        break;
+                    log.append(result.toString() + newline);
+                } catch (SearchException ex) {
+                    log.append("Une erreur est survenue pendant la recherche" + newline);
                 }
             }
         } else if (e.getSource() == exportButton) {
@@ -273,7 +215,10 @@ public class Interface extends JPanel implements ActionListener {
             }
         } else if (e.getSource() == clear) {
             log.setText("");
+
         }
+
+
 
     }
 }

@@ -16,6 +16,11 @@ public class AttributeValues {
         values = new ArrayList<>();
     }
 
+    public AttributeValues(String value) {
+        this();
+        values.add(value);
+    }
+
     public AttributeValues(List<String> values) {
         this();
         this.values.addAll(values);

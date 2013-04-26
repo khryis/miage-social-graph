@@ -2,8 +2,6 @@ package run;
 
 import domain.Graph;
 import domain.Node;
-import search.SearchMethod;
-import search.IGraphParser;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -23,6 +21,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import search.IGraphParser;
+import search.SearchMethod;
 
 public class SearchDialog extends JDialog {
 
@@ -70,6 +70,7 @@ public class SearchDialog extends JDialog {
         panSearchMethod.setBorder(BorderFactory.createTitledBorder("Type de parcours"));
         panSearchMethod.setPreferredSize(new Dimension(440, 60));
         searchMethod = new JComboBox();
+        searchMethod.addItem("");
         for (SearchMethod sm : SearchMethod.values()) {
             searchMethod.addItem(sm.getShortName());
         }
@@ -97,6 +98,7 @@ public class SearchDialog extends JDialog {
         panUnicity.setBorder(BorderFactory.createTitledBorder("Unicité"));
         panUnicity.setPreferredSize(new Dimension(440, 60));
         unicity = new JComboBox();
+        unicity.addItem("");
         for (IGraphParser.Unicity u : IGraphParser.Unicity.values()) {
             unicity.addItem(u);
         }
