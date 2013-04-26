@@ -22,7 +22,7 @@ class WithUpdateGraphBuilder extends GraphBuilder {
     @Override
     public void putLineData(String line) throws GraphBuildingException {
         Map<String, Object> lineData = getLineData(line);
-        if (lineData.size() != 4) {
+        if (lineData.size() != 4 && lineData.size() != 3) {
             throw new GraphBuildingException("Line has not the required data");
         }
         Map<String, Node> nodes = workingGraph.getNodes();

@@ -50,10 +50,10 @@ public class SearchDialogInfo {
     }
 
     public List<LinkFilter> getFilters() {
-        String[] links = getLinks();
+        String[] linksArray = getLinks();
         List<LinkFilter> filters = new ArrayList<>();
         //Build the filters list
-        for (String line : links) {
+        for (String line : linksArray) {
             if (!line.isEmpty()) {
                 String linkType = line;
                 LinkFilter.Direction linkDirection = null;
