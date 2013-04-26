@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -56,7 +57,9 @@ public class SearchDialog extends JDialog {
         panStartNode.setPreferredSize(new Dimension(440, 60));
         panStartNode.setBorder(BorderFactory.createTitledBorder("Noeud de depart"));
         startNode = new JComboBox();
-        for (Map.Entry<String, Node> node : graph.getNodes().entrySet()) {
+
+        Map<String, Node> nodeList = new TreeMap<>(graph.getNodes());
+        for (Map.Entry<String, Node> node : nodeList.entrySet()) {
             startNode.addItem(node.getKey());
         }
         startNodeLabel = new JLabel("Noeud : ");
@@ -114,10 +117,11 @@ public class SearchDialog extends JDialog {
         panLink.setBorder(BorderFactory.createTitledBorder("Les liens à rechercher"));
         link = new JTextArea();
         link.setPreferredSize(new Dimension(400, 150));
-        JScrollPane scrollPaneLink = new JScrollPane(link, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        JScrollPane scrollPaneLink = new JScrollPane(link, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         link.setLineWrap(true);
         panLink.add(scrollPaneLink);
+        panLink.add(new JLabel("ex: friend[since=2005,share=[books|movies]] >"));
 
         // Création du panel
         JPanel content = new JPanel();
