@@ -45,9 +45,11 @@ class WithUpdateGraphBuilder extends GraphBuilder {
             updateLink(link, attributes);
             Link toLink = to.getLink(linkType, from, to);
             toLink.setAttributes(link.getAttributes());
-        } else if (attributes != null) {
+        } else {
             link = new Link(linkType, from, to);
-            link.setAttributes(attributes);
+            if (attributes != null) {
+                link.setAttributes(attributes);
+            }
             from.addLink(link);
             to.addLink(link);
         }
