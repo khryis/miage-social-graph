@@ -41,10 +41,15 @@ class WithUpdateGraphBuilder extends GraphBuilder {
         Link link;
         Map<String, AttributeValues> attributes = (Map) lineData.get("attributes");
         String linkType = lineData.get("linkType").toString();
-        if ((link = from.getLink(linkType, from, to)) != null && attributes != null) {
-            updateLink(link, attributes);
-            Link toLink = to.getLink(linkType, from, to);
-            toLink.setAttributes(link.getAttributes());
+        // if the link already exists in the nodes = UPDATE TEAM REQUESTED
+        if ((link = from.getLink(linkType, from, to)) != null) {
+            // if there are attributes in the line = UPDATE TEAM INTERVENTION
+            if (attributes != null) {
+                updateLink(link, attributes);
+                Link toLink = to.getLink(linkType, from, to);
+                toLink.setAttributes(link.getAttributes());
+            }
+            // if the link does not exist in the nodes
         } else {
             link = new Link(linkType, from, to);
             if (attributes != null) {
