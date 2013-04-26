@@ -23,7 +23,7 @@ public class ImportDialog extends JDialog {
     public ImportDialog(JFrame parent, String title, boolean modal, Graph g) {
         super(parent, title, modal);
         graph = g;
-        this.setSize(550, 150);
+        this.setSize(550, 210);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
@@ -37,29 +37,34 @@ public class ImportDialog extends JDialog {
 
     private void initComponent() {
         //Paramètre d'import
-        JPanel panParam = new JPanel();
-        panParam.setBackground(Color.white);
-        panParam.setPreferredSize(new Dimension(440, 60));
-        panParam.setBorder(BorderFactory.createTitledBorder("Paramètres d'importation"));
+        JPanel panParam1 = new JPanel();
+        panParam1.setBackground(Color.white);
+        panParam1.setPreferredSize(new Dimension(440, 60));
+        panParam1.setBorder(BorderFactory.createTitledBorder("Mode de lecture"));
         ButtonGroup bg1 = new ButtonGroup();
-        strict = new JRadioButton("Strict", true);
+        strict = new JRadioButton("Strict", false);
         bg1.add(strict);
-        noStrict = new JRadioButton("Intelligent", false);
+        noStrict = new JRadioButton("Intelligent", true);
         bg1.add(noStrict);
-        panParam.add(strict);
-        panParam.add(noStrict);
+        panParam1.add(strict);
+        panParam1.add(noStrict);
+        JPanel panParam2 = new JPanel();
+        panParam2.setBackground(Color.white);
+        panParam2.setPreferredSize(new Dimension(440, 60));
+        panParam2.setBorder(BorderFactory.createTitledBorder("Sortie"));
         ButtonGroup bg2 = new ButtonGroup();
-        ecrase = new JRadioButton("Ecrase", true);
+        ecrase = new JRadioButton("Nouveau graphe", true);
         bg2.add(ecrase);
-        update = new JRadioButton("Update", false);
+        update = new JRadioButton("Ajout au graphe courant", false);
         bg2.add(update);
-        panParam.add(ecrase);
-        panParam.add(update);
+        panParam2.add(ecrase);
+        panParam2.add(update);
 
         // Création du panel
         JPanel content = new JPanel();
         content.setBackground(Color.white);
-        content.add(panParam);
+        content.add(panParam1);
+        content.add(panParam2);
 
         JPanel control = new JPanel();
         control.setBackground(Color.white);

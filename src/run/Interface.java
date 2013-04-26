@@ -69,13 +69,13 @@ public class Interface extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == importButton) {
-            ImportDialog zd1 = new ImportDialog(null, "Rechercher", true, g);
+            ImportDialog zd1 = new ImportDialog(null, "Importer", true, g);
             ImportDialogInfo zInfoImport = zd1.showZDialog();
             if (zInfoImport != null) {
                 int returnVal = fc.showOpenDialog(Interface.this);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     file = fc.getSelectedFile();
-                    log.append("Opening: " + file.getName() + "." + newline);
+                    System.out.println("Opening: " + file.getName());
                     showGraph.setEnabled(true);
                     searchButton.setEnabled(true);
                     exportButton.setEnabled(true);
@@ -100,12 +100,12 @@ public class Interface extends JPanel implements ActionListener {
                         Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
-                    log.append("Open command cancelled by user." + newline);
+                    System.out.println("Open command cancelled by user.");
                 }
 
 
             } else {
-                log.append("Open command cancelled by user." + newline);
+                System.out.println("Open command cancelled by user.");
             }
         } else if (e.getSource() == showGraph) {
             log.append("Graph: \n" + g.toString() + newline);
