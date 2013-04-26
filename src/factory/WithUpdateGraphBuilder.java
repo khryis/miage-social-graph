@@ -36,16 +36,18 @@ class WithUpdateGraphBuilder extends GraphBuilder {
             to = new Node((String) lineData.get("to"));
             workingGraph.addNode(to);
         }
-        Link link;
-        if ((link = from.getLink((String) lineData.get("linkType"), from, to)) != null) {
-            updateLink(link, (Map) lineData.get("attributes"));
-            Link toLink = to.getLink((String) lineData.get("linkType"), from, to);
-            toLink.setAttributes(link.getAttributes());
-        } else {
-            link = new Link((String) lineData.get("linkType"), from, to);
-            link.setAttributes((Map) lineData.get("attributes"));
-            from.addLink(link);
-            to.addLink(link);
+        if (lineData.get("attributes") != null) {
+            Link link;
+            if ((link = from.getLink((String) lineData.get("linkType"), from, to)) != null) {
+                updateLink(link, (Map) lineData.get("attributes"));
+                Link toLink = to.getLink((String) lineData.get("linkType"), from, to);
+                toLink.setAttributes(link.getAttributes());
+            } else {
+                link = new Link((String) lineData.get("linkType"), from, to);
+                link.setAttributes((Map) lineData.get("attributes"));
+                from.addLink(link);
+                to.addLink(link);
+            }
         }
     }
 
