@@ -5,8 +5,8 @@ package search;
  */
 public enum SearchMethod {
 
-    DFS("Depth-first search (default)", "DFS"),
-    BFS("Breadth-first search", "BFS");
+    DFS("Profondeur d'abord", "DFS"), //Depth-first search (default)
+    BFS("Largeur d'abord", "BFS"); //Breadth-first search
     String description;
     String shortName;
 

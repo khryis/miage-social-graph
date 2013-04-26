@@ -25,7 +25,7 @@ public class GraphParser implements IGraphParser {
 
     @Override
     public SearchResult search(String startingNode, List<LinkFilter> filters) throws SearchException {
-        return search(startingNode, filters, SearchMethod.DFS, 1, Unicity.GLOBALNODE);
+        return search(startingNode, filters, SearchMethod.DFS, Integer.MAX_VALUE, Unicity.GLOBALNODE);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class GraphParser implements IGraphParser {
 
     @Override
     public SearchResult search(String startingNode, List<LinkFilter> filters, Unicity unicity) throws SearchException {
-        return search(startingNode, filters, SearchMethod.DFS, 1, unicity);
+        return search(startingNode, filters, SearchMethod.DFS, Integer.MAX_VALUE, unicity);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class GraphParser implements IGraphParser {
 
     @Override
     public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod) throws SearchException {
-        return search(startingNode, filters, searchMethod, 1, Unicity.GLOBALNODE);
+        return search(startingNode, filters, searchMethod, Integer.MAX_VALUE, Unicity.GLOBALNODE);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class GraphParser implements IGraphParser {
 
     @Override
     public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod, Unicity unicity) throws SearchException {
-        return search(startingNode, filters, searchMethod, 1, unicity);
+        return search(startingNode, filters, searchMethod, Integer.MAX_VALUE, unicity);
     }
 
     @Override
@@ -97,7 +97,8 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the first step of research. Select the first set of Nodes that will be used to perform the second step of research
+     * Perform the first step of research. Select the first set of Nodes that
+     * will be used to perform the second step of research
      */
     private SearchResult globalNodeDFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
         //get the matching nodes
@@ -128,7 +129,8 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the second step of research. Add recursivly all linked nodes to the result until the given maxDepth is reached
+     * Perform the second step of research. Add recursivly all linked nodes to
+     * the result until the given maxDepth is reached
      */
     private void globalNodeDFSStep2(Node currentNode, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
@@ -141,7 +143,8 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the second step of research. Add recursivly the nodes matchink the given filters until the given maxDepth is reached
+     * Perform the second step of research. Add recursivly the nodes matchink
+     * the given filters until the given maxDepth is reached
      */
     private void globalNodeDFSStep2(Node currentNode, List<LinkFilter> filters, SearchResult result, int currentDepth, int maxDepth) {
         if (result.addNode(currentNode)) {
@@ -227,7 +230,8 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the first step of BFS research for global node. Select the first set of Nodes that will be used to perform the second step of research
+     * Perform the first step of BFS research for global node. Select the first
+     * set of Nodes that will be used to perform the second step of research
      */
     private SearchResult globalNodeBFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
         //get the matching nodes
@@ -322,7 +326,9 @@ public class GraphParser implements IGraphParser {
     }
 
     /**
-     * Perform the first step of BFS research for global relation. Select the first set of Nodes that will be used to perform the second step of research
+     * Perform the first step of BFS research for global relation. Select the
+     * first set of Nodes that will be used to perform the second step of
+     * research
      */
     private SearchResult globalRelationBFSStep1(Node startNode, List<LinkFilter> filters, int maxDepth) {
         //get the matching nodes
@@ -360,7 +366,8 @@ public class GraphParser implements IGraphParser {
 
     //TODO handle the depth
     /**
-     * Perform the second step of BFS research without filters for global relation.
+     * Perform the second step of BFS research without filters for global
+     * relation.
      */
     private void globalRelationBFSStep2(ArrayDeque<Node> nodesQueue, Set<Link> visited, SearchResult result, int nbNodesInDepth, int maxDepth) {
         Node currentNode;
