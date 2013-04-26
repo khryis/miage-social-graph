@@ -89,11 +89,7 @@ public class Interface extends JPanel implements ActionListener {
                                 g = factory.getGraph(file, GraphBuildingMethod.WITH_UPDATE);
                             }
                         } else {
-                            if (g != null) {
-                                g = factory.getGraph(file, g);
-                            } else {
-                                g = factory.getGraph(file);
-                            }
+                            g = factory.getGraph(file, g);
                         }
                         System.out.println(g);
                     } catch (GraphFileParserException | GraphBuildingException | IOException ex) {
