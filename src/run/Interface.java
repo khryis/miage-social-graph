@@ -39,7 +39,7 @@ import run.ImportDialogInfo;
 public class Interface extends JPanel implements ActionListener {
 
     private static final String newline = "\n";
-    private JButton importButton, exportButton, searchButton, showGraph, clear;
+    private JButton importButton, exportButton, searchButton, showGraph;
     private JTextArea log;
     private JFileChooser fc;
     private File file;
@@ -61,8 +61,6 @@ public class Interface extends JPanel implements ActionListener {
         searchButton = new JButton("Rechercher");
         searchButton.addActionListener(this);
         searchButton.setEnabled(false);
-        clear = new JButton("Vider affichage");
-        clear.addActionListener(this);
         exportButton = new JButton("Exporter un fichier");
         exportButton.addActionListener(this);
         exportButton.setEnabled(false);
@@ -70,7 +68,6 @@ public class Interface extends JPanel implements ActionListener {
         buttonPanel.add(importButton);
         buttonPanel.add(showGraph);
         buttonPanel.add(searchButton);
-        buttonPanel.add(clear);
         buttonPanel.add(exportButton);
         add(buttonPanel, BorderLayout.PAGE_START);
         add(logScrollPane, BorderLayout.CENTER);
@@ -102,8 +99,6 @@ public class Interface extends JPanel implements ActionListener {
             }
         } else if (e.getSource() == showGraph) {
             log.append("Graph: \n" + g.toString() + newline);
-        } else if (e.getSource() == clear) {
-            log.setText("");
         } else if (e.getSource() == searchButton) {
             SearchDialog zd = new SearchDialog(null, "Rechercher", true, g);
             SearchDialogInfo zInfo = zd.showZDialog();
