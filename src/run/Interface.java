@@ -8,6 +8,7 @@ import factory.GraphFactory;
 import factory.GraphFileParserException;
 import factory.IGraphFactory;
 import java.awt.BorderLayout;
+import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -96,12 +97,12 @@ public class Interface extends JPanel implements ActionListener {
                         Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 } else {
-                    System.out.println("Open command cancelled by user.");
+                    System.out.println("Open command canceled by user.");
                 }
 
 
             } else {
-                System.out.println("Open command cancelled by user.");
+                System.out.println("Open command canceled by user.");
             }
         } else if (e.getSource() == showGraph) {
             log.append("Graph: \n" + g.toString() + newline);
@@ -191,11 +192,11 @@ public class Interface extends JPanel implements ActionListener {
                 JFileChooser filechoose = new JFileChooser();
 
                 filechoose.setCurrentDirectory(new File("."));
-                String approve = new String("Enregistrer");
+                String approve = "Enregistrer";
 
                 int resultatEnregistrer = filechoose.showDialog(filechoose, approve);
                 if (resultatEnregistrer == JFileChooser.APPROVE_OPTION) {
-                    String monFichier = new String(filechoose.getSelectedFile().toString());
+                    String monFichier = filechoose.getSelectedFile().toString();
                     if (monFichier.endsWith(".txt") || monFichier.endsWith(".TXT")) {
                     } else {
                         monFichier = monFichier + ".txt";
@@ -203,7 +204,7 @@ public class Interface extends JPanel implements ActionListener {
                     g.export(monFichier);
                     log.append("Export: " + monFichier + newline);
                 }
-            } catch (Exception ee) {
+            } catch (HeadlessException | IOException ee) {
             }
         } else if (e.getSource() == clear) {
             log.setText("");

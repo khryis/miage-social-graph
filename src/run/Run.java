@@ -92,6 +92,7 @@ public class Run {
         frame.setPreferredSize(new Dimension(800, 450));
         frame.add(new Interface());
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }

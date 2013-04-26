@@ -133,7 +133,9 @@ public class SearchDialog extends JDialog {
         okBouton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                zInfo = new SearchDialogInfo((String) startNode.getSelectedItem(), (String) searchMethod.getSelectedItem().toString(), (Integer) level.getValue(), (String) unicity.getSelectedItem().toString(), getLinks());
+                zInfo = new SearchDialogInfo(startNode.getSelectedItem().toString(),
+                        searchMethod.getSelectedItem().toString(), Integer.parseInt(level.getValue().toString()),
+                        unicity.getSelectedItem().toString(), getLinks());
                 setVisible(false);
             }
 

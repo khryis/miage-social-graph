@@ -27,7 +27,7 @@ public class GraphFactory implements IGraphFactory {
     @Override
     public Graph getGraph(File file, Graph graph)
             throws GraphFileParserException, GraphBuildingException, IOException {
-        return getGraph(file, graph, GraphBuildingMethod.WITH_UPDATE);
+        return getGraph(file, graph == null ? new Graph() : graph, GraphBuildingMethod.WITH_UPDATE);
     }
 
     @Override
