@@ -7,8 +7,8 @@ public enum SearchMethod {
 
     DFS("Profondeur d'abord", "DFS"), //Depth-first search (default)
     BFS("Largeur d'abord", "BFS"); //Breadth-first search
-    String description;
-    String shortName;
+    private String description;
+    private String shortName;
 
     SearchMethod(String description, String shortName) {
         this.description = description;

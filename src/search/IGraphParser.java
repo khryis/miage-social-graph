@@ -10,16 +10,23 @@ public interface IGraphParser {
 
     public enum Unicity {
 
-        GLOBALNODE("Noeud global"),
-        GLOBALRELATION("Relation global");
-        String description;
+        GLOBALNODE("Noeud global", "GLOBAL NODE"),
+        GLOBALRELATION("Relation global", "GLOBAL RELATION");
+        private String description;
+        private String shortName;
 
-        Unicity(String description) {
+        Unicity(String description, String shortName) {
             this.description = description;
+            this.shortName = shortName;
         }
 
+        @Override
         public String toString() {
             return description;
+        }
+
+        public String getShortName() {
+            return shortName;
         }
     }
 

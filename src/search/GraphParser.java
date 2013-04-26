@@ -60,6 +60,7 @@ public class GraphParser implements IGraphParser {
 
     @Override
     public SearchResult search(String startingNode, List<LinkFilter> filters, SearchMethod searchMethod, int maxDepth, Unicity unicity) throws SearchException {
+        //Control
         Node node;
         if ((node = workingGraph.getNode(startingNode)) == null) {
             throw new SearchException("The node " + startingNode + " does not exist for this graph");
@@ -67,6 +68,20 @@ public class GraphParser implements IGraphParser {
         if (maxDepth < 1) {
             throw new SearchException("The depth of search must a least be 1");
         }
+        if (filters != null && filters.size() == 0) {
+            filters = null;
+        }
+
+        //Inform user
+        System.out.println("Search init");
+        System.out.println("Starting node: " + startingNode);
+        System.out.println("Search method: " + searchMethod.getShortName());
+        System.out.println("Max depth: " + maxDepth);
+        System.out.println("Unicity: " + unicity.getShortName());
+        System.out.println("Filters:");
+        System.out.println(filters);
+
+        //Perform search
         switch (searchMethod) {
             case BFS:
                 return BFS(node, filters, maxDepth, unicity);
