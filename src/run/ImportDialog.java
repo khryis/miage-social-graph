@@ -44,7 +44,7 @@ public class ImportDialog extends JDialog {
         ButtonGroup bg1 = new ButtonGroup();
         strict = new JRadioButton("Strict", true);
         bg1.add(strict);
-        noStrict = new JRadioButton("Pas strict", false);
+        noStrict = new JRadioButton("Intelligent", false);
         bg1.add(noStrict);
         panParam.add(strict);
         panParam.add(noStrict);
