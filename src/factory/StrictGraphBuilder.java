@@ -24,14 +24,16 @@ class StrictGraphBuilder extends GraphBuilder {
             throw new GraphBuildingException("Line has not the required data");
         }
         Map<String, Node> nodes = workingGraph.getNodes();
-        Node from = nodes.get((String) lineData.get("from"));
+        String fromStr = lineData.get("from").toString();
+        Node from = nodes.get(fromStr);
         if (from == null) {
-            from = new Node((String) lineData.get("from"));
+            from = new Node(fromStr);
             workingGraph.addNode(from);
         }
-        Node to = nodes.get((String) lineData.get("to"));
+        String toStr = lineData.get("to").toString();
+        Node to = nodes.get(toStr);
         if (to == null) {
-            to = new Node((String) lineData.get("to"));
+            to = new Node(toStr);
             workingGraph.addNode(to);
         }
         Link link = new Link((String) lineData.get("linkType"), from, to);

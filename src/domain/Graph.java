@@ -48,38 +48,42 @@ public class Graph {
                         visitedLinks.add(link);
                         String nodeToId = link.getTo().getId();
                         String linkType = link.getType();
-                        bw.write(nodeFromId + " --" + linkType + '[');
+                        bw.write(nodeFromId + " --" + linkType);
                         Map<String, AttributeValues> attributes = link.getAttributes();
                         int attributesNumber = attributes.size();
-                        int currentAttributeIndex = 1;
-                        // Parses attributes of the current link
-                        for (Map.Entry<String, AttributeValues> attribute : attributes.entrySet()) {
-                            String attributeName = attribute.getKey();
-                            bw.write(attributeName + '=');
-                            // If one value
-                            if (attribute.getValue().getValues().size() == 1) {
-                                bw.write(attribute.getValue().getValues().get(0));
-                                // If more
-                            } else {
-                                List<String> values = attribute.getValue().getValues();
-                                bw.write('[');
-                                // Parses values of the current attribute
-                                for (int i = 0; i < values.size(); i++) {
-                                    bw.write(values.get(i));
-                                    // Checks if it is not the last value
-                                    if (i != values.size() - 1) {
-                                        bw.write('|');
+                        if (attributesNumber > 0) {
+                            bw.write('[');
+                            int currentAttributeIndex = 1;
+                            // Parses attributes of the current link
+                            for (Map.Entry<String, AttributeValues> attribute : attributes.entrySet()) {
+                                String attributeName = attribute.getKey();
+                                bw.write(attributeName + '=');
+                                // If one value
+                                if (attribute.getValue().getValues().size() == 1) {
+                                    bw.write(attribute.getValue().getValues().get(0));
+                                    // If more
+                                } else {
+                                    List<String> values = attribute.getValue().getValues();
+                                    bw.write('[');
+                                    // Parses values of the current attribute
+                                    for (int i = 0; i < values.size(); i++) {
+                                        bw.write(values.get(i));
+                                        // Checks if it is not the last value
+                                        if (i != values.size() - 1) {
+                                            bw.write('|');
+                                        }
                                     }
+                                    bw.write(']');
                                 }
-                                bw.write(']');
+                                // Checks if it is not the last attribute
+                                if (currentAttributeIndex != attributesNumber) {
+                                    bw.write(',');
+                                }
+                                currentAttributeIndex++;
                             }
-                            // Checks if it is not the last attribute
-                            if (currentAttributeIndex != attributesNumber) {
-                                bw.write(',');
-                            }
-                            currentAttributeIndex++;
+                            bw.write(']');
                         }
-                        bw.write("]--> " + nodeToId);
+                        bw.write("--> " + nodeToId);
                         bw.newLine();
                         bw.flush();
                     }

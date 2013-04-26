@@ -26,29 +26,28 @@ class WithUpdateGraphBuilder extends GraphBuilder {
             throw new GraphBuildingException("Line has not the required data");
         }
         Map<String, Node> nodes = workingGraph.getNodes();
-        Node from = nodes.get((String) lineData.get("from"));
+        String fromStr = lineData.get("from").toString();
+        Node from = nodes.get(fromStr);
         if (from == null) {
-            from = new Node((String) lineData.get("from"));
+            from = new Node(fromStr);
             workingGraph.addNode(from);
         }
-        Node to = nodes.get((String) lineData.get("to"));
+        String toStr = lineData.get("to").toString();
+        Node to = nodes.get(toStr);
         if (to == null) {
-            to = new Node((String) lineData.get("to"));
+            to = new Node(toStr);
             workingGraph.addNode(to);
         }
         Link link;
         Map<String, AttributeValues> attributes = (Map) lineData.get("attributes");
-        String linkType = (String) lineData.get("linkType");
-        if ((link = from.getLink(linkType, from, to)) != null
-                && attributes != null) {
+        String linkType = lineData.get("linkType").toString();
+        if ((link = from.getLink(linkType, from, to)) != null && attributes != null) {
             updateLink(link, attributes);
             Link toLink = to.getLink(linkType, from, to);
             toLink.setAttributes(link.getAttributes());
-        } else {
+        } else if (attributes != null) {
             link = new Link(linkType, from, to);
-            if (attributes != null) {
-                link.setAttributes(attributes);
-            }
+            link.setAttributes(attributes);
             from.addLink(link);
             to.addLink(link);
         }
