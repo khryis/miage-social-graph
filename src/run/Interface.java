@@ -82,20 +82,14 @@ public class Interface extends JPanel implements ActionListener {
                     log.setCaretPosition(log.getDocument().getLength());
                     factory = new GraphFactory();
                     try {
-                        if (zInfoImport.isStrict()) {
-                            if (zInfoImport.isEcrase()) {
+                        if (zInfoImport.isEcrase()) {
+                            if (zInfoImport.isStrict()) {
                                 g = factory.getGraph(file, GraphBuildingMethod.STRICT);
                             } else {
-                                //TODO
-                                // g = factory.getGraph(file, g, GraphBuildingMethod.STRICT);
+                                g = factory.getGraph(file, GraphBuildingMethod.WITH_UPDATE);
                             }
                         } else {
-                            if (zInfoImport.isEcrase()) {
-                                g = factory.getGraph(file, GraphBuildingMethod.WITH_UPDATE);
-                            } else {
-                                //TODO
-                                // g = factory.getGraph(file, g, GraphBuildingMethod.WITH_UPDATE);
-                            }
+                            g = factory.getGraph(file, g);
                         }
                         System.out.println(g);
                     } catch (GraphFileParserException | GraphBuildingException | IOException ex) {
@@ -208,9 +202,7 @@ public class Interface extends JPanel implements ActionListener {
                     }
                     g.export(monFichier);
                     log.append("Export: " + monFichier + newline);
-
                 }
-
             } catch (Exception ee) {
             }
         } else if (e.getSource() == clear) {
