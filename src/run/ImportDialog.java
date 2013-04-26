@@ -6,13 +6,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class ImportDialog extends JDialog {
 
@@ -57,6 +61,28 @@ public class ImportDialog extends JDialog {
         bg2.add(ecrase);
         update = new JRadioButton("Ajout au graphe courant", false);
         bg2.add(update);
+
+        // Disable / Enable strict and no strict radio buttons if update / ecrase radio buttons are selected
+        ChangeListener changeListener = new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changEvent) {
+                AbstractButton aButton = (AbstractButton) changEvent.getSource();
+                ButtonModel aModel = aButton.getModel();
+                boolean selected = aModel.isArmed();
+                if (aButton == ecrase && selected) {
+                    strict.setEnabled(true);
+                    noStrict.setEnabled(true);
+                } else if (aButton == update && selected) {
+                    strict.setEnabled(false);
+                    noStrict.setSelected(true);
+                    noStrict.setEnabled(false);
+                }
+
+            }
+        };
+
+        ecrase.addChangeListener(changeListener);
+        update.addChangeListener(changeListener);
         panParam2.add(ecrase);
         panParam2.add(update);
 

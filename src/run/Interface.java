@@ -15,10 +15,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -94,7 +93,7 @@ public class Interface extends JPanel implements ActionListener {
                         }
                         System.out.println(g);
                     } catch (GraphFileParserException | GraphBuildingException | IOException ex) {
-                        Logger.getLogger(Run.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(this, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
                     System.out.println("Open command canceled by user.");
