@@ -136,10 +136,10 @@ public class SearchDialogInfo {
     @Override
     public String toString() {
         String str = "\tNoeud de départ : " + startNode + "\n";
-        str += "\tMéthode de recherche : " + searchMethod + "\n";
-        str += "\tNiveau de recherche : " + searchLevel + "\n";
-        str += "\tUnicité : " + unicity + "\n";
-        str += "\tLiens : \n" + links;
+        str += "\tMéthode de recherche : " + (searchMethod.isEmpty() ? "Defaut" : searchMethod) + "\n";
+        str += "\tNiveau de recherche : " + (searchLevel == 0 ? "Tout le graphe" : searchLevel) + "\n";
+        str += "\tUnicité : " + (unicity.isEmpty() ? "Defaut" : unicity) + "\n";
+        str += "\tLiens : " + (links.isEmpty() ? "Pas de critère" : "") + "\n" + links;
         return str;
     }
 }

@@ -1,5 +1,6 @@
 package run;
 
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -88,6 +89,7 @@ public class Run {
     public static void main(String[] args) {
         JFrame frame = new JFrame("SocialGraph");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setPreferredSize(new Dimension(800, 450));
         frame.add(new Interface());
         frame.pack();
         frame.setVisible(true);

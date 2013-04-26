@@ -113,8 +113,7 @@ public class Node {
                 Link link = it.next();
                 if (this.equals(link.getFrom())) {
                     linkedNodes.add(link.getTo());
-                }
-                if (this.equals(link.getTo())) {
+                } else {
                     linkedNodes.add(link.getFrom());
                 }
             }
