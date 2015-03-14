@@ -1,0 +1,1 @@
+The purpose of this project is to read a file and construct a social graph based on the file's content. This graph must allow the user to execute query and return coherant results.
